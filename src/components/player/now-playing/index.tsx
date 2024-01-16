@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // Hooks
 import { useSpotify } from '@/hooks'
-import { playbackStateAtom } from '@/lib/atoms'
+import { playbackStateAtom, sessionAtom } from '@/lib/atoms'
 import { Episode, Track } from '@spotify/web-api-ts-sdk'
 import { useAtom } from 'jotai'
 // Components
@@ -17,6 +17,7 @@ interface NowPlayingProps extends React.HTMLAttributes<HTMLDivElement> {}
 const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
   ({ ...props }, ref) => {
     const spotify = useSpotify()
+    const [session] = useAtom(sessionAtom)
     const [playbackState] = useAtom(playbackStateAtom)
     const [isArtist, setIsArtist] = useState(false)
     const [title, setTitle] = useState<string | undefined>(undefined)
@@ -52,7 +53,7 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
 
     return (
       <div ref={ref} {...props}>
-        {playbackState ? (
+        {session && playbackState ? (
           <div className='flex w-full items-center justify-start'>
             <div className='flex max-w-full items-center gap-x-3 gap-y-2 truncate'>
               <Avatar className={cn('h-10 w-10 rounded-sm')}>

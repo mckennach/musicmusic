@@ -20,7 +20,7 @@ const Player = React.forwardRef<HTMLDivElement, PlayerProps>(
     // }, []);
 
     return (
-      <footer className={cn(`flex`, className)} {...props} ref={ref}>
+      <footer className={cn(`flex h-[72px]`, className)} {...props} ref={ref}>
         <div className='flex h-full w-full items-center justify-between'>
           <NowPlaying className={cn('flex-1 basis-[30%] max-w-[30%] pl-2')} />
           <PlayerControls className={cn('flex-1 basis-[40%] max-w-[40%]')} />

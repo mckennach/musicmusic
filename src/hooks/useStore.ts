@@ -25,8 +25,7 @@ export function useStore() {
   return {
     initStore: async (session: AuthSession) => {
       if (!session) return
-      // console.log('init')
-      setCurrentSession(session)
+      // console.log('bam')
       await setCurrentLibrary()
       await setAvailableDevices()
       await setPlayback()

@@ -3,6 +3,7 @@ import { Error } from '@/components/ui/error'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { Suspense } from 'react'
 import {
   DatabaseProvider,
   JotaiProvider,
@@ -73,7 +74,7 @@ export default async function RootLayout({
           <DatabaseProvider session={session} user={user}>
             <body
               className={cn(
-                'max-h-screen min-h-screen overflow-hidden bg-background font-sans text-foreground antialiased',
+                'bg-background font-sans text-foreground antialiased',
                 fontSans.variable
               )}
             >

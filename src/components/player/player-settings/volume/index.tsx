@@ -4,37 +4,68 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { useSpotify } from '@/hooks'
 import { useAtom } from 'jotai'
+import { useDebounce } from '@/hooks'
 import React, { useEffect } from 'react'
 // import Icon from '@/components/ui/icon'
-import { volumeAtom, volumeBeforeMutedAtom, volumeMutedAtom } from '@/lib/atoms'
+import {
+  activeDeviceAtom,
+  asyncPlaybackAtom,
+  playbackStateAtom,
+  sessionAtom,
+  volumeAtom,
+  volumeBeforeMutedAtom,
+  volumeMutedAtom
+} from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react'
-import { VolumeBar } from './volume-bar'
+import { VolumeBar } from './volume-bar';
+
+
 interface VolumeControlProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const VolumeControl = React.forwardRef<HTMLDivElement, VolumeControlProps>(
   ({ className, ...props }, ref) => {
+    const spotify = useSpotify();
+    const [activeDevice] = useAtom(activeDeviceAtom);
+    const [, sync] = useAtom(asyncPlaybackAtom);
+    const [session] = useAtom(sessionAtom);
+    const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
     const [volumeBeforeMutedState, setVolumeBeforeMutedState] = useAtom(
       volumeBeforeMutedAtom
     )
     const [volumeMutedState, setVolumeMutedState] = useAtom(volumeMutedAtom)
-    const [volumeState, setVolumeState] = useAtom(volumeAtom)
+    const [volumeState, setVolumeState] = useAtom(volumeAtom);
+    const debouncedVolumeState = useDebounce(volumeState, 300);
 
     useEffect(() => {
-      setVolumeMutedState(volumeState === 0)
-    }, [volumeState, setVolumeMutedState])
+      ;(async () => {
+        console.log(activeDevice);
+        if (activeDevice && typeof activeDevice.volume_percent === 'number') {
+          console.log(activeDevice.volume_percent);
+          setVolumeState(activeDevice.volume_percent);
+        }
+      })()
+    }, [activeDevice, setVolumeState])
+
 
     useEffect(() => {
-      if (volumeMutedState) {
-        setVolumeState(0)
+      if (volumeState === 0) {
+        setVolumeMutedState(true)
       } else {
-        setVolumeState(volumeBeforeMutedState)
+        setVolumeMutedState(false)
       }
-    }, [volumeMutedState, volumeBeforeMutedState, setVolumeState])
+    }, [volumeState, volumeMutedState, volumeBeforeMutedState, setVolumeMutedState])
+
+    useEffect(() => {
+      (async () => { 
+        if(!activeDevice || !session) return;
+        await spotify.setVolume(debouncedVolumeState)
+      })()
+    }, [debouncedVolumeState, session, activeDevice, spotify])
 
     const handleMuteButtonClick = () => {
-      console.log(volumeMutedState)
       if (volumeMutedState) {
         setVolumeState(volumeBeforeMutedState)
       } else {
@@ -43,6 +74,10 @@ const VolumeControl = React.forwardRef<HTMLDivElement, VolumeControlProps>(
       }
       setVolumeMutedState(!volumeMutedState)
     }
+
+    const handleVolumeChange = (value: number) => {
+      setVolumeState(value);
+  }
 
     return (
       <div
@@ -80,6 +115,7 @@ const VolumeControl = React.forwardRef<HTMLDivElement, VolumeControlProps>(
           </TooltipContent>
         </Tooltip>
         <VolumeBar
+          defaultValue={[volumeState]}
           value={[volumeState]}
           onValueChange={(value) => setVolumeState(value[0])}
           onValueCommit={(value) => setVolumeState(value[0])}

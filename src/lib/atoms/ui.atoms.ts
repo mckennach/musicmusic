@@ -18,4 +18,4 @@ export const sidebarSortByAtom = atom<
 >('recents')
 export const sidebarViewAtom = atom<'grid' | 'list' | 'compact'>('list')
 export const sidebarSearchInputAtom = atom<string>('')
-export const fullScreenAtom = atom<boolean>(false)
+export const fullScreenAtom = atom<boolean>(false);

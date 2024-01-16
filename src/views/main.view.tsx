@@ -6,7 +6,8 @@ import { useEffect, useRef } from 'react'
 // Components
 import { Header } from '@/components/header'
 import { Player } from '@/components/player'
-import { Sidebar } from '@/components/sidebar'
+import { Sidebar } from '@/components/sidebar';
+import { DeviceModal } from '@/components/ui/device-modal'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -26,7 +27,6 @@ export default function MainView({ children }: { children: React.ReactNode }) {
   )
   const panelRef = useRef<ImperativePanelHandle>(null)
   useEffect(() => {
-    // console.log(sideBarLeftCollapsed);
     if (sideBarLeftCollapsed) {
       panelRef.current?.collapse()
     } else {
@@ -34,11 +34,77 @@ export default function MainView({ children }: { children: React.ReactNode }) {
     }
   }, [sideBarLeftCollapsed])
 
+
+  return (
+    <div className="main-layout">
+      <div className="main-area">
+      <ResizablePanelGroup
+        direction='horizontal'
+        className='overflow-hidden '
+      >
+        <ResizablePanel
+          ref={panelRef}
+          order={1}
+          collapsible={true}
+          collapsedSize={6}
+          onCollapse={() => {
+            setSidebarLeftCollaposed(true)
+          }}
+          onExpand={() => {
+            setSidebarLeftCollaposed(false)
+          }}
+          minSize={20}
+          maxSize={35}
+          defaultSize={sideBarLeftCollapsed ? 6 : 30}
+          className={cn(
+            sideBarLeftCollapsed
+              ? `min-w-[65px] max-w-[65px]`
+              : `min-w-[200px] max-w-[375px]`,
+            `overflow-hidden`
+          )}
+        >
+          <Sidebar>
+            <SidebarNav />
+            <SidebarLibrary />
+          </Sidebar>
+        </ResizablePanel>
+        <ResizableHandle className='hover:bg-foreground/50 mx-1 bg-transparent' />
+        <ResizablePanel order={2} className='relative'>
+          <Header />
+          <main className='h-full  overflow-hidden'>
+            <Card className='h-full overflow-x-hidden overflow-y-scroll border-none @container'>
+              {children}
+            </Card>
+          </main>
+        </ResizablePanel>
+        <ResizableHandle className='hover:bg-foreground/50 w-0.5 bg-transparent' />
+        <ResizablePanel
+          order={3}
+          collapsible={true}
+          collapsedSize={0}
+          minSize={0}
+          maxSize={25}
+          defaultSize={0}
+          className=' overflow-hidden'
+        >
+          <Sidebar>Sidebar 2</Sidebar>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+      </div>
+      
+
+      <div className="player-area">
+        <Player className='' />
+        <DeviceModal />
+      </div>
+    </div>
+  )
+
   return (
     <>
       <ResizablePanelGroup
         direction='horizontal'
-        className='h-[91vh] max-h-[91vh] overflow-hidden  p-2 pb-0'
+        className='h-[91vh] max-h-[91vh] overflow-hidden'
       >
         <ResizablePanel
           ref={panelRef}
@@ -88,7 +154,10 @@ export default function MainView({ children }: { children: React.ReactNode }) {
           <Sidebar>Sidebar 2</Sidebar>
         </ResizablePanel>
       </ResizablePanelGroup>
-      <Player className='h-[9vh] max-h-[9vh] min-h-[9vh] px-2' />
+      <div>
+        <Player className='h-[9vh] max-h-[9vh] min-h-[9vh] px-2' />
+        <DeviceModal />
+      </div>
     </>
   )
 }

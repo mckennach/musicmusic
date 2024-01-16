@@ -1,28 +1,46 @@
 import { Button } from '@/components/ui/button'
-import { useAtom } from 'jotai'
-import React from 'react'
-// import Icon from '@/components/ui/icon'
-import { repeatStateAtom } from '@/lib/atoms'
+import { useSpotify } from '@/hooks'
+import { playbackStateAtom, repeatStateAtom, sessionAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
+import { useAtom } from 'jotai'
 import { Repeat, Repeat1 } from 'lucide-react'
+import React, { useEffect } from 'react'
 interface RepeatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
 
 const RepeatButton = React.forwardRef<HTMLButtonElement, RepeatButtonProps>(
   ({ className, ...props }, ref) => {
+    const spotify = useSpotify();
+    const [session] = useAtom(sessionAtom);
     const [repeatState, setRepeatState] = useAtom(repeatStateAtom)
+    const [playbackState] = useAtom(playbackStateAtom)
+
+    useEffect(() => {
+      ;(async () => {
+        if (playbackState && session) {
+          setRepeatState(playbackState.repeat_state)
+        }
+      })()
+    }, [playbackState, session, setRepeatState])
 
     const handleButtonClick = () => {
       if (repeatState === 'off') {
-        setRepeatState('context')
+        spotify.setRepeat('context').then(() => {
+          setRepeatState('context')
+        })
       } else if (repeatState === 'context') {
-        setRepeatState('track')
+        spotify.setRepeat('track').then(() => {
+          setRepeatState('track')
+        })
       } else {
-        setRepeatState('off')
+        spotify.setRepeat('off').then(() => {
+          setRepeatState('off')
+        })
       }
     }
 
     return (
       <Button
+        disabled={!session}
         onClick={handleButtonClick}
         ref={ref}
         size='icon'

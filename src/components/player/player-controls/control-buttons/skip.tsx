@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
-import { repeatStateAtom, shuffleStateAtom } from '@/lib/atoms'
+import { useSpotify } from '@/hooks'
+import { asyncPlaybackAtom, playbackStateAtom, sessionAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 import { useAtom } from 'jotai'
-import React from 'react'
+import { useAtomCallback } from 'jotai/utils'
+import React, { useCallback } from 'react'
 interface SkipButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   action: 'previous' | 'next'
   icon: 'skip-back' | 'skip-forward'
@@ -11,10 +13,28 @@ interface SkipButtonProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const SkipButton = React.forwardRef<HTMLButtonElement, SkipButtonProps>(
   ({ action, icon, className, ...props }, ref) => {
-    const [shuffleState, setShuffleState] = useAtom(shuffleStateAtom)
-    const [repeatState, setRepeatState] = useAtom(repeatStateAtom)
+    const spotify = useSpotify();
+    const [session] = useAtom(sessionAtom);
+
+    const [playbackState] = useAtom(playbackStateAtom)
+    const [, sync] = useAtom(asyncPlaybackAtom)
+
+    const handleButtonClick = useAtomCallback(
+      useCallback(async (get) => {
+        if (action === 'previous') {
+          await spotify.skipToPrevious()
+        } else if (action === 'next') {
+          await spotify.skipToNext()
+        }
+
+        sync()
+      }, [action, spotify, sync])
+    )
+
     return (
       <Button
+        disabled={!session}
+        onClick={handleButtonClick}
         size='icon'
         className={cn(
           `h-8 w-8 rounded-full p-0`,

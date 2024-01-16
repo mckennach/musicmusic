@@ -4,22 +4,40 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { shuffleStateAtom } from '@/lib/atoms'
+import { useSpotify } from '@/hooks'
+import { playbackStateAtom, shuffleStateAtom, sessionAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 import { useAtom } from 'jotai'
 import { Shuffle } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 interface ShuffleButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
 
 const ShuffleButton = React.forwardRef<HTMLButtonElement, ShuffleButtonProps>(
   ({ className, ...props }, ref) => {
+    const [session] = useAtom(sessionAtom);
+    const spotify = useSpotify()
+    const [playbackState] = useAtom(playbackStateAtom)
     const [shuffleState, setShuffleState] = useAtom(shuffleStateAtom)
+    useEffect(() => {
+      ;(async () => {
+        if (playbackState && session) {
+          setShuffleState(playbackState.shuffle_state)
+        }
+      })()
+    }, [playbackState, session, setShuffleState])
+
+    const handleButtonClick = () => {
+      spotify.setShuffle(!shuffleState).then(() => {
+        setShuffleState(!shuffleState)
+      })
+    }
 
     return (
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => setShuffleState(!shuffleState)}
+            disabled={!session}
+            onClick={handleButtonClick}
             ref={ref}
             {...props}
             size='icon'

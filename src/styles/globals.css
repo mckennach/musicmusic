@@ -262,9 +262,48 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen max-h-screen overflow-hidden;
 
     overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
   }
+
+  .main-layout {
+    --main-view-top-bar-grid-area-z-index: 2;
+    --left-sidebar-grid-area-z-index: 4;
+    --above-everything-except-now-playing-bar-z-index: 5;
+    --above-main-and-now-playing-view-grid-area: 6;
+    --now-playing-bar-grid-area-z-index: calc(
+      var(--above-everything-except-now-playing-bar-z-index) + 1
+    );
+    padding: var(--panel-gap);
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 100%;
+    position: relative;
+    width: 100%;
+    display: grid;
+    gap: var(--panel-gap);
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      'main-view main-view main-view'
+      'main-view main-view main-view'
+      'now-playing-bar now-playing-bar now-playing-bar';
+  }
+
+  .main-area {
+    grid-area: main-view;
+    z-index: var(--main-view-top-bar-grid-area-z-index);
+    overflow: hidden;
+  }
+
+  .player-area {
+    grid-area: now-playing-bar;
+    z-index: var(--now-playing-bar-grid-area-z-index);
+    overflow: hidden;
+
+  }
+
+  
 }

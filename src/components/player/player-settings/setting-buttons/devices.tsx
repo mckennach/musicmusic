@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
@@ -11,16 +14,50 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useAtom } from 'jotai'
-import React from 'react'
+import { useSpotify } from '@/hooks'
+import React, { useEffect } from 'react'
 // import Icon from '@/components/ui/icon'
-import { activeDeviceTypeAtom } from '@/lib/atoms'
+import {
+  activeDeviceAtom,
+  activeDeviceTypeAtom,
+  asyncAvailableDevicesAtom,
+  availableDevicesAtom,
+  playbackStateAtom,
+  isPlayingAtom
+} from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 import { Laptop2, MonitorSpeaker, Smartphone, Speaker } from 'lucide-react'
 interface DevicesButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
 
 const DevicesButton = React.forwardRef<HTMLButtonElement, DevicesButtonProps>(
   ({ className, ...props }, ref) => {
-    const [activeDevice, setActiveDevice] = useAtom(activeDeviceTypeAtom)
+    const spotify = useSpotify();
+    const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom)
+    const [availableDevices] = useAtom(availableDevicesAtom)
+    const [activeDevice, setActiveDevice] = useAtom(activeDeviceAtom)
+    const [activeDeviceType, setActiveDeviceType] =
+      useAtom(activeDeviceTypeAtom)
+    const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
+    const [, syncActiveDevice] = useAtom(asyncAvailableDevicesAtom)
+
+    useEffect(() => {
+      ;(async () => {
+        if (playbackState && playbackState.device) {
+          if(activeDevice && playbackState.device.id !== activeDevice.id) {
+            await syncActiveDevice()
+          }
+        }
+      })()
+    }, [playbackState, activeDevice, syncActiveDevice]);
+
+    const handleDeviceChange = async (device: SpotifyApi.UserDevice) => {
+      if(device && device.id) { 
+        await spotify.transferMyPlayback([device.id], { play: isPlaying });
+        await syncActiveDevice();
+      }
+    }
+
+
     return (
       <DropdownMenu>
         <Tooltip>
@@ -32,19 +69,21 @@ const DevicesButton = React.forwardRef<HTMLButtonElement, DevicesButtonProps>(
                 size='icon'
                 {...props}
                 className={cn(
-                  `h-8 w-8 rounded-full p-2`,
+                  `h-8 w-8 rounded-full p-2 outline-none focus:outline-none focus-visible:ring-offset-[unset] focus-visible:ring-[unset]`,
                   `bg-transparent text-foreground opacity-70 hover:bg-transparent hover:opacity-100 active:bg-transparent`,
-                  activeDevice !== 'no-device' &&
+                  activeDeviceType !== 'no-device' &&
                     'text-spotify opacity-100 hover:scale-100',
-                  activeDevice !== 'no-device' &&
+                  activeDeviceType !== 'no-device' &&
                     'after:absolute after:bottom-0 after:left-1/2 after:z-[-1] after:h-1 after:w-1 after:translate-x-[-50%] after:rounded-full after:bg-spotify after:opacity-100'
                 )}
                 scale={true}
               >
-                {activeDevice === 'no-device' && <MonitorSpeaker size={16} />}
-                {activeDevice === 'computer' && <Laptop2 size={16} />}
-                {activeDevice === 'smartphone' && <Smartphone size={16} />}
-                {activeDevice === 'speaker' && <Speaker size={16} />}
+                {activeDeviceType === 'no-device' && (
+                  <MonitorSpeaker size={16} />
+                )}
+                {activeDeviceType === 'computer' && <Laptop2 size={16} />}
+                {activeDeviceType === 'smartphone' && <Smartphone size={16} />}
+                {activeDeviceType === 'speaker' && <Speaker size={16} />}
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
@@ -52,8 +91,29 @@ const DevicesButton = React.forwardRef<HTMLButtonElement, DevicesButtonProps>(
             Connect to a device
           </TooltipContent>
         </Tooltip>
-        <DropdownMenuContent side='top' align='center'>
-          <DropdownMenuItem>DEVICE</DropdownMenuItem>
+        <DropdownMenuContent className="space-y-1" side='top' align='center'>
+          <DropdownMenuLabel>
+              <h4 className="text-md font-bold">Current device</h4>
+              <p className="text-xs text-spotify font-normal">{activeDevice?.name}</p>
+          </DropdownMenuLabel>
+          <DropdownMenuLabel className="text-xs text-subdued">
+            Select another device
+          </DropdownMenuLabel>
+          <DropdownMenuGroup>
+            {availableDevices && availableDevices.length > 0 && availableDevices.filter((device) => !device.is_active).map((device) => (
+              <DropdownMenuItem
+                key={device.id}
+                className="flex gap-2 justify-start"
+                onClick={() => handleDeviceChange(device)}
+              >
+                  {device.type.toLowerCase() === 'computer' && <Laptop2 size={22} />}
+                  {device.type.toLowerCase() === 'smartphone' && <Smartphone size={22} />}
+                  {device.type.toLowerCase() === 'speaker' && <Speaker size={22} />}
+                  {device.name} 
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+          
         </DropdownMenuContent>
       </DropdownMenu>
     )

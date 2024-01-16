@@ -22,7 +22,7 @@ export function LibrarySearch() {
 
   useEffect(() => {
     console.log(searchInput)
-  }, [searchInput])
+  }, [searchInput]);
   // const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchInput(e.target.value)
   // }
@@ -32,7 +32,7 @@ export function LibrarySearch() {
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            onClick={() => setSearchVisible(!searchVisible)}
+            onClick={() => setSearchVisible(true)}
             className={cn(
               `z-20 p-1`,
               searchVisible
@@ -57,9 +57,10 @@ export function LibrarySearch() {
           `relative z-20`,
           `bg-tinted-highlight text-white outline-none`,
           `w-48 rounded-md py-1.5 pl-0 text-xs focus:pl-6 active:pl-6`,
-          `opacity-0 focus:opacity-100 active:opacity-100`,
-          `w-[23px] focus:w-full active:w-full`
+          searchVisible &&  `w-full pl-6 focus:pl-6 active:pl-6`,
+          searchInput.length > 0 ? 'w-full' : `w-[23px] focus:w-full active:w-full opacity-0 focus:opacity-100 active:opacity-100`,
         )}
+        onFocus={() => setSearchVisible(true)}
         placeholder='Search in Your Library'
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

@@ -1,22 +1,40 @@
 import { Button } from '@/components/ui/button'
-import { repeatStateAtom, shuffleStateAtom } from '@/lib/atoms'
+import { useSpotify } from '@/hooks'
+import { isPlayingAtom, sessionAtom } from '@/lib/atoms'
 import { useAtom } from 'jotai'
-import { Play } from 'lucide-react'
+import { Pause, Play } from 'lucide-react'
 import React from 'react'
 interface PlayPauseProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const PlayPauseButton = React.forwardRef<HTMLButtonElement, PlayPauseProps>(
   ({ className, ...props }, ref) => {
-    const [shuffleState, setShuffleState] = useAtom(shuffleStateAtom)
-    const [repeatState, setRepeatState] = useAtom(repeatStateAtom)
+    const spotify = useSpotify();
+    const [session] = useAtom(sessionAtom);
+    const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom)
+
+    const handlePlayPause = async () => {
+      if (isPlaying) {
+        await spotify.pause()
+      } else {
+        await spotify.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+
     return (
       <Button
+        disabled={!session}
         size='icon'
         className='h-8 w-8 rounded-full'
         scale={true}
+        onClick={handlePlayPause}
         ref={ref}
       >
-        <Play size={16} fill='black' />
+        {isPlaying && session ? (
+          <Pause size={16} fill='black' />
+        ) : (
+          <Play size={16} fill='black' />
+        )}
       </Button>
     )
   }

@@ -3,6 +3,7 @@ import {
   activeLibFilterAtom,
   libraryItemsAtom,
   sessionAtom,
+  sidebarSearchInputAtom,
   sideBarLeftCollapsedAtom,
   sidebarSortByAtom
 } from '@/lib/atoms'
@@ -22,7 +23,7 @@ export function LibraryNav({}) {
   const libraryItems = useAtomValue(libraryItemsAtom)
   const [library, setLibrary] = useState([] as LibraryItem[])
   const [sideBarLeftCollapsed] = useAtom(sideBarLeftCollapsedAtom)
-
+  const [searchInput] = useAtom(sidebarSearchInputAtom);
   useEffect(() => {
     if (!libraryItems) return
     if (activeLibFilter === 'playlists') {
@@ -33,6 +34,8 @@ export function LibraryNav({}) {
       setLibrary(libraryItems.filter((item) => item.type === 'album'))
     } else if (activeLibFilter === 'tracks') {
       setLibrary(libraryItems.filter((item) => item.type === 'tracks'))
+    } else if (activeLibFilter === 'episodes') {
+      setLibrary(libraryItems.filter((item) => item.type === 'episodes'))
     } else {
       setLibrary(
         libraryItems
@@ -48,7 +51,18 @@ export function LibraryNav({}) {
           })
       )
     }
-  }, [libraryItems, activeLibFilter, sortBy])
+
+    if(searchInput) {
+      setLibrary(libraryItems.filter((item) => {
+        if(item.name.toLowerCase().includes(searchInput.toLowerCase()) || item.label.toLowerCase().includes(searchInput.toLowerCase())) {
+          return item
+        }
+      }))
+    }
+  }, [libraryItems, activeLibFilter, sortBy, searchInput]);
+
+  
+
 
   if (!session)
     return (
@@ -72,9 +86,20 @@ export function LibraryNav({}) {
           ? library.map((item) => {
               return <LibraryNavItem key={item.id} {...item} />
             })
-          : Array(12)
+          : (
+            <>
+                {searchInput.length > 0 ? (
+                  <div className="h-full flex items-center justify-center mt-24">
+                    <p className='text-foreground text-center'>No results found</p>
+                  </div>
+                ) : Array(12)
               .fill(0)
               .map((_, i) => <LibrarySkeleton key={i} />)}
+            </>
+
+            
+          
+          )}
       </div>
     </nav>
   )

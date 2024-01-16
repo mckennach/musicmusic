@@ -9,8 +9,10 @@ import Icon from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 import { A11y, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import { useAtom } from 'jotai';
+import { activeLibFilterAtom } from '@/lib/atoms'
 import { LibraryFilterTypes } from '@/types'
+import { X } from 'lucide-react'
 
 interface LibraryFilterItemsProps {
   label: string
@@ -34,9 +36,10 @@ const filterItems: LibraryFilterItemsProps[] = [
     label: 'Artists',
     value: 'artists'
   }
-]
+];
 
 export function LibraryFilter() {
+  const [activeLibFilter, setActiveLibFilter] = useAtom(activeLibFilterAtom)
   return (
     <div className={cn(`relative z-30 w-full space-y-4 px-0`)}>
       <div className='relative'>
@@ -89,13 +92,29 @@ export function LibraryFilter() {
             disabledClass: 'swiper-button-disabled'
           }}
         >
+          {activeLibFilter !== '*' && (
+            <SwiperSlide className='!w-max'>
+              <Button
+                onClick={() => setActiveLibFilter('*')}
+                className={cn(
+                  `h-8 w-8 rounded-full p-2 text-xs font-semibold capitalize text-foreground`,
+                  `bg-tinted-base hover:bg-tinted-higlight active:bg-tinted-press`,
+                )}
+                size='sm'
+              >
+                <X size={16} />
+              </Button>
+            </SwiperSlide>
+          )}
           {filterItems.map((item) => {
             return (
               <SwiperSlide key={item.value} className='!w-max'>
                 <Button
+                  onClick={() => setActiveLibFilter(activeLibFilter === item.value ? '*' : item.value)}
                   className={cn(
-                    `h-8 !w-max rounded-full p-2 text-xs font-normal capitalize text-foreground`,
-                    `bg-tinted-base hover:bg-tinted-higlight active:bg-tinted-press`
+                    `h-8 !w-max rounded-full p-2 text-xs font-semibold capitalize text-foreground`,
+                    `bg-tinted-base hover:bg-tinted-higlight active:bg-tinted-press`,
+                    activeLibFilter === item.value && `bg-primary text-primary-foreground hover:bg-primary/80 active:bg-primary-press`,
                   )}
                   size='sm'
                 >
