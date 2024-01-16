@@ -6,7 +6,7 @@ import { getCsrfToken } from 'next-auth/react'
 import MainView from '@/views/main.view'
 
 const fetchSession = async (token: any) => {
-  const resp = await fetch('http://localhost:3000/api/spotify/me')
+  const resp = await fetch('https://musicmusic.vercel.app/api/spotify/me')
   const data = await resp.json()
   return data
 }

@@ -44,7 +44,7 @@ const fetchCurrentUser = async (session: AuthSession) => {
 
 const fetchLibrary = async (session: AuthSession) => {
   // return null;
-  const resp = await fetch('http:localhost:3000/api/spotify/library', {
+  const resp = await fetch('https://musicmusic.vercel.app/api/spotify/library', {
     method: 'POST',
     body: JSON.stringify({
       token: session?.user?.access_token
