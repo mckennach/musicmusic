@@ -73,7 +73,7 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
                 <Link
                   href={
                     playingTrack
-                      ? `/track/${playingTrack?.id}`
+                      ? `/album/${playingTrack?.album.id}`
                       : `/episode/${playingEpisode?.id}`
                   }
                   className='truncate text-sm font-normal text-foreground hover:underline'
