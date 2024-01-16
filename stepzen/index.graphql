@@ -1,0 +1,15 @@
+schema
+  @sdl(
+    files: [
+      "recommendations/index.graphql"
+      "auth/index.graphql"
+      "search/index.graphql"
+      "track/index.graphql"
+      "postgresql/index.graphql"
+      "currentUser/index.graphql"
+      "topItems/index.graphql"
+      "userProfile/index.graphql"
+    ]
+  ) {
+  query: Query
+}

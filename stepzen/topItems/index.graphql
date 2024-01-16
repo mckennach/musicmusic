@@ -1,0 +1,105 @@
+type TopItems {
+  href: String
+  items: [TopItemsItemsEntry]
+  limit: Int
+  next: String
+  offset: Int
+  """
+  Field "previous" is defined as JSON since its value was always 'null'
+  """
+  previous: JSON
+  total: Int
+}
+
+type TopItemsAlbum {
+  album_type: String
+  artists: [TopItemsArtistsEntry]
+  available_markets: [String]
+  external_urls: TopItemsExternalUrls1
+  href: String
+  id: String
+  images: [TopItemsImagesEntry]
+  name: String
+  release_date: String
+  release_date_precision: String
+  total_tracks: Int
+  type: String
+  uri: String
+}
+
+type TopItemsArtists1Entry {
+  external_urls: TopItemsExternalUrls2
+  href: String
+  id: String
+  name: String
+  type: String
+  uri: String
+}
+
+type TopItemsArtistsEntry {
+  external_urls: TopItemsExternalUrls
+  href: String
+  id: String
+  name: String
+  type: String
+  uri: String
+}
+
+type TopItemsExternalIds {
+  isrc: String
+}
+
+type TopItemsExternalUrls {
+  spotify: String
+}
+
+type TopItemsExternalUrls1 {
+  spotify: String
+}
+
+type TopItemsExternalUrls2 {
+  spotify: String
+}
+
+type TopItemsExternalUrls3 {
+  spotify: String
+}
+
+type TopItemsImagesEntry {
+  height: Int
+  url: String
+  width: Int
+}
+
+type TopItemsItemsEntry {
+  album: TopItemsAlbum
+  artists: [TopItemsArtists1Entry]
+  available_markets: [String]
+  disc_number: Int
+  duration_ms: Int
+  explicit: Boolean
+  external_ids: TopItemsExternalIds
+  external_urls: TopItemsExternalUrls3
+  href: String
+  id: String
+  is_local: Boolean
+  name: String
+  popularity: Int
+  preview_url: String
+  track_number: Int
+  type: String
+  uri: String
+}
+
+type Query {
+  topItems(
+    type: String!
+    access_token: String!
+    limit: Int
+    offset: Int
+  ): TopItems
+    @rest(
+      endpoint: "https://api.spotify.com/v1/me/top/$type"
+      headers: [{ name: "authorization", value: "Bearer $access_token" }]
+    )
+}

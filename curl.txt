@@ -1,0 +1,14 @@
+stepzen import \
+        curl --request POST 'https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/followers' \
+        --header "Authorization: Bearer BQA760m4DxzGWxaH7SVKgQP8dYAmyUtSPiiE-QnAeWKXmUy9MJR5NcfexyeOFe55gm09NSBP7PNi53Vr_5sXj0qGzqZ-fr20wxRAZfw_et3ocT_VG9KyLYNAM58SMdrGxFcYzmJThMH8GoWOpR082iWOno3l-l6kWLlmhRToUKgLw6dENJJE4Gw1ne94DeZpXVjENcyYMRJ9EreG6fMJcTygieUOwBFZTikWvFr4aoYh_WoNlbew7g2dtXLFQrrGe8f_xbSe5_gj-gnZ3jxNzP8i2n0-5n8ZLEpIjhmWmhUDrX6JLNJaLSkQDXHFsUXz" \
+        --path-params "/v1/playlists/\$id/followers"  \
+        --query-name "followPlaylist" \
+        --query-type "FollowPlaylist" \
+        --name "followPlalist" \
+        --prefix "FollowPlaylist"
+
+        stepzen import curl 
+        'http://dummy.restapiexample.com/api/v1/create' -d 
+        '{"key1":"value1", "key2":"value2"}' -H 'Content-Type: application/json'
+
+        stepzen import curl --request POST 'https://api.spotify.com/v1/playlists/{playlist_id}/followers?public=true' --header 'Authorization: Bearer BQA760m4DxzGWxaH7SVKgQP8dYAmyUtSPiiE-QnAeWKXmUy9MJR5NcfexyeOFe55gm09NSBP7PNi53Vr_5sXj0qGzqZ-fr20wxRAZfw_et3ocT_VG9KyLYNAM58SMdrGxFcYzmJThMH8GoWOpR082iWOno3l-l6kWLlmhRToUKgLw6dENJJE4Gw1ne94DeZpXVjENcyYMRJ9EreG6fMJcTygieUOwBFZTikWvFr4aoYh_WoNlbew7g2dtXLFQrrGe8f_xbSe5_gj-gnZ3jxNzP8i2n0-5n8ZLEpIjhmWmhUDrX6JLNJaLSkQDXHFsUXz' --query-name=spotifyQuery --query-type=Spotify --name=spotifyQuery --header-param 'authorization: $authorization' --path-params '/v1/playlists/\$playlist_id/\followers'

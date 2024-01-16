@@ -1,0 +1,36 @@
+type UserProfile {
+  display_name: String
+  external_urls: UserProfileExternalUrls
+  followers: UserProfileFollowers
+  href: String
+  id: Int
+  images: [UserProfileImagesEntry]
+  type: String
+  uri: String
+}
+
+type UserProfileExternalUrls {
+  spotify: String
+}
+
+type UserProfileFollowers {
+  """
+  Field "href" is defined as JSON since its value was always 'null'
+  """
+  href: JSON
+  total: Int
+}
+
+type UserProfileImagesEntry {
+  height: Int
+  url: String
+  width: Int
+}
+
+type Query {
+  userProfile(user_id: String!, access_token: String!): UserProfile
+    @rest(
+      endpoint: "https://api.spotify.com/v1/users/$user_id;"
+      headers: [{ name: "authorization", value: "Bearer $access_token" }]
+    )
+}

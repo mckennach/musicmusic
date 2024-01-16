@@ -1,0 +1,45 @@
+type CurrentUserExplicitContent {
+  filter_enabled: Boolean
+  filter_locked: Boolean
+}
+
+type CurrentUserExternalUrls {
+  spotify: String
+}
+
+type CurrentUserFollowers {
+  """
+  Field "href" is defined as JSON since its value was always 'null'
+  """
+  href: JSON
+  total: Int
+}
+
+type CurrentUserImagesEntry {
+  height: Int
+  url: String
+  width: Int
+}
+
+type CurrentUserResponse {
+  country: String
+  display_name: String
+  email: String
+  explicit_content: CurrentUserExplicitContent
+  external_urls: CurrentUserExternalUrls
+  followers: CurrentUserFollowers
+  href: String
+  id: Int
+  images: [CurrentUserImagesEntry]
+  product: String
+  type: String
+  uri: String
+}
+
+type Query {
+  getCurrentUser(access_token: String!): CurrentUserResponse
+    @rest(
+      endpoint: "https://api.spotify.com/v1/me"
+      headers: [{ name: "authorization", value: "Bearer $access_token" }]
+    )
+}

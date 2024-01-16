@@ -1,0 +1,8 @@
+configurationset:
+  - configuration:
+      name: postgresql_config
+      uri: postgresql://hello:RXtH6u4iUmbE@ep-crimson-breeze-a5l5b14w.us-east-2.aws.neon.tech/neondb?sslmode=require
+  - configuration:
+      name: auth_config
+      client_id: efea91059b724f868defc7fef716353f
+      client_secret: 2eee2099a2ff4b0b987c2d412a8f9f02
