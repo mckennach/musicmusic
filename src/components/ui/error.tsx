@@ -51,13 +51,20 @@ export function Error() {
           label: 'Login',
           onClick: () => {
             store.reAuth()
+            // if(session && session.user && status === 'authenticated') {
+            //   const reAuth = store.reAuth(session);
+            //   if(reAuth) {
+            //     router.refresh();
+            //     // store.update(session);
+            //   }
+            // }
           }
         })
         setShowMessage(true)
       }
 
     }
-  }, [error, errorMessage, store, setError, setErrorMessage])
+  }, [error, errorMessage])
 
   useEffect(() => {
     if (error && showMessage) {
@@ -67,7 +74,7 @@ export function Error() {
       })
       setShowMessage(false)
     }
-  }, [showMessage, title, description, action, error, errorMessage])
+  }, [showMessage, title, description, action, error])
 
   return null
 }

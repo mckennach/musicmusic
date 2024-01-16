@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { A11y, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-import { LibraryFilterTypes } from '@/lib/atoms'
+import { LibraryFilterTypes } from '@/types'
 
 interface LibraryFilterItemsProps {
   label: string
