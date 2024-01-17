@@ -31,6 +31,9 @@ const HeroImage = React.forwardRef<HTMLSpanElement, HeroImageProps>(({ src, alt,
   )
 })
 
+HeroImage.displayName = 'HeroImage';
+
+
 const HeroTextContainer = React.forwardRef<HTMLDivElement, any>(({ className, ...props }, ref) => {
   return (
     <div className={cn(className)} ref={ref} {...props}>
@@ -39,7 +42,7 @@ const HeroTextContainer = React.forwardRef<HTMLDivElement, any>(({ className, ..
   )
 });
 
-HeroImage.displayName = 'HeroImage';
+HeroTextContainer.displayName = 'HeroTextContainer';
 
 const HeroHeading = React.forwardRef<HTMLDivElement, any>(({ src, alt, fallback, className, ...props }, ref) => {
   return (
