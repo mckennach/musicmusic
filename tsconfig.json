@@ -27,6 +27,7 @@
       "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/lib/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@views/*": ["./src/components/views/*"],
       "@types/*": ["./src/types/*"],
       "@store/*": ["./src/lib/store/*"],
       "@services/*": ["./src/services/*"],

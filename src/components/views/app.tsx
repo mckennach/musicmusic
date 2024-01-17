@@ -21,7 +21,7 @@ import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { ImperativePanelHandle } from 'react-resizable-panels'
 
-export default function MainView({ children }: { children: React.ReactNode }) {
+export default function AppView({ children }: { children: React.ReactNode }) {
   const [sideBarLeftCollapsed, setSidebarLeftCollaposed] = useAtom(
     sideBarLeftCollapsedAtom
   )
@@ -70,12 +70,9 @@ export default function MainView({ children }: { children: React.ReactNode }) {
         </ResizablePanel>
         <ResizableHandle className='hover:bg-foreground/50 mx-1 bg-transparent' />
         <ResizablePanel order={2} className='relative'>
-          <Header />
-          <main className='h-full  overflow-hidden'>
-            <Card className='h-full overflow-x-hidden overflow-y-scroll border-none @container'>
-              {children}
-            </Card>
-          </main>
+         
+          {children}
+            
         </ResizablePanel>
         <ResizableHandle className='hover:bg-foreground/50 w-0.5 bg-transparent' />
         <ResizablePanel

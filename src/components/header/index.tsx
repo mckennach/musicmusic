@@ -71,7 +71,7 @@ export function Header() {
   }
 
   return (
-    <header className='absolute left-0 top-0 z-20 w-full' role='banner'>
+    <header className='absolute left-0 top-0 z-20 w-full min-h-16' role='banner'>
       <div className='flex items-center justify-between p-4'>
         <div className='flex items-center gap-2'>
           <Tooltip>

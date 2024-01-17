@@ -305,5 +305,14 @@
 
   }
 
+  .hero {
+    max-height: 320px;
+    min-height: 320px;
+    width: 100%;
+    /* --fluid-height: clamp(250px,250px + (100vw - var(--left-sidebar-width,0px) - var(--panel-width,0px) - 600px)/424*150,400px);
+    --min-fluid-height: clamp(250px,250px + (100vw - var(--left-sidebar-width,0px) - var(--panel-width,0px) - 600px)/424*90,340px);
+    --min-fluid-height-large-header: clamp(280px,280px + (100vw - var(--left-sidebar-width,0px) - var(--panel-width,0px) - 600px)/424*60,340px); */
+  }
+
   
 }

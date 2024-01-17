@@ -1,9 +1,10 @@
 import { Session } from 'next-auth'
-
+import { Header } from '@/components/header'
 // Components
 import { getCsrfToken } from 'next-auth/react'
 // Utils
-import MainView from '@/views/main.view'
+import AppView from '@/components/views/app'
+import Main from '@/components/views/main'
 
 const fetchSession = async (token: any) => {
   const resp = await fetch(`${process.env.NEXTAUTH_URL!}api/spotify/me`)
@@ -18,5 +19,12 @@ export default async function MainLayout({
 }) {
   const token = await getCsrfToken()
   const session: Session | null = await fetchSession(token)
-  return <MainView>{children}</MainView>
+  return  (
+    <AppView>
+      <Header />
+      <Main>
+        {children}
+      </Main>
+    </AppView>
+    )
 }
