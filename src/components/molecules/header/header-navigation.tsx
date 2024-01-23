@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@components/ui/button'
-import { signIn, useSession } from 'next-auth/react'
+// Components
+import { useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
 
@@ -11,9 +11,9 @@ import { useAtom } from 'jotai'
 
 import { forwardRoutesAtom, previousRoutesAtom } from '@/lib/atoms'
 
-import { Bell, ChevronLeft, ChevronRight, Users } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-// Components
+import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
@@ -83,7 +83,7 @@ export function HeaderNavigation() {
             <ChevronLeft size={20} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Go back</TooltipContent>
+        <TooltipContent align='start'>Go back</TooltipContent>
       </Tooltip>
       <Tooltip>
         <TooltipTrigger asChild>

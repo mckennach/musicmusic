@@ -306,10 +306,13 @@
   }
 
   body {
-    @apply max-h-screen min-h-screen overflow-hidden bg-background text-foreground;
-
-    overscroll-behavior-y: none;
+    @apply max-h-screen min-h-screen w-screen overflow-hidden bg-background text-foreground;
+    overflow-y: scroll;
     -webkit-font-smoothing: antialiased;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   .main-layout {
@@ -527,7 +530,7 @@
     justify-content: space-between;
     -webkit-padding-end: var(--content-spacing);
     align-items: center;
-    contain: content;
+    contain: layout;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -877,5 +880,65 @@
     -ms-flex-pack: end;
     grid-column: last;
     justify-content: flex-end;
+  }
+}
+
+@layer utilities {
+  .scroll-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+
+    scrollbar-width: none; /* Firefox */
+    /* scroll-padding-right: 8px; */
+  }
+
+  .scroll-area::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* .scroll-area::-webkit-scrollbar {
+    width: 7px;
+    background: transparent;
+  }
+  .scroll-area::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 10rem;
+  }
+
+
+  .scroll-area::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+  }
+
+  .scroll-area::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+  } */
+
+  /* .scroll-area::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+  }
+
+  .scroll-area::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+  } */
+
+  /* .scroll-area::-webkit-resizer,
+  .scroll-area::-webkit-scrollbar-button,
+  .scroll-area::-webkit-scrollbar-corner { display: none; } */
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

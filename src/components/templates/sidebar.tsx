@@ -1,6 +1,5 @@
 'use client'
 
-import { PanelProps } from '@/types'
 import { ImperativePanelHandle } from 'react-resizable-panels'
 import { useElementSize } from 'usehooks-ts'
 
@@ -14,6 +13,8 @@ import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 
 import { ResizableHandle, ResizablePanel } from '@/components/ui/resizable'
+
+import { PanelProps } from '@/types/database.ds'
 
 interface SidebarProps extends PanelProps {
   side: 'left' | 'right'

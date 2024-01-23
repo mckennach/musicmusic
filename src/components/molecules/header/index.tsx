@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@components/ui/button'
+// Components
 import { signIn, useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
@@ -13,7 +13,7 @@ import { forwardRoutesAtom, previousRoutesAtom } from '@/lib/atoms'
 
 import { Bell, ChevronLeft, ChevronRight, Users } from 'lucide-react'
 
-// Components
+import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,

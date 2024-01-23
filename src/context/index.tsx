@@ -1,9 +1,9 @@
-export * from './apollo.provider'
-export * from './database.provider'
-export * from './jotai.provider'
-export * from './session.provider'
-export * from './theme.provider'
-export * from './scroller'
+export * from './apollo'
+export * from './database'
+export * from './gsap'
+export * from './jotai'
+export * from './session'
+export * from './theme'
 
 // export default function Providers({ session }: { session: AuthSession}) {
 //   return (

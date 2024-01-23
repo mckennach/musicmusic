@@ -26,6 +26,7 @@ export function HeaderUserDropdown({ session }: { session: Session }) {
           size='md'
           scale={true}
           className='h-7 w-7 rounded-full'
+          tooltipAlign='end'
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' side='bottom' hideWhenDetached={true}>

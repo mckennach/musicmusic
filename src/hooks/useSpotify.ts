@@ -1,11 +1,12 @@
 // import spotifyApi from '@/lib/spotify'
-import { LibraryItem, LibraryProps } from '@/types'
 import { Artist } from '@spotify/web-api-ts-sdk'
 
 import spotify from '@/lib/spotify-sdk'
 import { formatNumber } from '@/lib/utils'
 
 import { toast } from 'sonner'
+
+import { LibraryItem, LibraryProps } from '@/types/database.ds'
 
 export function useSpotify() {
   return {

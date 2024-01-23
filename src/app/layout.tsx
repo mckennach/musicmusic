@@ -1,12 +1,11 @@
 // import { Toaster } from '@/components/ui/toaster'
 import {
   DatabaseProvider,
+  GsapProvider,
   JotaiProvider,
-  ScrollProvider,
   SessionProvider,
   ThemeProvider
 } from '@/context'
-import { authOptions } from '@auth/auth-options'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { getCsrfToken } from 'next-auth/react'
@@ -20,7 +19,9 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 
 import '@/styles/globals.output.css'
 
-import { AuthSession } from '@/types/sessions.types'
+import { authOptions } from '../lib/auth/auth-options'
+
+import { AuthSession } from '@/types/database.ds'
 
 const fontSans = Lato({
   weight: ['300', '400', '700', '900'],
@@ -46,20 +47,21 @@ const fetchCurrentUser = async (session: AuthSession) => {
   return data
 }
 
-const fetchLibrary = async (session: AuthSession) => {
-  // return null;
-  const resp = await fetch(`${process.env.NEXTAUTH_URL!}api/spotify/library`, {
-    method: 'POST',
-    body: JSON.stringify({
-      token: session?.user?.access_token
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.user?.access_token}`
-    }
-  })
-  const data = await resp.json()
-  return data
+const fetchInitalData = async (session: AuthSession | null) => {
+  if(session) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT!}/api/spotify/init`,{
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: session.user?.access_token
+      }),
+      method: 'POST'
+    })
+    return response.json();
+  }
+  return null;
 }
 
 export default async function RootLayout({
@@ -70,31 +72,30 @@ export default async function RootLayout({
   const token = await getCsrfToken()
   const session: AuthSession | null = await getServerSession(authOptions)
   const user = session && (await fetchCurrentUser(session))
-
+  const initialData = await fetchInitalData(session as AuthSession);
   return (
     <html lang='en' className='scroll-smooth' suppressHydrationWarning>
       <SessionProvider session={session}>
         <JotaiProvider>
-          <DatabaseProvider session={session} user={user}>
+          <DatabaseProvider session={session} initialData={initialData}>
             <body
               className={cn(
                 'bg-background font-sans text-foreground antialiased',
                 fontSans.variable
               )}
             >
-              <ThemeProvider
-                attribute='class'
-                defaultTheme='dark'
-                enableSystem={false}
-              >
-                <ScrollProvider>
-                  <TooltipProvider delayDuration={0}>
+              <TooltipProvider delayDuration={0}>
+                <GsapProvider>
+                  <ThemeProvider
+                    attribute='class'
+                    defaultTheme='dark'
+                    enableSystem={false}
+                  >
                     {children}
-                    {/* <Error /> */}
                     <Toaster />
-                  </TooltipProvider>
-                </ScrollProvider>
-              </ThemeProvider>
+                  </ThemeProvider>
+                </GsapProvider>
+              </TooltipProvider>
             </body>
           </DatabaseProvider>
         </JotaiProvider>

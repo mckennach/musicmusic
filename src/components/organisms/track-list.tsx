@@ -1,11 +1,9 @@
-import {
-  Episode,
-  Playlist,
-  PlaylistedTrack,
-  Show,
-  Track,
-  User
-} from '@spotify/web-api-ts-sdk'
+import { GsapContextProps, useGsapContext } from '@/context'
+import { useGSAP } from '@gsap/react'
+import { Playlist } from '@spotify/web-api-ts-sdk'
+import gsap from 'gsap'
+
+import { useEffect, useState } from 'react'
 
 import {
   TrackListBody,
@@ -16,7 +14,6 @@ import {
 } from '@/components/ui/track-list'
 
 import { PlaylistTrackItem } from '../molecules/track-items'
-import { TrackItem } from '../molecules/track-items/track-item'
 
 export interface TrackListHeaderItems {
   title: string
@@ -42,6 +39,47 @@ export function TrackList({
   type,
   headerItems
 }: TrackListProps) {
+  const gsapRef = useGsapContext()
+  const [ref, setRef] = useState<GsapContextProps>()
+
+  useEffect(() => {
+    if (gsapRef?.current) {
+      setRef(gsapRef)
+    }
+  }, [gsapRef])
+
+  useGSAP(
+    () => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            scroller: '.main-view-container__viewport',
+            trigger: '.track-list-body',
+            start: '-=128 top',
+            end: 'top-=64 bottom',
+            scrub: 0.6
+            // markers: true
+          }
+        })
+        .set('.track-list__grid.heading', {
+          borderBottomColor: 'hsla(0, 0%, 100%, 0.1)'
+        })
+        .to('.track-list__grid.heading', {
+          borderBottomColor: 'hsla(0, 0%, 100%, 0)'
+        })
+        .set('.track-list-heading', {
+          '--top-bar-opacity': 0
+        })
+        .to('.track-list-heading', {
+          '--top-bar-opacity': 1
+        })
+    },
+    {
+      scope: ref,
+      dependencies: [ref]
+    }
+  )
+
   return (
     <TrackListContainer className='' data-colcount={columnCount}>
       <TrackListHeading>
@@ -59,7 +97,7 @@ export function TrackList({
           })}
         </TrackListGrid>
       </TrackListHeading>
-      <TrackListBody className='body'>
+      <TrackListBody className='track-list-body'>
         {tracks.map((track, index) => {
           if (type === 'playlist')
             return (

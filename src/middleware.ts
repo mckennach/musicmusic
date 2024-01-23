@@ -16,6 +16,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/unauthorized', req.url))
   }
 
+  if (token && pathname == '/unauthorized') {
+    return NextResponse.redirect(new URL('/', req.url))
+  }
+
   return NextResponse.next()
 }
 

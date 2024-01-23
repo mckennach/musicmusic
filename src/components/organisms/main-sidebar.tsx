@@ -1,33 +1,14 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options'
 // Components
-import { getServerSession, Session } from 'next-auth'
-
-import React from 'react'
-
-import { cookies } from 'next/headers'
-
 // import { Sidebar } from '@/components/sidebar'
-import { cn } from '@/lib/utils'
-
 // Utils
+import { Session } from 'next-auth'
+
 import {
   LibraryNav,
   SidebarNav,
   SidebarSignIn
 } from '@/components/molecules/main-sidebar'
-import {
-  NowPlaying,
-  PlayerControls,
-  PlayerSettings,
-  PlayerUnauthorized
-} from '@/components/molecules/player'
-import {
-  MainLayout,
-  MainView,
-  NowPlayingBar,
-  Sidebar,
-  SidebarLibrary
-} from '@/components/templates'
+import { Sidebar, SidebarLibrary } from '@/components/templates'
 
 export function MainSidebar({
   defaultLayout,

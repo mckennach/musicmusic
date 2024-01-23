@@ -17,6 +17,9 @@ interface UserAvatarProps {
   scale?: boolean
   fallbackClassName?: string
   className?: string
+  tooltip?: boolean
+  tooltipSide?: 'top' | 'right' | 'bottom' | 'left'
+  tooltipAlign?: 'start' | 'center' | 'end'
 }
 
 const UserAvatar = forwardRef<HTMLSpanElement, UserAvatarProps>(
@@ -30,6 +33,9 @@ const UserAvatar = forwardRef<HTMLSpanElement, UserAvatarProps>(
       scale = false,
       fallbackClassName,
       className,
+      tooltip = true,
+      tooltipSide = 'top',
+      tooltipAlign = 'center',
       ...props
     },
     ref
@@ -58,7 +64,13 @@ const UserAvatar = forwardRef<HTMLSpanElement, UserAvatarProps>(
             </AvatarFallback>
           </Avatar>
         </TooltipTrigger>
-        <TooltipContent>{name}</TooltipContent>
+        <TooltipContent
+          side={tooltipSide}
+          align={tooltipAlign}
+          hidden={!tooltip}
+        >
+          {name}
+        </TooltipContent>
       </Tooltip>
     )
   }

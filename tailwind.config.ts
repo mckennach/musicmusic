@@ -23,8 +23,8 @@ const config = {
           '1xl': '39rem',
           '3-4xl': '45rem',
           '5-6xl': '66rem',
-          '9xl': '106rem',
-        },  
+          '9xl': '106rem'
+        },
         center: true
       },
       fontSize: {

@@ -7,7 +7,7 @@ import {
   RepeatButton,
   ShuffleButton,
   SkipButton
-} from './control-buttons'
+} from '../control-buttons'
 
 interface ControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 

@@ -1,16 +1,15 @@
 import { useSpotify } from '@/hooks'
-import { ErrorType, LibraryFilterTypes, LibraryItem } from '@/types'
+// import { ErrorType, LibraryFilterTypes, LibraryItem } from '../../../types/auth.ds'
 import {
   Artist,
   Device,
-  Episode,
   Page,
   PlaybackState,
   SavedAlbum,
   SavedEpisode,
   SavedTrack,
   SimplifiedPlaylist,
-  Track
+  User
 } from '@spotify/web-api-ts-sdk'
 import { atomWithStorage } from 'jotai/utils'
 
@@ -20,7 +19,8 @@ import spotify from '@/lib/spotify-sdk'
 
 import { millisToMinutesAndSeconds } from '../utils'
 
-import { AuthSession } from '@/types/sessions.types'
+import { ErrorType, LibraryFilterTypes, LibraryItem } from '@/types/database.ds'
+import { AuthSession } from '@/types/database.ds'
 
 export const store = createStore()
 // ====================
@@ -29,7 +29,7 @@ export const store = createStore()
 
 export const sessionAtom = atomWithStorage<AuthSession | null>('session', null)
 
-export const currentUserAtom = atomWithStorage('currentUser', null)
+export const currentUserAtom = atomWithStorage<User | null>('currentUser', null)
 
 // ====================
 // Library Atoms
@@ -51,7 +51,7 @@ export const asyncLibraryAtom = atom(null, async (get, set) => {
   if (!data) return set(libraryAtom, null)
   return set(libraryAtom, data)
 })
-export const libraryAtom = atomWithStorage<LibraryProps | null>('library', null)
+export const libraryAtom = atomWithStorage<LibraryProps | null>('library', null);
 
 export const activeLibFilterAtom = atomWithStorage<LibraryFilterTypes>(
   'library-filter',
@@ -181,7 +181,7 @@ export const activeDeviceAtom = atom<Device | null>((get) => {
   if (!availableDevices || availableDevices.length === 0) return null
   // if (availableDevices.length === 0) return null
   const activeDevice = availableDevices.find((device) => device.is_active)
-  return activeDevice ? activeDevice : availableDevices[0]
+  return activeDevice ? activeDevice : null
 })
 export const activeDeviceTypeAtom = atom<
   'no-device' | 'computer' | 'speaker' | 'smartphone'

@@ -1,6 +1,5 @@
 'use client'
 
-import { LibraryItem } from '@/types'
 import { signIn } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
@@ -21,6 +20,8 @@ import { Button } from '@/components/ui/button'
 
 import { LibraryItem as LibraryNavItem } from './library-item'
 import { LibrarySkeleton } from './library-skeleton'
+
+import { LibraryItem } from '@/types/database.ds'
 
 export function LibraryNav({}) {
   const [session] = useAtom(sessionAtom)
@@ -82,32 +83,36 @@ export function LibraryNav({}) {
     )
 
   return (
-    <nav
-      role='navigation'
-      className={cn(
-        `h-full overflow-x-hidden overflow-y-scroll`,
-        sideBarLeftCollapsed && `justify-center p-1.5`
-      )}
-    >
-      <div className='flex flex-col justify-start overflow-hidden pb-1 text-left'>
-        {library && library.length > 0 ? (
-          library.map((item) => {
-            return <LibraryNavItem key={item.id} {...item} />
-          })
-        ) : (
-          <>
-            {searchInput.length > 0 ? (
-              <div className='h-full flex items-center justify-center mt-24'>
-                <p className='text-foreground text-center'>No results found</p>
-              </div>
-            ) : (
-              Array(12)
-                .fill(0)
-                .map((_, i) => <LibrarySkeleton key={i} />)
-            )}
-          </>
+    <div className='relative h-full overflow-hidden'>
+      <nav
+        role='navigation'
+        className={cn(
+          'scroll-area',
+          sideBarLeftCollapsed && `no-scrollbar justify-center p-1.5`
         )}
-      </div>
-    </nav>
+      >
+        <div className='flex flex-col justify-start overflow-hidden pb-1 text-left'>
+          {library && library.length > 0 ? (
+            library.map((item) => {
+              return <LibraryNavItem key={item.id} {...item} />
+            })
+          ) : (
+            <>
+              {searchInput.length > 0 ? (
+                <div className='h-full flex items-center justify-center mt-24'>
+                  <p className='text-foreground text-center'>
+                    No results found
+                  </p>
+                </div>
+              ) : (
+                Array(12)
+                  .fill(0)
+                  .map((_, i) => <LibrarySkeleton key={i} />)
+              )}
+            </>
+          )}
+        </div>
+      </nav>
+    </div>
   )
 }

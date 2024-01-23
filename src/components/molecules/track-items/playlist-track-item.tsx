@@ -13,11 +13,15 @@ import { useAtom } from 'jotai'
 import {
   activeDeviceAtom,
   activePlaylistAtom,
-  activeTrackOrEpisodeAtom,
   asyncPlaybackAtom,
   playbackStateAtom
 } from '@/lib/atoms'
-import { cn, formatTime, millisToMinutesAndSeconds } from '@/lib/utils'
+import {
+  cn,
+  formatDate,
+  formatTime,
+  millisToMinutesAndSeconds
+} from '@/lib/utils'
 
 import { CheckCircle2, MoreHorizontal, Play, PlusCircle } from 'lucide-react'
 
@@ -66,6 +70,10 @@ const PlaylistTrackItem = ({
 
   useEffect(() => {
     ;(async () => {
+      if (track?.is_local) {
+        setIsSaved(true)
+        return
+      }
       if (track.track.type === 'track') {
         const isSaved = await checkIfItemIsSaved(
           (track.track as Track).id,
@@ -123,7 +131,7 @@ const PlaylistTrackItem = ({
       setIsSaved(true)
     }
   }
-
+  console.log('TRACK', track)
   useOnClickOutside(ref, handleClickOutside)
 
   return (
@@ -165,8 +173,12 @@ const PlaylistTrackItem = ({
             className='w-10 h-10 shrink-0'
             src={
               track.track.type === 'track'
-                ? (track.track as Track).album.images[0].url
-                : (track.track as Episode).show.images[0].url
+                ? (track.track as Track).album.images[0]
+                  ? (track.track as Track).album.images[0].url
+                  : undefined
+                : (track.track as Episode).show.images[0]
+                  ? (track.track as Episode).show.images[0].url
+                  : undefined
             }
             alt={track.track.name}
             icon='music'
@@ -176,7 +188,7 @@ const PlaylistTrackItem = ({
             name={
               <Link
                 className={cn(
-                  `hover:underline`,
+                  `hover:underline font-medium`,
                   playbackState?.item?.id === track.track?.id
                     ? 'text-spotify'
                     : ''
@@ -216,7 +228,7 @@ const PlaylistTrackItem = ({
           href={`/album/${albumOrPodcast.id}`}
           className={cn(
             'hover:underline',
-            'text-sm max-w-full truncate transition-colors duration-300',
+            'text-sm max-w-full truncate transition-colors duration-300 font-medium',
             isSelected ? 'text-white' : 'group-hover:text-white '
           )}
         >
@@ -227,8 +239,8 @@ const PlaylistTrackItem = ({
         className='grid-item truncate text-subdued-foreground'
         data-colindex={4}
       >
-        <span className='text-sm max-w-full truncate'>
-          {formatTime(track.added_at, false)}
+        <span className='text-sm max-w-full truncate font-medium'>
+          {formatDate(track.added_at)}
         </span>
       </TrackListGridItem>
       <TrackListGridItem
@@ -259,7 +271,7 @@ const PlaylistTrackItem = ({
           </TooltipContent>
         </Tooltip>
 
-        <span className='text-sm max-w-full mr-3 truncate'>
+        <span className='text-sm max-w-full mr-3 truncate font-medium'>
           {millisToMinutesAndSeconds(track.track.duration_ms)}
         </span>
         <button

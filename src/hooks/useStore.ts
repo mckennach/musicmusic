@@ -1,10 +1,8 @@
-import { AuthSession, LibraryProps } from '@/types'
-
+// import { useHydrateAtoms, } from 'jotai/utils'
 import { useState } from 'react'
 
 import { useAtom } from 'jotai'
 
-// import { useHydrateAtoms, } from 'jotai/utils'
 import {
   asyncAvailableDevicesAtom,
   asyncLibraryAtom,
@@ -15,6 +13,8 @@ import {
 } from '@/lib/atoms'
 
 import { useSyncAtoms } from '.'
+
+import { AuthSession, LibraryProps } from '@/types/database.ds'
 
 export function useStore() {
   const [items, setItems] = useAtom(libraryItemsAtom)

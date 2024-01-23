@@ -6,28 +6,13 @@ import { useOnClickOutside } from 'usehooks-ts'
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import Link from 'next/link'
-
 import { useAtom } from 'jotai'
 
-import {
-  activeDeviceAtom,
-  activePlaylistAtom,
-  activeTrackOrEpisodeAtom,
-  asyncPlaybackAtom,
-  playbackStateAtom
-} from '@/lib/atoms'
-import { cn, formatTime, millisToMinutesAndSeconds } from '@/lib/utils'
+import { activeDeviceAtom, playbackStateAtom } from '@/lib/atoms'
+import { cn } from '@/lib/utils'
 
-import { CheckCircle2, MoreHorizontal, Play, PlusCircle } from 'lucide-react'
+import { Play } from 'lucide-react'
 
-import { CoverImage } from '@/components/ui/cover-image'
-import { ItemTitle } from '@/components/ui/item-title'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
 import { TrackListGrid, TrackListGridItem } from '@/components/ui/track-list'
 
 interface TrackItemProps extends React.HTMLAttributes<HTMLDivElement> {

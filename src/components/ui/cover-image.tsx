@@ -15,12 +15,14 @@ import { Skeleton } from './skeleton'
 interface CoverImageProps {
   src?: string | StaticImport
   alt?: string
-  icon?: keyof typeof dynamicIconImports
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
   scale?: boolean
   loading?: boolean
-  fallbackClassName?: string
   className?: string
+  fallbackClassName?: string
+  icon?: keyof typeof dynamicIconImports
+  iconClassName?: string
+  iconSize?: number
 }
 
 const coverImageVariants = cva('h-7 w-7 rounded-sm', {
@@ -40,13 +42,14 @@ const CoverImage = forwardRef<HTMLDivElement, CoverImageProps>(
     {
       src,
       alt,
-      icon = 'music',
       size,
       scale = false,
       loading = false,
-      fallbackClassName,
       className,
-      ...props
+      fallbackClassName,
+      icon = 'music',
+      iconClassName,
+      iconSize = 16
     },
     ref
   ) => {
@@ -83,8 +86,16 @@ const CoverImage = forwardRef<HTMLDivElement, CoverImageProps>(
                   priority={true}
                 />
               ) : (
-                <div className='flex items-center justify-center w-full h-full bg-[#282828]'>
-                  <Icon name={icon} className='w-1/2 h-1/2' />
+                <div
+                  className={cn(
+                    'flex items-center justify-center w-full h-full bg-[#282828]',
+                    fallbackClassName
+                  )}
+                >
+                  <Icon
+                    name={icon}
+                    className={cn('w-1/2 h-1/2', iconClassName)}
+                  />
                 </div>
               )}
             </>

@@ -1,3 +1,4 @@
+// Components
 import { useState } from 'react'
 
 import { useAtom } from 'jotai'
@@ -6,7 +7,6 @@ import { activeLibFilterAtom, sidebarSearchInputAtom } from '@/lib/atoms'
 // Utils
 import { cn } from '@/lib/utils'
 
-// Components
 import Icon from '@/components/ui/icon'
 import {
   Tooltip,

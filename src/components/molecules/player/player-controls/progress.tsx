@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 
 import {
+  activeDeviceAtom,
   asyncPlaybackAtom,
   durationAtom,
   durationReadoutAtom,
@@ -23,6 +24,7 @@ interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ ...props }, ref) => {
+    const [activeDevice] = useAtom(activeDeviceAtom)
     const [, sync] = useAtom(asyncPlaybackAtom)
     const [session] = useAtom(sessionAtom)
     const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
@@ -40,13 +42,16 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     const updatePlayback = useAtomCallback(
       useCallback(
         async (get) => {
+          if(!activeDevice) return;
           await sync()
         },
-        [sync]
+        [sync, activeDevice]
       )
     )
 
     useEffect(() => {
+      console.log('playing', isPlaying)
+
       if (!session) return
       const timer = setInterval(async () => {
         updatePlayback()
@@ -58,12 +63,20 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     }, [updatePlayback, isPlaying, session])
 
     useEffect(() => {
-      if (playbackState && session) {
-        setProgress(playbackState.progress_ms)
-        setDuration(playbackState.item.duration_ms)
+      if (session && playbackState && activeDevice) {
+        console.log(playbackState)
+        setProgress(playbackState.progress_ms - 1)
+        setDuration(playbackState?.item?.duration_ms - 1)
         setIsPlaying(playbackState.is_playing)
       }
-    }, [playbackState, session, setProgress, setDuration, setIsPlaying])
+    }, [
+      activeDevice,
+      playbackState,
+      session,
+      setProgress,
+      setDuration,
+      setIsPlaying
+    ])
 
     useEffect(() => {
       // console.log('PROGRESS', progressPercent)
@@ -72,7 +85,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     if (!progressPercent) return null
     return (
       <div ref={ref} {...props}>
-        <div className='min-w-[40px] text-right text-xs text-subdued'>
+        <div className='min-w-[40px] text-right text-xs text-white/80'>
           <span>{progressReadout}</span>
         </div>
         <ProgressBar
@@ -81,7 +94,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
           value={[progressPercent]}
           className='flex w-full items-center justify-center'
         />
-        <div className='min-w-[40px] text-left text-xs text-subdued'>
+        <div className='min-w-[40px] text-left text-xs text-white/80'>
           <span>{durationReadout}</span>
         </div>
       </div>

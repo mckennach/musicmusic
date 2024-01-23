@@ -9,8 +9,8 @@ import {
   FullScreenButton,
   NowPlayingButton,
   QueueButton
-} from './setting-buttons'
-import { VolumeControl } from './volume'
+} from '../setting-buttons'
+import { VolumeControl } from '../volume'
 
 interface PlayerSettingsProps extends React.HTMLAttributes<HTMLDivElement> {}
 

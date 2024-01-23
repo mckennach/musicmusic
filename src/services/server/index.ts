@@ -1,10 +1,11 @@
 'use server'
 
 // import spotify from '@/lib/spotify-sdk'
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options'
-import { AuthSession } from '@/types'
+import { authOptions } from '@/lib/auth/auth-options'
 import { Playlist } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
+
+import { AuthSession } from '@/types/database.ds'
 
 const apiUrl = process.env.NEXT_PUBLIC_SPOTIFY_API_URL!
 
@@ -21,4 +22,10 @@ export const getPlaylistById = async (id: string): Promise<Playlist | null> => {
   return data
   // spotify.playlists.getPlaylist(id)
   // const playlist = await spotify.makeRequest<Playlist>
+}
+
+export const getSession = async () => {
+  'use server'
+  const session: AuthSession | null = await getServerSession(authOptions);
+  return session;
 }

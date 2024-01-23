@@ -1,48 +1,57 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options'
+'use client'
+
 // Components
-import { getServerSession, Session } from 'next-auth'
+// Utils
+import { Session } from 'next-auth'
 
-import React from 'react'
+import { useEffect, useState } from 'react'
 
-import { cookies } from 'next/headers'
+import { useAtomValue } from 'jotai'
 
+import { activeDeviceAtom } from '@/lib/atoms'
 // import { Sidebar } from '@/components/sidebar'
 import { cn } from '@/lib/utils'
 
-// Utils
 import {
-  LibraryNav,
-  SidebarNav,
-  SidebarSignIn
-} from '@/components/molecules/main-sidebar'
-import {
+  NoDevice,
   NowPlaying,
   PlayerControls,
   PlayerSettings,
   PlayerUnauthorized
 } from '@/components/molecules/player'
-import {
-  MainLayout,
-  MainView,
-  NowPlayingBar,
-  Sidebar,
-  SidebarLibrary
-} from '@/components/templates'
+import { NowPlayingBar } from '@/components/templates'
 
 export function NowPlayingView({ session }: { session: Session | null }) {
+  const [loaded, setLoaded] = useState(false)
+  const activeDevice = useAtomValue(activeDeviceAtom)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true)
+    }, 500)
+  }, [activeDevice])
   return (
     <NowPlayingBar>
       {session ? (
         <>
-          {/* test */}
-          <NowPlaying
-              className={cn(' flex-1 basis-[30%] max-w-[30%] pl-2')}
-            />
-            <PlayerControls className={cn('flex-1 basis-[40%] max-w-[40%]')} />
-            <PlayerSettings className={cn('flex-1 basis-[30%] max-w-[30%]')} />
+          {activeDevice ? (
+            <>
+              <NowPlaying
+                className={cn(' flex-1 basis-[30%] max-w-[30%] pl-2')}
+              />
+              <PlayerControls
+                className={cn('flex-1 basis-[40%] max-w-[40%]')}
+              />
+              <PlayerSettings
+                className={cn('flex-1 basis-[30%] max-w-[30%]')}
+              />
+            </>
+          ) : (
+            <>{loaded && <NoDevice />}</>
+            // <NoDevice />
+          )}
         </>
       ) : (
-        // <>test</>
         <PlayerUnauthorized />
       )}
     </NowPlayingBar>

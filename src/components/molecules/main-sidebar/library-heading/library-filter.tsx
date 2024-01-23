@@ -1,5 +1,4 @@
 // Import Swiper styles
-import { LibraryFilterTypes } from '@/types'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -16,6 +15,8 @@ import { X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
+
+import { LibraryFilterTypes } from '@/types/database.ds'
 
 interface LibraryFilterItemsProps {
   label: string

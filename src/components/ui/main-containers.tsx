@@ -1,11 +1,7 @@
-import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 
-import React, { HTMLAttributes } from 'react'
-import { useRef } from 'react'
-
-import { usePathname } from 'next/navigation'
+import React, { HTMLAttributes, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -82,23 +78,25 @@ const MainResizeObserver = React.forwardRef<
 
 MainResizeObserver.displayName = 'MainResizeObserver'
 
-const MainViewport = ({
-  children,
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) => {
+const MainViewport = React.forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ children, className, ...props }, ref) => {
   const container = useRef<HTMLDivElement>(null)
 
   return (
     <div
-      className={cn(`main-view-container__viewport @container`, className)}
+      ref={ref}
+      className={cn(
+        `main-view-container__viewport scroll-area scroll-r-0 scroll-pr-0 scroll-mr-0 @container`,
+        className
+      )}
       {...props}
-      ref={container}
     >
       {children}
     </div>
   )
-}
+})
 
 MainViewport.displayName = 'MainViewport'
 

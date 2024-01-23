@@ -1,37 +1,18 @@
 // Components
-import { ScrollProvider } from '@/context'
+// import { ScrollProvider } from '@/context'
+// import { Sidebar } from '@/components/sidebar'
+// Utils
 import { getServerSession } from 'next-auth'
 
 import React from 'react'
 
 import { cookies } from 'next/headers'
 
-// import { Sidebar } from '@/components/sidebar'
-import { cn } from '@/lib/utils'
-
-// Utils
-import {
-  LibraryNav,
-  SidebarNav,
-  SidebarSignIn
-} from '@/components/molecules/main-sidebar'
-import {
-  NowPlaying,
-  PlayerControls,
-  PlayerSettings,
-  PlayerUnauthorized
-} from '@/components/molecules/player'
 import { MainSidebar } from '@/components/organisms/main-sidebar'
 import { NowPlayingView } from '@/components/organisms/now-playing-bar'
-import {
-  MainLayout,
-  MainView,
-  NowPlayingBar,
-  Sidebar,
-  SidebarLibrary
-} from '@/components/templates'
+import { MainLayout, MainView } from '@/components/templates'
 
-import { authOptions } from '../api/auth/[...nextauth]/auth-options'
+import { authOptions } from '../../lib/auth/auth-options'
 
 export default async function Layout({
   children
@@ -41,7 +22,7 @@ export default async function Layout({
   const session = await getServerSession(authOptions)
   const layout = cookies().get('react-resizable-panels:layout')
 
-  let defaultLayout = [35, 65]
+  let defaultLayout = [28, 72]
   if (layout) {
     defaultLayout = JSON.parse(layout.value)
   }

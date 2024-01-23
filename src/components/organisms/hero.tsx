@@ -1,20 +1,9 @@
 'use client'
 
-import { Button } from '@components/ui/button'
-import { Playlist, User } from '@spotify/web-api-ts-sdk'
-import dynamicIconImports from 'lucide-react/dynamicIconImports'
-import { signIn, useSession } from 'next-auth/react'
-
-import { useEffect, useState } from 'react'
-
-import Link from 'next/link'
-
-import spotify from '@/lib/spotify-sdk'
-
-import { Bell, Users } from 'lucide-react'
-
 // import '@/styles/header.css'
-import { HeaderUserDropdown } from '@/components/molecules/header/header-user-dropdown'
+import dynamicIconImports from 'lucide-react/dynamicIconImports'
+import { useSession } from 'next-auth/react'
+
 import {
   HeroDescription,
   HeroImageContainer,
@@ -22,15 +11,8 @@ import {
   HeroTitle
 } from '@/components/molecules/hero'
 import { CoverImage } from '@/components/ui/cover-image'
-// Components
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import { UserAvatar } from '@/components/ui/user-avatar'
 
-import { HeaderNavigation } from '../molecules/header/header-navigation'
+// Components
 
 export interface HeroProps {
   title: string

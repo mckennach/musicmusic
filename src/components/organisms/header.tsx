@@ -1,12 +1,17 @@
 'use client'
 
-import { Button } from '@components/ui/button'
+import { GsapContextProps, useGsapContext } from '@/context'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+// import '@/styles/header.css'
 import { signIn, useSession } from 'next-auth/react'
+
+import { useEffect, useState } from 'react'
 
 import { Bell, Users } from 'lucide-react'
 
-// import '@/styles/header.css'
 import { HeaderUserDropdown } from '@/components/molecules/header/header-user-dropdown'
+import { Button } from '@/components/ui/button'
 // Components
 import {
   Tooltip,
@@ -17,13 +22,45 @@ import {
 import { HeaderNavigation } from '../molecules/header/header-navigation'
 
 export function Header() {
-  const { data: session, status } = useSession()
-
+  const { data: session } = useSession()
+  const gsapRef = useGsapContext()
+  const [ref, setRef] = useState<GsapContextProps>()
   const handleSignIn = () => {
     signIn('spotify', {
       callbackUrl: '/'
     })
   }
+
+  useEffect(() => {
+    if (gsapRef?.current) {
+      setRef(gsapRef)
+    }
+  }, [gsapRef])
+
+  useGSAP(
+    () => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            scroller: '.main-view-container__viewport',
+            trigger: '.main-view-container__scroll-spacer-child',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1
+          }
+        })
+        .set('.header', {
+          '--top-bar-opacity': 0
+        })
+        .to('.header', {
+          '--top-bar-opacity': 1
+        })
+    },
+    {
+      scope: ref,
+      dependencies: [ref]
+    }
+  )
 
   return (
     <header

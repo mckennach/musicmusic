@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
+// Components
 import { Episode, Track } from '@spotify/web-api-ts-sdk'
 
 import React, { useEffect, useState } from 'react'
@@ -14,8 +14,9 @@ import { useAtom } from 'jotai'
 import { playbackStateAtom, sessionAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 
-// Components
 import { NowPlayingLoading } from '@/components/molecules/player/now-playing/loading'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CoverImage } from '@/components/ui/cover-image'
 import Icon from '@/components/ui/icon'
 // Utils
 import { ItemTitle } from '@/components/ui/item-title'
@@ -64,7 +65,15 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
         {session && playbackState ? (
           <div className='flex w-full items-center justify-start'>
             <div className='flex max-w-full items-center gap-x-3 gap-y-2 truncate'>
-              <Avatar className={cn('h-10 w-10 rounded-sm')}>
+              <CoverImage
+                src={
+                  playingEpisode?.show.images[0].url ||
+                  playingTrack?.album.images[0].url
+                }
+                alt={alt}
+                icon='music'
+              />
+              {/* <Avatar className={cn('h-10 w-10 rounded-sm')}>
                 <AvatarImage
                   className={cn('rounded-sm')}
                   src={
@@ -76,7 +85,7 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
                 <AvatarFallback className={cn('rounded-sm')}>
                   <Icon name='music' size={20} className='shadow-sm' />
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <ItemTitle
                 name={
                   <Link

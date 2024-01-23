@@ -1,33 +1,32 @@
 'use client'
-import { useEffect, useState } from "react"
-import { Playlist, User, Track } from "@spotify/web-api-ts-sdk"
-import { Hero } from "../organisms/hero"
 import spotify from '@/lib/spotify-sdk'
-import { UserAvatar } from "../ui/user-avatar"
-import Link from "next/link"
-import { BackgroundFade } from "../ui/background-fade"
-import { ControlBar } from "../organisms/control-bar"
-import { TrackList } from "../organisms/track-list"
-import { Clock } from "lucide-react"
-import { TrackListHeaderItems } from "../organisms/track-list"
+import { Playlist, User } from '@spotify/web-api-ts-sdk'
+import { Clock } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { ControlBar } from '../organisms/control-bar'
+import { Hero } from '../organisms/hero'
+import { TrackList, TrackListHeaderItems } from '../organisms/track-list'
+import { BackgroundFade } from '../ui/background-fade'
+import { UserAvatar } from '../ui/user-avatar'
 // import { useImageData } from "@/hooks/useImageData"
 const headerItems: TrackListHeaderItems[] = [
   {
     title: '#',
     value: 'index',
-    className: 'w-6',
+    className: 'w-6'
   },
   {
     title: 'Title',
-    value: 'title',
+    value: 'title'
   },
   {
     title: 'Album',
-    value: 'album',
+    value: 'album'
   },
   {
     title: 'Date added',
-    value: 'date',
+    value: 'date'
   },
   {
     title: 'Length',
@@ -36,29 +35,26 @@ const headerItems: TrackListHeaderItems[] = [
   }
 ]
 
-export default function Playlist({ id }: { id: string}) {
-  const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [owner, setOwner] = useState<User | null>(null);
-  const [tracks, setTracks] = useState<Playlist['tracks']['items']>([]);
-
+export default function Playlist({ id, playlist }: { id: string, playlist: Playlist | null }) {
+  // const [playlist, setPlaylist] = useState<Playlist | null>(null)
+  const [owner, setOwner] = useState<User | null>(null)
+  const [tracks, setTracks] = useState<Playlist['tracks']['items']>([])
 
   useEffect(() => {
-    if(id) {
+    if (id && playlist) {
       spotify.playlists.getPlaylist(id).then((data) => {
-        setPlaylist(data)
-        const { owner } = data;
+        const { owner } = data
         setTracks(data.tracks.items)
         spotify.users.profile(owner.id).then((owner) => {
           setOwner(owner)
         })
-      });
-      
-      
+      })
     }
-  }, []);
+  }, [playlist, id]);
 
+  console.log(playlist);
 
-  if(!playlist) return null;
+  if (!playlist) return null
   return (
     <div className='under-header'>
       <Hero
@@ -86,22 +82,23 @@ export default function Playlist({ id }: { id: string}) {
               songs · {playlist?.public ? 'Public' : 'Private'} ·{' '}
               {playlist?.collaborative ? 'Collaborative' : 'Not Collaborative'}
             </span>
-          </>        
+          </>
         }
         imageSrc={playlist?.images && playlist?.images[0].url}
-        imageIcon="music"
-        imageSize="cover"
+        imageIcon='music'
+        imageSize='cover'
       />
       <section className='relative h-full content-spacing'>
         <BackgroundFade className='faade m-0 top-0 isolate' />
         <ControlBar id={id} />
-        <TrackList 
+        <TrackList
           id={id}
           contextUri={playlist?.uri}
-          tracks={tracks} 
-          columnCount={5} 
-          type="playlist" 
-          headerItems={headerItems} />
+          tracks={tracks}
+          columnCount={5}
+          type='playlist'
+          headerItems={headerItems}
+        />
       </section>
     </div>
   )

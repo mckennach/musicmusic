@@ -1,9 +1,9 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
-
 // import { useSession } from 'next-auth/react'
 // import { useSpotify } from '@/hooks';
+import { signIn } from 'next-auth/react'
+
 import { Button } from '@/components/ui/button'
 
 export default function Unauthorized({}) {

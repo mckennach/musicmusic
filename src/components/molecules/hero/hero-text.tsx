@@ -79,4 +79,4 @@ const HeroDescription = React.forwardRef<HTMLDivElement, HeroDescriptionProps>(
 
 HeroDescription.displayName = 'HeroDescription'
 
-export { HeroTextContainer, HeroTitle, HeroDescription }
+export { HeroDescription, HeroTextContainer, HeroTitle }
