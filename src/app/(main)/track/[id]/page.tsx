@@ -4,5 +4,5 @@ export default async function Track({
   params: { id: string }
 }) {
   const { id } = params
-  return <>Track: {id}</>
+  return <>Track!: {id}</>
 }
