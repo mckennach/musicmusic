@@ -1,5 +1,6 @@
 import { ImageProps } from '.'
 import { ArtistProps } from './artists.types'
+
 export interface IAlbumDisplay {
   images: ImageProps[]
   name: string

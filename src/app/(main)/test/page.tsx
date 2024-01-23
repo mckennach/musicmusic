@@ -1,8 +1,11 @@
 'use client'
 
-import { Card } from '@/components/ui/card'
-import { libraryAtom, libraryItemsAtom } from '@/lib/atoms'
 import { useAtom } from 'jotai'
+
+import { libraryAtom, libraryItemsAtom } from '@/lib/atoms'
+
+import { Card } from '@/components/ui/card'
+
 export default function Test() {
   const [library, setLibrary] = useAtom(libraryAtom)
   const [libraryItems, setLibraryItems] = useAtom(libraryItemsAtom)

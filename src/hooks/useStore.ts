@@ -1,4 +1,9 @@
+import { AuthSession, LibraryProps } from '@/types'
+
+import { useState } from 'react'
+
 import { useAtom } from 'jotai'
+
 // import { useHydrateAtoms, } from 'jotai/utils'
 import {
   asyncAvailableDevicesAtom,
@@ -8,9 +13,9 @@ import {
   libraryItemsAtom,
   sessionAtom
 } from '@/lib/atoms'
-import { AuthSession, LibraryProps } from '@/types'
-import { useState } from 'react'
+
 import { useSyncAtoms } from '.'
+
 export function useStore() {
   const [items, setItems] = useAtom(libraryItemsAtom)
   const [currentSession, setCurrentSession] = useAtom(sessionAtom)

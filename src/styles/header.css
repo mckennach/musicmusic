@@ -1,0 +1,17 @@
+.header {
+  justify-content: space-between;
+  -webkit-padding-end: var(--content-spacing);
+  align-items: center;
+  contain: content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 8px;
+  height: 64px;
+  justify-content: space-between;
+  padding: 16px var(--content-spacing);
+  padding-inline-end: var(--content-spacing);
+  position: absolute;
+  width: 100%;
+  z-index: var(--top-bar-z-index);
+}

@@ -1,5 +1,6 @@
 import { AlbumProps } from './albums.types'
 import { ArtistProps } from './artists.types'
+
 export interface TracksProps {
   href: string
   items: TrackItemsProps[]

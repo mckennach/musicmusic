@@ -1,6 +1,8 @@
-import { WritableAtom, atom, useSetAtom } from 'jotai'
 import type { useHydrateAtoms } from 'jotai/react/utils'
+
 import { useEffect, useMemo } from 'react'
+
+import { atom, useSetAtom, WritableAtom } from 'jotai'
 
 type AnyWritableAtom = WritableAtom<unknown, any[], any>
 type InferAtomTuples<T> = {

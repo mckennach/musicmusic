@@ -1,22 +1,26 @@
 // import { Toaster } from '@/components/ui/toaster'
-import { Error } from '@/components/ui/error'
-import { Toaster } from '@/components/ui/sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
-import { Suspense } from 'react'
 import {
   DatabaseProvider,
   JotaiProvider,
+  ScrollProvider,
   SessionProvider,
   ThemeProvider
-} from '@/providers'
-import { AuthSession } from '@/types/sessions.types'
+} from '@/context'
 import { authOptions } from '@auth/auth-options'
-import '@styles/globals.css'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { getCsrfToken } from 'next-auth/react'
+
 import { Lato } from 'next/font/google'
+
+import { cn } from '@/lib/utils'
+
+import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
+
+import '@/styles/globals.output.css'
+
+import { AuthSession } from '@/types/sessions.types'
 
 const fontSans = Lato({
   weight: ['300', '400', '700', '900'],
@@ -68,7 +72,7 @@ export default async function RootLayout({
   const user = session && (await fetchCurrentUser(session))
 
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' className='scroll-smooth' suppressHydrationWarning>
       <SessionProvider session={session}>
         <JotaiProvider>
           <DatabaseProvider session={session} user={user}>
@@ -83,11 +87,13 @@ export default async function RootLayout({
                 defaultTheme='dark'
                 enableSystem={false}
               >
-                <TooltipProvider delayDuration={0}>
-                  {children}
-                  <Error />
-                  <Toaster />
-                </TooltipProvider>
+                <ScrollProvider>
+                  <TooltipProvider delayDuration={0}>
+                    {children}
+                    {/* <Error /> */}
+                    <Toaster />
+                  </TooltipProvider>
+                </ScrollProvider>
               </ThemeProvider>
             </body>
           </DatabaseProvider>

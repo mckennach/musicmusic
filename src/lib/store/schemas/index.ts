@@ -11,12 +11,11 @@ import PlaylistTrack from './PlaylistTrack'
 import RecommendationParameters from './RecommendationParameters'
 import RecommendationsResponse from './RecommendationsResponse'
 import RecommendationsSeedObject from './RecommendationsSeedObject'
+import RootQuery from './RootQuery'
 import TimeRange from './TimeRange'
 import TopType from './TopType'
 import Track from './Track'
 import User from './User'
-
-import RootQuery from './RootQuery'
 
 const SchemaDefinition = `
   schema {

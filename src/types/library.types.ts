@@ -1,11 +1,6 @@
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
-import {
-  AlbumsProps,
-  FollowedProps,
-  ImageProps,
-  PlaylistsProps,
-  TracksProps
-} from '.'
+
+import { ImageProps } from '.'
 
 export type LibraryFilterTypes =
   | '*'
@@ -28,15 +23,6 @@ export interface LibraryItem {
   pinned: boolean
 }
 
-export interface LibraryProps {
-  artists: FollowedProps
-  albums: AlbumsProps
-  tracks: TracksProps
-  playlists: PlaylistsProps
-  episodes: any
-  shows: any
-}
-
 export interface Library {
   tracks: LibraryItemProps[]
   episodes: LibraryItemProps[]
@@ -45,10 +31,10 @@ export interface Library {
   artists: LibraryItemProps[]
 }
 
-export interface LibraryProps {
-  type: string
-  items: LibraryItemProps[]
-}
+// export interface LibraryProps {
+//   type: string
+//   items: LibraryItemProps[]
+// }
 
 export interface LibraryItemProps {
   id: string

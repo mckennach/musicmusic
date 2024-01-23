@@ -1,14 +1,13 @@
 'use client'
 
-import { AuthSession } from '@/types'
-import { AuthUser } from '@auth/auth-options'
+import { AuthUser } from '@/types'
 import {
   AccessToken,
   IAuthStrategy,
   SdkConfiguration,
   SdkOptions,
   SpotifyApi
-} from '@spotify/web-api-ts-sdk' // use "@spotify/web-api-ts-sdk" in your own project
+} from '@spotify/web-api-ts-sdk'
 import { getSession, signIn } from 'next-auth/react'
 
 /**
@@ -21,7 +20,7 @@ class NextAuthStrategy implements IAuthStrategy {
   }
 
   public async getAccessToken(): Promise<AccessToken> {
-    const session: AuthSession | null = (await getSession()) as AuthSession
+    const session: any = await getSession()
     if (!session) {
       return {} as AccessToken
     }
@@ -55,5 +54,43 @@ function withNextAuthStrategy(config?: SdkOptions) {
   const strategy = new NextAuthStrategy()
   return new SpotifyApi(strategy, config)
 }
+
+export const scopes = [
+  // Images
+  'ugc-image-upload',
+  // Spotify Connect
+  'user-read-playback-state',
+  'user-modify-playback-state',
+  'user-read-currently-playing',
+  // Playback
+  'app-remote-control',
+  'streaming',
+  // Playlist
+  'playlist-read-private',
+  'playlist-read-collaborative',
+  'playlist-modify-private',
+  'playlist-modify-public',
+
+  // Follow
+
+  'user-follow-modify',
+  'user-follow-read',
+
+  // Listening History
+
+  'user-read-playback-position',
+  'user-top-read',
+  'user-read-recently-played',
+
+  // Library
+
+  'user-library-modify',
+  'user-library-read',
+
+  // Users
+
+  'user-read-email',
+  'user-read-private'
+]
 
 export default withNextAuthStrategy()

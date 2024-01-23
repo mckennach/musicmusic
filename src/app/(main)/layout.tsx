@@ -1,30 +1,60 @@
-import { Session } from 'next-auth'
-import { Header } from '@/components/header'
 // Components
-import { getCsrfToken } from 'next-auth/react'
+import { ScrollProvider } from '@/context'
+import { getServerSession } from 'next-auth'
+
+import React from 'react'
+
+import { cookies } from 'next/headers'
+
+// import { Sidebar } from '@/components/sidebar'
+import { cn } from '@/lib/utils'
+
 // Utils
-import AppView from '@/components/views/app'
-import Main from '@/components/views/main'
+import {
+  LibraryNav,
+  SidebarNav,
+  SidebarSignIn
+} from '@/components/molecules/main-sidebar'
+import {
+  NowPlaying,
+  PlayerControls,
+  PlayerSettings,
+  PlayerUnauthorized
+} from '@/components/molecules/player'
+import { MainSidebar } from '@/components/organisms/main-sidebar'
+import { NowPlayingView } from '@/components/organisms/now-playing-bar'
+import {
+  MainLayout,
+  MainView,
+  NowPlayingBar,
+  Sidebar,
+  SidebarLibrary
+} from '@/components/templates'
 
-const fetchSession = async (token: any) => {
-  const resp = await fetch(`${process.env.NEXTAUTH_URL!}api/spotify/me`)
-  const data = await resp.json()
-  return data
-}
+import { authOptions } from '../api/auth/[...nextauth]/auth-options'
 
-export default async function MainLayout({
+export default async function Layout({
   children
 }: {
   children: React.ReactNode
 }) {
-  const token = await getCsrfToken()
-  const session: Session | null = await fetchSession(token)
-  return  (
-    <AppView>
-      <Header />
-      <Main>
-        {children}
-      </Main>
-    </AppView>
-    )
+  const session = await getServerSession(authOptions)
+  const layout = cookies().get('react-resizable-panels:layout')
+
+  let defaultLayout = [35, 65]
+  if (layout) {
+    defaultLayout = JSON.parse(layout.value)
+  }
+
+  return (
+    <>
+      <MainLayout>
+        <MainSidebar defaultLayout={defaultLayout} session={session} />
+        <MainView defaultSize={defaultLayout[1]} id='MainView' order={2}>
+          {children}
+        </MainView>
+      </MainLayout>
+      <NowPlayingView session={session} />
+    </>
+  )
 }

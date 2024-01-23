@@ -1,5 +1,6 @@
 // middleware.ts
 import { getToken } from 'next-auth/jwt'
+
 import { NextRequest, NextResponse } from 'next/server'
 
 // This function can be marked `async` if using `await` inside
@@ -11,8 +12,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  if (!token && pathname != '/') {
-    return NextResponse.redirect(new URL('/', req.url))
+  if (!token && pathname != '/unauthorized') {
+    return NextResponse.redirect(new URL('/unauthorized', req.url))
   }
 
   return NextResponse.next()

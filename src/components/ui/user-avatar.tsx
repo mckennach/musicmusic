@@ -1,16 +1,20 @@
-import { cn } from '@/lib/utils'
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
+
 import { forwardRef } from 'react'
+
+import { cn } from '@/lib/utils'
+
 import { Avatar, AvatarFallback, AvatarImage } from './avatar'
 import Icon from './icon'
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
+
 interface UserAvatarProps {
   src?: string
   alt?: string
   name: string
   icon: keyof typeof dynamicIconImports
   size?: 'sm' | 'md' | 'lg'
-  scale: boolean
+  scale?: boolean
   fallbackClassName?: string
   className?: string
 }
@@ -48,7 +52,7 @@ const UserAvatar = forwardRef<HTMLSpanElement, UserAvatarProps>(
           >
             <AvatarImage src={src} alt={alt ? alt : 'Avatar'} />
             <AvatarFallback
-              className={cn(`bg-primary text-xs`, fallbackClassName)}
+              className={cn(`bg-card text-xs`, fallbackClassName)}
             >
               <Icon name={icon} size={15} />
             </AvatarFallback>

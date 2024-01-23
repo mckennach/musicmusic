@@ -1,6 +1,27 @@
-import { AuthUser } from '@auth/auth-options'
-import { DefaultSession } from 'next-auth'
+import { DefaultSession, DefaultUser } from 'next-auth'
 
+// export interface AuthUser extends DefaultUser {
+//   access_token?: string
+
+//   username?: string
+//   expires_at: number
+//   refresh_token?: string
+
+//   id: string
+// }
+
+export interface AuthUser extends DefaultUser {
+  name: string
+  email: string
+  image: string
+  access_token: string
+  token_type: string
+  expires_at: number
+  expires_in: number
+  refresh_token: string
+  scope: string
+  id: string
+}
 // export interface AuthSessionProps extends Session {
 //   data: {
 //     expires: string

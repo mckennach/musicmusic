@@ -46,7 +46,11 @@ const params = {
 }
 
 const queryParamString = new URLSearchParams(params)
+export const authURL = new URL('https://accounts.spotify.com/authorize')
+
+authURL.searchParams.append('scope', scopes.join(' '))
 const LOGIN_URL = `https://accounts.spotify.com:443/authorize?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&response_type=code&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&${queryParamString}`
+
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID!,
   clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET!

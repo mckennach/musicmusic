@@ -12,13 +12,19 @@ const config = {
   prefix: '',
   theme: {
     container: {
-      center: true,
       padding: '2rem',
       screens: {
         '2xl': '1400px'
       }
     },
     extend: {
+      container: {
+        '1xl': '39rem',
+        '3-4xl': '45rem',
+        '5-6xl': '66rem',
+        '9xl': '106rem',
+        center: true
+      },
       fontSize: {
         '2xs': '0.625rem'
       },
@@ -92,6 +98,14 @@ const config = {
           DEFAULT: 'var(--background-tinted-highlight)',
           foreground: 'var(--foreground)'
         },
+        'tinted-higlight-2': {
+          DEFAULT: 'var(--background-tinted-highlight-2)',
+          foreground: 'var(--foreground)'
+        },
+        'tinted-higlight-3': {
+          DEFAULT: 'var(--background-tinted-highlight-3)',
+          foreground: 'var(--foreground)'
+        },
         'tinted-press': {
           DEFAULT: 'var(--background-tinted-press)',
           foreground: 'var(--foreground)'
@@ -113,6 +127,7 @@ const config = {
           foreground: 'var(--spotify-text-base)',
           inverted: 'var(--spotify-text-inverted)'
         },
+        'bright-accent': 'var(--text-bright-accent)',
         invert: {
           DEFAULT: 'var(--inverted-bg-base)',
           highlight: 'var(--inverted-bg-highlight)',
