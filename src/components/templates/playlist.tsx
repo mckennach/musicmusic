@@ -36,29 +36,26 @@ const headerItems: TrackListHeaderItems[] = [
   }
 ]
 
-export default function Playlist({ id, playlist }: { id: string, playlist: Playlist | null}) {
+export default function Playlist({ id }: { id: string}) {
+  const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [owner, setOwner] = useState<User | null>(null);
   const [tracks, setTracks] = useState<Playlist['tracks']['items']>([]);
 
 
   useEffect(() => {
-    if(playlist) {
-      const { owner } = playlist;
-      setTracks(playlist.tracks.items)
-      spotify.users.profile(owner.id).then((owner) => {
-        setOwner(owner)
-      })
-      if(playlist.images) {
-        // getImageData(playlist.images[0].url).then((data) => {
-        //   console.log(data);
-        //   // document.documentElement.style.setProperty(
-        //   //   '--random-color',
-        //   //   `${data}`
-        //   // )
-        // })
-      }
+    if(id) {
+      spotify.playlists.getPlaylist(id).then((data) => {
+        setPlaylist(data)
+        const { owner } = data;
+        setTracks(data.tracks.items)
+        spotify.users.profile(owner.id).then((owner) => {
+          setOwner(owner)
+        })
+      });
+      
+      
     }
-  }, [playlist]);
+  }, []);
 
 
   if(!playlist) return null;

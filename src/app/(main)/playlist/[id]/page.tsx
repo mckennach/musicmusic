@@ -3,7 +3,7 @@
 //   PlaylistHero,
 //   PlaylistTrackList
 // } from '@/components/templates/playlist'
-import { getPlaylistById } from '@/services/server'
+// import { getPlaylistById } from '@/services/server'
 
 import spotify from '@/lib/spotify-sdk'
 
@@ -15,9 +15,9 @@ export default async function Playlists({
 }: {
   params: { id: string }
 }) {
-  const playlist = await getPlaylistById(params.id)
+  // const playlist = await getPlaylistById(params.id)
 
-  return <Playlist id={params?.id} playlist={playlist} />
+  return <Playlist id={params?.id}  />
   // return (
   //   <section role='presentation' className='under-header'>
   //     <PlaylistHero id={params.id} />
