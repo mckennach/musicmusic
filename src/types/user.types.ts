@@ -1,7 +1,7 @@
-import { Artist, TrackProps } from '.'
+import { TrackProps } from '.'
 import { ImageProps } from './image.types'
 import { PlaylistProps } from './playlists.types'
-
+import { Artist } from '@spotify/web-api-ts-sdk'
 export interface UserProps {
   country: string
   display_name: string
