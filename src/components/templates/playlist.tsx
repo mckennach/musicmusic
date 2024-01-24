@@ -1,14 +1,15 @@
-'use client'
-import spotify from '@/lib/spotify-sdk'
-import { Playlist, User } from '@spotify/web-api-ts-sdk'
+
+// import spotify from '@/lib/spotify-sdk'
+import { PlaylistedTrack, TrackItem, Page, Playlist, User, QueryAdditionalTypes } from '@spotify/web-api-ts-sdk'
 import { Clock } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { ControlBar } from '../organisms/control-bar'
 import { Hero } from '../organisms/hero'
 import { TrackList, TrackListHeaderItems } from '../organisms/track-list'
 import { BackgroundFade } from '../ui/background-fade'
 import { UserAvatar } from '../ui/user-avatar'
+import { Recommendations } from '../organisms/recommendations'
 // import { useImageData } from "@/hooks/useImageData"
 const headerItems: TrackListHeaderItems[] = [
   {
@@ -35,25 +36,16 @@ const headerItems: TrackListHeaderItems[] = [
   }
 ]
 
-export default function Playlist({ id, playlist }: { id: string, playlist: Playlist | null }) {
-  // const [playlist, setPlaylist] = useState<Playlist | null>(null)
-  const [owner, setOwner] = useState<User | null>(null)
-  const [tracks, setTracks] = useState<Playlist['tracks']['items']>([])
-
-  useEffect(() => {
-    if (id && playlist) {
-      spotify.playlists.getPlaylist(id).then((data) => {
-        const { owner } = data
-        setTracks(data.tracks.items)
-        spotify.users.profile(owner.id).then((owner) => {
-          setOwner(owner)
-        })
-      })
-    }
-  }, [playlist, id]);
-
-  console.log(playlist);
-
+export default function Playlist({ 
+  id, 
+  playlist, 
+  owner 
+}: 
+{ 
+  id: string, 
+  playlist: Playlist | null, 
+  owner: User | null
+}) {
   if (!playlist) return null
   return (
     <div className='under-header'>
@@ -94,11 +86,12 @@ export default function Playlist({ id, playlist }: { id: string, playlist: Playl
         <TrackList
           id={id}
           contextUri={playlist?.uri}
-          tracks={tracks}
+          tracks={playlist?.tracks?.items || []}
           columnCount={5}
           type='playlist'
           headerItems={headerItems}
         />
+        <Recommendations playlist={playlist} description="Based on what's in this playlist"  />
       </section>
     </div>
   )

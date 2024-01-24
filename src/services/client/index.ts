@@ -6,7 +6,6 @@ import { formatNumber } from '@/lib/utils'
 
 import { LibraryItem, LibraryProps } from '@/types/database.ds'
 
-
 export const checkIfItemIsSaved = async (
   id: string,
   type: 'tracks' | 'episodes' | 'albums' | 'artists' | 'playlists'
@@ -17,9 +16,7 @@ export const checkIfItemIsSaved = async (
   }
 
   if (type === 'episodes') {
-    const isSaved = await spotify.currentUser.episodes.hasSavedEpisodes([
-      id
-    ])
+    const isSaved = await spotify.currentUser.episodes.hasSavedEpisodes([id])
     return isSaved[0]
   }
 
@@ -29,9 +26,7 @@ export const checkIfItemIsSaved = async (
   }
 
   if (type === 'playlists') {
-    const isSaved = await spotify.currentUser.playlists.isFollowing(id, [
-      id
-    ])
+    const isSaved = await spotify.currentUser.playlists.isFollowing(id, [id])
     return isSaved[0]
   }
 
@@ -127,7 +122,5 @@ export const createLibraryItems = (library: LibraryProps) => {
       icon: 'bookmark'
     })
   }
-  return libraryItems?.sort((a, b) =>
-    a.id.localeCompare(b.id)
-  ) as LibraryItem[]
+  return libraryItems?.sort((a, b) => a.id.localeCompare(b.id)) as LibraryItem[]
 }

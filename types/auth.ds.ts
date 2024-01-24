@@ -1,4 +1,4 @@
-import { TimeRange, Limit, Offset, ItemType } from "./database.ds";
+import { ItemType, Limit, Offset, TimeRange } from './database.ds'
 
 export interface UserTopItemParams {
   type: ItemType

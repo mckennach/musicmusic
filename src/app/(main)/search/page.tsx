@@ -1,7 +1,5 @@
+import { SearchPage } from '@/components/templates/search'
+
 export default async function Search() {
-  return (
-    <div>
-      <h1>Search</h1>
-    </div>
-  )
+  return <SearchPage />
 }

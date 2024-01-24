@@ -61,7 +61,7 @@ export function LibraryItem({
               )}>
                   <CoverImage
                     className={cn('overflow-hidden shadow-md  w-full h-full',
-                      sideBarLeftCollapsed ? '' : 'max-w-12 min-h-12',
+                      sideBarLeftCollapsed ? 'max-w-12' : 'max-w-12 min-h-12',
                       type === 'artist' ? `rounded-full` : 'rounded-sm'
                     )}
                     src={imageSrc ? imageSrc : undefined}

@@ -1322,6 +1322,12 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   }
 }
 
+.track-list {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  outline: none;
+}
+
 .track-list-heading {
   border-bottom: 1px solid transparent;
   box-sizing: content-box;
@@ -1348,19 +1354,46 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   box-shadow: 0 -1px 0 0 #181818;
 }
 
-.track-list__grid {
+.track-list__grid-container {
   grid-gap: 16px;
   display: grid;
   padding: 0 16px;
+}
+
+.track-list__body {
+  contain: layout size;
+  position: relative;
+  --row-height: 56px;
+  /* padding: 0 16px; */
+}
+
+.track-list__body-container {
+  /* pointer-events: none; */
+  position: absolute;
+  width: 100%;
 }
 
 .track-list__grid.heading {
   color: var(--text-subdued);
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
   height: 36px;
+  --row-height: 36px;
 }
 
-.track-list[data-colcount='5'] .track-list__grid {
+.track-list__grid-container {
+  height: var(--row-height);
+}
+
+.track-list[aria-colcount='4'] .track-list__grid-container {
+  grid-template-columns:
+      [index] minmax(120px, var(--col0, 48fr)) [var1] minmax(
+        120px,
+        var(--col1, 29fr)
+      )
+      [var2] minmax(120px, var(--col2, 23fr)) [last] minmax(120px, var(--col3, 1fr));
+}
+
+.track-list[aria-colcount='5'] .track-list__grid-container {
   /* grid-template-columns: repeat(5, 1fr); */
   grid-template-columns:
       [index] var(--tracklist-index-column-width, 16px) [first] minmax(
@@ -1380,14 +1413,15 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   display: flex;
 }
 
-.track-list__grid-item[data-colindex='1'] {
+.track-list__grid-item[aria-colindex='1'] {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   grid-column: index;
   justify-content: flex-start;
 }
 
-.track-list__grid-item[data-colindex='5'] {
+.track-list[aria-colcount='4'] .track-list__grid-item[aria-colindex='4'],
+  .track-list[aria-colcount='5'] .track-list__grid-item[aria-colindex='5'] {
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   grid-column: last;
@@ -1420,10 +1454,6 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .collapse {
   visibility: collapse;
-}
-
-.static {
-  position: static;
 }
 
 .fixed {
@@ -1466,6 +1496,10 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .left-2 {
   left: 0.5rem;
+}
+
+.left-3 {
+  left: 0.75rem;
 }
 
 .left-\[50\%\] {
@@ -1958,12 +1992,8 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   width: 1px;
 }
 
-.w-screen {
-  width: 100vw;
-}
-
-.w-\[340px\] {
-  width: 340px;
+.min-w-\[10px\] {
+  min-width: 10px;
 }
 
 .min-w-\[200px\] {
@@ -2010,6 +2040,10 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   max-width: 65px;
 }
 
+.max-w-\[68px\] {
+  max-width: 68px;
+}
+
 .max-w-full {
   max-width: 100%;
 }
@@ -2039,6 +2073,10 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   flex-shrink: 0;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
+
 .grow {
   flex-grow: 1;
 }
@@ -2057,6 +2095,10 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .basis-\[30\%\] {
   flex-basis: 30%;
+}
+
+.basis-\[360px\] {
+  flex-basis: 360px;
 }
 
 .basis-\[40\%\] {
@@ -2149,10 +2191,6 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-}
-
-.resize {
-  resize: both;
 }
 
 .scroll-mr-0 {
@@ -2318,10 +2356,6 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   overflow: hidden;
 }
 
-.overflow-scroll {
-  overflow: scroll;
-}
-
 .overflow-y-auto {
   overflow-y: auto;
 }
@@ -2425,6 +2459,11 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   border-color: transparent;
 }
 
+.border-white {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
 .bg-\[\#056952\] {
   --tw-bg-opacity: 1;
   background-color: rgb(5 105 82 / var(--tw-bg-opacity));
@@ -2433,6 +2472,11 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 .bg-\[\#181818\] {
   --tw-bg-opacity: 1;
   background-color: rgb(24 24 24 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#242424\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(36 36 36 / var(--tw-bg-opacity));
 }
 
 .bg-\[\#282828\] {
@@ -2515,11 +2559,6 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .bg-transparent {
   background-color: transparent;
-}
-
-.bg-slate-950 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(2 6 23 / var(--tw-bg-opacity));
 }
 
 .bg-gradient-to-br {
@@ -2645,6 +2684,11 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   padding-right: 2rem;
 }
 
+.px-9 {
+  padding-left: 2.25rem;
+  padding-right: 2.25rem;
+}
+
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -2732,6 +2776,14 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   padding-top: 0.5rem;
 }
 
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2813,10 +2865,6 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .font-semibold {
   font-weight: 600;
-}
-
-.lowercase {
-  text-transform: lowercase;
 }
 
 .capitalize {
@@ -2931,6 +2979,14 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.placeholder-subdued-foreground::-moz-placeholder {
+  color: var(--text-subdued);
+}
+
+.placeholder-subdued-foreground::placeholder {
+  color: var(--text-subdued);
 }
 
 .opacity-0 {
@@ -3351,6 +3407,17 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   transition-duration: 150ms;
 }
 
+.focus-within\:outline-none:focus-within {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-within\:ring-0:focus-within {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
 .hover\:scale-100:hover {
   --tw-scale-x: 1;
   --tw-scale-y: 1;
@@ -3473,6 +3540,12 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   outline-offset: 2px;
 }
 
+.focus\:ring-0:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
 .focus\:ring-2:focus {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
@@ -3510,6 +3583,11 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
 
 .focus-visible\:ring-ring:focus-visible {
   --tw-ring-color: hsl(var(--ring));
+}
+
+.focus-visible\:ring-white:focus-visible {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity));
 }
 
 .focus-visible\:ring-offset-1:focus-visible {
@@ -3574,6 +3652,11 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   opacity: 0.5;
 }
 
+.group:focus-within .group-focus-within\:text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .group:hover .group-hover\:bg-slider-range-active {
   background-color: var(--slider-range-active);
 }
@@ -3595,8 +3678,18 @@ svg.lucide.lucide-check-circle2.text-black.fill-bright-accent circle {
   opacity: 1;
 }
 
+.group:focus-visible .group-focus-visible\:text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .group:active .group-active\:bg-slider-range-active {
   background-color: var(--slider-range-active);
+}
+
+.group:active .group-active\:text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .group.toaster .group-\[\.toaster\]\:border-border {

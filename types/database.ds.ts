@@ -10,17 +10,15 @@ import {
   SimplifiedPlaylist,
   User
 } from '@spotify/web-api-ts-sdk'
+import { MaxInt } from '@spotify/web-api-ts-sdk'
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
-
-import { DefaultSession, DefaultUser } from 'next-auth';
-
+import { DefaultSession, DefaultUser } from 'next-auth'
 import {
   PanelProps as Panel,
   PanelOnCollapse,
   PanelOnExpand,
   PanelOnResize
 } from 'react-resizable-panels'
-import { MaxInt } from '@spotify/web-api-ts-sdk'
 
 export interface PanelProps extends Panel {
   children: React.ReactNode
@@ -84,7 +82,6 @@ export type ErrorType =
   | 'no-lyrics-api-key-valid'
   | 'no-lyrics-api-key-valid-found'
 
-
 export interface InitialData {
   artists: Page<Artist>
   albums: Page<SavedAlbum>
@@ -126,10 +123,7 @@ export interface LibraryItem {
   pinned: boolean
 }
 
-
 export type TimeRange = 'short_term' | 'medium_term' | 'long_term'
 export type ItemType = 'artists' | 'tracks'
 export type Limit = MaxInt<50>
 export type Offset = number
-
-

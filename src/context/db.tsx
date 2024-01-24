@@ -4,11 +4,11 @@
 // import { useEffect } from "react"
 // import { useAtom } from "jotai"
 // import { sessionAtom, currentUserAtom, libraryAtom, availableDevicesAtom, playbackStateAtom } from "@/lib/atoms"
-// export function DatabaseProvider({ 
-//   children, 
-//   session, 
-//   initialData 
-// }: { 
+// export function DatabaseProvider({
+//   children,
+//   session,
+//   initialData
+// }: {
 //   children: React.ReactNode
 //   session: AuthSession| null
 //   initialData: InitialData | null
@@ -35,7 +35,6 @@
 //       setPlaybackState(initialData.playback);
 //     }
 //   }, [session, initialData])
-
 
 //   return (
 //     <>{children}</>

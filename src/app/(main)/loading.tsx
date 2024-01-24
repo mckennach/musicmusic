@@ -1,6 +1,6 @@
 export default async function Loading() {
   return (
-    <div className='h-screen min-h-screen flex items-center justify-center w-full '>
+    <div className='h-screen min-h-screen flex items-center justify-center w-full mt-[-64px]'>
       <div role='status'>
         <svg
           aria-hidden='true'

@@ -13,7 +13,14 @@ export default function Unauthorized({}) {
   return (
     <div className='p-12 flex items-center flex-col justify-center gap-2'>
       <h1 className='text-4xl font-bold'>Unauthorized</h1>
-      <Button onClick={() => signIn('spotify')} className='rounded-full'>
+      <Button
+        onClick={() =>
+          signIn('spotify', {
+            callbackUrl: '/'
+          })
+        }
+        className='rounded-full'
+      >
         {' '}
         Sign in with Spotify
       </Button>

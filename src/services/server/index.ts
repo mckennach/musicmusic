@@ -1,18 +1,18 @@
 'use server'
 
 // import spotify from '@/lib/spotify-sdk'
-import { authOptions } from '@/lib/auth/auth-options'
 import { Playlist } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
 
+import { authOptions } from '@/lib/auth/auth-options'
+
 import { AuthSession } from '@/types/database.ds'
 
-const apiUrl = process.env.NEXT_PUBLIC_SPOTIFY_API_URL!
+const apiUrl = process.env.SPOTIFY_ENDPOINT!
 
 export const getPlaylistById = async (id: string): Promise<Playlist | null> => {
   const session: AuthSession | null = await getServerSession(authOptions)
   if (!session) return null
-  console.log(session.user?.access_token)
   const response = await fetch(`${apiUrl}/playlists/${id}`, {
     headers: {
       Authorization: `Bearer ${session.user?.access_token}`
@@ -26,6 +26,6 @@ export const getPlaylistById = async (id: string): Promise<Playlist | null> => {
 
 export const getSession = async () => {
   'use server'
-  const session: AuthSession | null = await getServerSession(authOptions);
-  return session;
+  const session: AuthSession | null = await getServerSession(authOptions)
+  return session
 }

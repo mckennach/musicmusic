@@ -4,12 +4,12 @@ import { Artist } from '@spotify/web-api-ts-sdk'
 import spotify from '@/lib/spotify-sdk'
 import { formatNumber } from '@/lib/utils'
 
-
-
 import { LibraryItem, LibraryProps } from '@/types/database.ds'
 
-export async function createLibraryItems (library: LibraryProps): Promise<LibraryItem[]> {
-  const libraryItems: LibraryItem[] = [];
+export async function createLibraryItems(
+  library: LibraryProps
+): Promise<LibraryItem[]> {
+  const libraryItems: LibraryItem[] = []
   if (library.artists?.items) {
     library.artists.items.forEach((artist) => {
       libraryItems.push({
@@ -89,7 +89,5 @@ export async function createLibraryItems (library: LibraryProps): Promise<Librar
       icon: 'bookmark'
     })
   }
-  return libraryItems?.sort((a, b) =>
-    a.id.localeCompare(b.id)
-  ) as LibraryItem[];
+  return libraryItems?.sort((a, b) => a.id.localeCompare(b.id)) as LibraryItem[]
 }
