@@ -58,7 +58,7 @@ export function Header() {
 
   const handleSignIn = () => {
     signIn('spotify', {
-      callbackUrl: '/'
+      callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
     })
   }
 

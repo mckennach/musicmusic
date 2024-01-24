@@ -79,7 +79,7 @@ export function LibraryNav({}) {
         <Button
           onClick={() =>
             signIn('spotify', {
-              callbackUrl: '/'
+              callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
             })
           }
           className='rounded-full'

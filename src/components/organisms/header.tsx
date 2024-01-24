@@ -31,7 +31,7 @@ export function Header() {
   const [ref, setRef] = useState<GsapContextProps>()
   const handleSignIn = () => {
     signIn('spotify', {
-      callbackUrl: '/'
+      callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
     })
   }
 
