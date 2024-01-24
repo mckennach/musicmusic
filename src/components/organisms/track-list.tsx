@@ -1,18 +1,21 @@
+'use client'
+
 import { GsapContextProps, useGsapContext } from '@/context'
 import { useGSAP } from '@gsap/react'
-import { Playlist } from '@spotify/web-api-ts-sdk'
+import { Playlist, Track } from '@spotify/web-api-ts-sdk'
 import gsap from 'gsap'
 
 import { useEffect, useState } from 'react'
 
 import {
   TrackListBody,
+  TrackListColumn,
   TrackList as TrackListContainer,
-  TrackListGrid,
-  TrackListGridItem,
-  TrackListHeading
+  TrackListHeading,
+  TrackListRow
 } from '@/components/ui/track-list'
 
+import { RecommendationTrackItem } from '../molecules/recommendations/recommendation-track-item'
 import { PlaylistTrackItem } from '../molecules/track-items'
 
 export interface TrackListHeaderItems {
@@ -25,10 +28,10 @@ export interface TrackListHeaderItems {
 export interface TrackListProps {
   id: string
   contextUri: string
-  tracks: Playlist['tracks']['items']
+  tracks: Playlist['tracks']['items'] | Track[]
   columnCount: number
-  type: 'playlist' | 'album' | 'show' | 'episode'
-  headerItems: TrackListHeaderItems[]
+  type: 'playlist' | 'album' | 'show' | 'episode' | 'recommendations'
+  headerItems?: TrackListHeaderItems[]
 }
 
 export function TrackList({
@@ -81,30 +84,51 @@ export function TrackList({
   )
 
   return (
-    <TrackListContainer className='' data-colcount={columnCount}>
-      <TrackListHeading>
-        <TrackListGrid className='heading text-sm'>
-          {headerItems.map((item, index) => {
-            return (
-              <TrackListGridItem
-                key={index}
-                className={item.className}
-                data-colindex={index + 1}
-              >
-                <span className=''>{item.icon ? item.icon : item.title}</span>
-              </TrackListGridItem>
-            )
-          })}
-        </TrackListGrid>
-      </TrackListHeading>
-      <TrackListBody className='track-list-body'>
+    <TrackListContainer
+      className=''
+      aria-colcount={columnCount}
+      data-colcount={columnCount}
+      aria-rowcount={tracks?.length}
+      tabIndex={0}
+    >
+      {headerItems && headerItems.length > 0 && (
+        <TrackListHeading>
+          <TrackListRow className='heading text-sm'>
+            {headerItems.map((item, index) => {
+              return (
+                <TrackListColumn
+                  key={index}
+                  role='columnheader'
+                  className={item.className}
+                  data-colindex={index + 1}
+                >
+                  <span className=''>{item.icon ? item.icon : item.title}</span>
+                </TrackListColumn>
+              )
+            })}
+          </TrackListRow>
+        </TrackListHeading>
+      )}
+
+      <TrackListBody className='track-list-body' height={56 * tracks?.length}>
         {tracks.map((track, index) => {
           if (type === 'playlist')
             return (
               <PlaylistTrackItem
-                key={track.track.id}
+                key={(track as Playlist['tracks']['items'][0]).track.id}
                 playlistId={id}
-                track={track}
+                track={track as Playlist['tracks']['items'][0]}
+                index={index}
+                contextUri={contextUri}
+              />
+            )
+          if (type === 'recommendations')
+            return (
+              <RecommendationTrackItem
+                id={(track as Track).id}
+                playlistId={id}
+                key={(track as Track).id}
+                track={track as Track}
                 index={index}
                 contextUri={contextUri}
               />

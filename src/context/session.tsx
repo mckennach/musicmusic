@@ -14,7 +14,7 @@ export function SessionProvider({
   session: Session | null
 }) {
   return (
-    <Provider session={session} {...props}>
+    <Provider session={session} {...props} refetchInterval={5 * 60}>
       {children}
     </Provider>
   )

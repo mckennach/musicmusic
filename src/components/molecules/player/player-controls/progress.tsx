@@ -1,3 +1,5 @@
+'use client'
+
 import { useAtomCallback } from 'jotai/utils'
 
 import React, { useCallback, useEffect, useState } from 'react'
@@ -42,7 +44,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     const updatePlayback = useAtomCallback(
       useCallback(
         async (get) => {
-          if(!activeDevice) return;
+          if (!activeDevice) return
           await sync()
         },
         [sync, activeDevice]
@@ -64,7 +66,6 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
 
     useEffect(() => {
       if (session && playbackState && activeDevice) {
-        console.log(playbackState)
         setProgress(playbackState.progress_ms - 1)
         setDuration(playbackState?.item?.duration_ms - 1)
         setIsPlaying(playbackState.is_playing)

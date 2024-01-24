@@ -27,7 +27,9 @@ class NextAuthStrategy implements IAuthStrategy {
     }
 
     if (session?.error === 'RefreshAccessTokenError') {
-      await signIn()
+      await signIn('spotify', {
+        callbackUrl: process.env.NEXTAUTH_URL!
+      })
       return this.getAccessToken()
     }
 

@@ -14,12 +14,14 @@ import { MainLayout, MainView } from '@/components/templates'
 
 import { authOptions } from '../../lib/auth/auth-options'
 
+import { AuthSession } from '@/types/database.ds'
+
 export default async function Layout({
   children
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
+  const session: AuthSession | null = await getServerSession(authOptions)
   const layout = cookies().get('react-resizable-panels:layout')
 
   let defaultLayout = [28, 72]

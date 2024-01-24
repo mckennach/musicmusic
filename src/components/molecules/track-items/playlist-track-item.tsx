@@ -32,7 +32,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { TrackListGrid, TrackListGridItem } from '@/components/ui/track-list'
+import { TrackListColumn, TrackListRow } from '@/components/ui/track-list'
 
 interface TrackItemProps extends React.HTMLAttributes<HTMLDivElement> {
   track: PlaylistedTrack
@@ -131,11 +131,11 @@ const PlaylistTrackItem = ({
       setIsSaved(true)
     }
   }
-  console.log('TRACK', track)
+
   useOnClickOutside(ref, handleClickOutside)
 
   return (
-    <TrackListGrid
+    <TrackListRow
       ref={ref}
       onClick={() => setIsSelected(true)}
       onDoubleClick={handleDoubleClick}
@@ -148,7 +148,11 @@ const PlaylistTrackItem = ({
       )}
       role='row'
     >
-      <TrackListGridItem className='grid-item relative' data-colindex={1}>
+      <TrackListColumn
+        role='gridcell'
+        className='grid-item relative'
+        data-colindex={1}
+      >
         <Play
           color='white'
           fill='white'
@@ -166,8 +170,8 @@ const PlaylistTrackItem = ({
         >
           {index + 1}
         </span>
-      </TrackListGridItem>
-      <TrackListGridItem className='grid-item' data-colindex={2}>
+      </TrackListColumn>
+      <TrackListColumn role='gridcell' className='grid-item' data-colindex={2}>
         <span className='py-2 text-xs text-subdued-foreground flex items-center gap-3 truncate'>
           <CoverImage
             className='w-10 h-10 shrink-0'
@@ -219,8 +223,9 @@ const PlaylistTrackItem = ({
             }
           />
         </span>
-      </TrackListGridItem>
-      <TrackListGridItem
+      </TrackListColumn>
+      <TrackListColumn
+        role='gridcell'
         className='grid-item truncate text-subdued-foreground'
         data-colindex={3}
       >
@@ -234,16 +239,18 @@ const PlaylistTrackItem = ({
         >
           {albumOrPodcast.name}
         </Link>
-      </TrackListGridItem>
-      <TrackListGridItem
+      </TrackListColumn>
+      <TrackListColumn
+        role='gridcell'
         className='grid-item truncate text-subdued-foreground'
         data-colindex={4}
       >
         <span className='text-sm max-w-full truncate font-medium'>
           {formatDate(track.added_at)}
         </span>
-      </TrackListGridItem>
-      <TrackListGridItem
+      </TrackListColumn>
+      <TrackListColumn
+        role='gridcell'
         className='grid-item truncate text-subdued-foreground'
         data-colindex={5}
       >
@@ -282,8 +289,8 @@ const PlaylistTrackItem = ({
         >
           <MoreHorizontal size={16} className='' />
         </button>
-      </TrackListGridItem>
-    </TrackListGrid>
+      </TrackListColumn>
+    </TrackListRow>
   )
 }
 

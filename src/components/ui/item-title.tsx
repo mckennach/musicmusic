@@ -35,7 +35,7 @@ const ItemTitle = React.forwardRef<HTMLDivElement, ItemTitleProps>(
               <Icon
                 name={icon}
                 size={10}
-                className='rotate-45 text-spotify'
+                className='rotate-45 text-spotify min-w-[10px]'
                 fill='#1ed760'
               />
             )}

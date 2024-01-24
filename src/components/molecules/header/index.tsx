@@ -1,6 +1,7 @@
 'use client'
 
 // Components
+import { logIn } from '@/services/client/auth'
 import { signIn, useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'

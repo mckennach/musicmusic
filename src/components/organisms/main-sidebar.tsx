@@ -1,6 +1,3 @@
-// Components
-// import { Sidebar } from '@/components/sidebar'
-// Utils
 import { Session } from 'next-auth'
 
 import {
@@ -10,12 +7,14 @@ import {
 } from '@/components/molecules/main-sidebar'
 import { Sidebar, SidebarLibrary } from '@/components/templates'
 
+import { AuthSession } from '@/types/database.ds'
+
 export function MainSidebar({
   defaultLayout,
   session
 }: {
   defaultLayout: number[]
-  session: Session | null
+  session: AuthSession | null
 }) {
   return (
     <Sidebar
@@ -24,7 +23,7 @@ export function MainSidebar({
       collapsible={true}
       collapsedSize={6}
       minSize={20}
-      maxSize={35}
+      maxSize={30}
       defaultSize={defaultLayout[0]}
       id='Sidebar-Left'
     >

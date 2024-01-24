@@ -51,7 +51,7 @@ export const asyncLibraryAtom = atom(null, async (get, set) => {
   if (!data) return set(libraryAtom, null)
   return set(libraryAtom, data)
 })
-export const libraryAtom = atomWithStorage<LibraryProps | null>('library', null);
+export const libraryAtom = atomWithStorage<LibraryProps | null>('library', null)
 
 export const activeLibFilterAtom = atomWithStorage<LibraryFilterTypes>(
   'library-filter',

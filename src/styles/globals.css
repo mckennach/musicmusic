@@ -804,6 +804,12 @@
 }
 
 @layer components {
+  .track-list {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    outline: none;
+  }
+
   .track-list-heading {
     border-bottom: 1px solid transparent;
     -webkit-box-sizing: content-box;
@@ -832,19 +838,46 @@
     box-shadow: 0 -1px 0 0 #181818;
   }
 
-  .track-list__grid {
+  .track-list__grid-container {
     grid-gap: 16px;
     display: grid;
     padding: 0 16px;
+  }
+
+  .track-list__body {
+    contain: layout size;
+    position: relative;
+    --row-height: 56px;
+    /* padding: 0 16px; */
+  }
+
+  .track-list__body-container {
+    /* pointer-events: none; */
+    position: absolute;
+    width: 100%;
   }
 
   .track-list__grid.heading {
     @apply text-subdued-foreground;
     border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
     height: 36px;
+    --row-height: 36px;
   }
 
-  .track-list[data-colcount='5'] .track-list__grid {
+  .track-list__grid-container {
+    height: var(--row-height);
+  }
+
+  .track-list[aria-colcount='4'] .track-list__grid-container {
+    grid-template-columns:
+      [index] minmax(120px, var(--col0, 48fr)) [var1] minmax(
+        120px,
+        var(--col1, 29fr)
+      )
+      [var2] minmax(120px, var(--col2, 23fr)) [last] minmax(120px, var(--col3, 1fr));
+  }
+
+  .track-list[aria-colcount='5'] .track-list__grid-container {
     /* grid-template-columns: repeat(5, 1fr); */
     grid-template-columns:
       [index] var(--tracklist-index-column-width, 16px) [first] minmax(
@@ -868,14 +901,15 @@
     display: flex;
   }
 
-  .track-list__grid-item[data-colindex='1'] {
+  .track-list__grid-item[aria-colindex='1'] {
     -webkit-box-pack: start;
     -ms-flex-pack: start;
     grid-column: index;
     justify-content: flex-start;
   }
 
-  .track-list__grid-item[data-colindex='5'] {
+  .track-list[aria-colcount='4'] .track-list__grid-item[aria-colindex='4'],
+  .track-list[aria-colcount='5'] .track-list__grid-item[aria-colindex='5'] {
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     grid-column: last;

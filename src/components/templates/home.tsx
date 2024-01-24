@@ -19,11 +19,9 @@ import { useAtom } from 'jotai'
 import { sessionAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 
-
-import { TopItems } from '../molecules/home/top-items'
-
 import { BackgroundFade } from '@/components/ui/background-fade'
 
+import { TopItems } from '../molecules/home/top-items'
 import { CardButton, CardButtonSkeleton } from '../ui/card-button'
 import {
   CardSection,
@@ -48,7 +46,6 @@ export function Home() {
   const [playlists, setPlaylists] = useState<
     Page<SimplifiedPlaylist>['items'] | null
   >(null)
-
 
   useEffect(() => {
     ;(async () => {
@@ -81,10 +78,7 @@ export function Home() {
       <div className='flex flex-col px-4 pb-12'>
         <div className='flex flex-col isolate pt-2 bg-transparent'>
           <div className='flex flex-wrap gap-8'>
-            <TopItems
-              items={topItems}
-              cardCount={rowCardsCount}
-            />
+            <TopItems items={topItems} cardCount={rowCardsCount} />
 
             <CardSection>
               {playlists && session && (

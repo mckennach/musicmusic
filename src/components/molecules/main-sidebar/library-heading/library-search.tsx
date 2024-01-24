@@ -1,3 +1,5 @@
+'use client'
+
 // Components
 import { useState } from 'react'
 

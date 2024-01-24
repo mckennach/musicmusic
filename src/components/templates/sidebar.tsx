@@ -68,6 +68,7 @@ const Sidebar = ({
         onExpand={() => setSidebarLeftCollaposed(false)}
         onResize={() => setIsResizing(true)}
         className={cn(
+          sideBarLeftCollapsed ? 'max-w-[68px]' : '',
           // sideBarLeftCollapsed && side === 'left'
           //   ? `min-w-[65px] max-w-[65px]`
           //   : `min-w-[200px] max-w-[375px]`,
@@ -78,7 +79,8 @@ const Sidebar = ({
         <aside
           ref={squareRef}
           className={cn(
-            `flex h-full flex-col items-center justify-between gap-2 overflow-hidden`
+            `flex h-full flex-col items-center justify-between gap-2 overflow-hidden`,
+            sideBarLeftCollapsed ? 'max-w-[68px] justify-center' : ''
           )}
         >
           {children}

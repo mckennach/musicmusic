@@ -8,6 +8,8 @@ import { signIn, useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
 
+import { usePathname } from 'next/navigation'
+
 import { Bell, Users } from 'lucide-react'
 
 import { HeaderUserDropdown } from '@/components/molecules/header/header-user-dropdown'
@@ -20,8 +22,10 @@ import {
 } from '@/components/ui/tooltip'
 
 import { HeaderNavigation } from '../molecules/header/header-navigation'
+import { HeaderSearch } from '../molecules/header/header-search'
 
 export function Header() {
+  const pathname = usePathname()
   const { data: session } = useSession()
   const gsapRef = useGsapContext()
   const [ref, setRef] = useState<GsapContextProps>()
@@ -39,6 +43,7 @@ export function Header() {
 
   useGSAP(
     () => {
+      console.log('here')
       gsap
         .timeline({
           scrollTrigger: {
@@ -70,8 +75,10 @@ export function Header() {
       // className='header absolute top-0 z-20 w-full min-h-16'
       role='banner'
     >
-      <div className='flex items-center justify-between w-full'>
+      <div className='flex items-center gap-2 justify-between w-full'>
         <HeaderNavigation />
+        {pathname.includes('/search') && <HeaderSearch className='flex-grow' />}
+
         {session ? (
           <div className='flex items-center gap-2'>
             <Tooltip>

@@ -3,17 +3,17 @@ import SpotifyProvider from 'next-auth/providers/spotify'
 
 import { AuthUser } from './auth-options'
 
-if (!process.env.NEXT_PUBLIC_CLIENT_ID) {
-  throw new Error('Missing NEXT_PUBLIC_SPOTIFY_CLIENT_ID')
+if (!process.env.SPOTIFY_CLIENT_ID_BACKUP) {
+  throw new Error('Missing SPOTIFY_CLIENT_ID_BACKUP')
 }
 
-if (!process.env.NEXT_PUBLIC_CLIENT_SECRET) {
-  throw new Error('Missing NEXT_PUBLIC_CLIENT_SECRET')
+if (!process.env.SPOTIFY_CLIENT_SECRET_BACKUP) {
+  throw new Error('Missing SPOTIFY_CLIENT_SECRET_BACKUP')
 }
 
 const spotifyProfile = SpotifyProvider({
-  clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
-  clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET
+  clientId: process.env.SPOTIFY_CLIENT_ID_BACKUP,
+  clientSecret: process.env.SPOTIFY_CLIENT_SECRET_BACKUP
 })
 
 const authURL = new URL('https://accounts.spotify.com/authorize')
@@ -68,12 +68,12 @@ export async function refreshAccessToken(token: AuthUser) {
     const response = await fetch(process.env.SPOTIFY_TOKEN_URL!, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${Buffer.from(`${process.env.NEXT_PUBLIC_CLIENT_ID}:${process.env.NEXT_PUBLIC_CLIENT_SECRET}`).toString('base64')}`
+        Authorization: `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID_BACKUP}:${process.env.SPOTIFY_CLIENT_SECRET_BACKUP}`).toString('base64')}`
       },
       body: new URLSearchParams({
         grant_type: 'refresh_token',
         refresh_token: token?.refresh_token,
-        client_id: process.env.NEXT_PUBLIC_CLIENT_ID!
+        client_id: process.env.SPOTIFY_CLIENT_ID_BACKUP!
       }),
       method: 'POST'
     })
@@ -94,7 +94,6 @@ export async function refreshAccessToken(token: AuthUser) {
       scope: refreshedTokens.scope
     }
   } catch (error) {
-    console.error(error)
     return {
       ...token,
       error: 'RefreshAccessTokenError'

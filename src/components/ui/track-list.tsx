@@ -39,7 +39,7 @@ const TrackListHeading = React.forwardRef<
 
 TrackListHeading.displayName = 'TrackListHeading'
 
-const TrackListGrid = React.forwardRef<
+const TrackListRow = React.forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ children, className, ...props }, ref) => {
@@ -50,39 +50,51 @@ const TrackListGrid = React.forwardRef<
       role='row'
       {...props}
     >
-      {children}
+      <div className='track-list__grid-container'>{children}</div>
     </div>
   )
 })
 
-TrackListGrid.displayName = 'TrackListGrid'
+TrackListRow.displayName = 'TrackListRow'
 
-const TrackListBody = React.forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ children, className, ...props }, ref) => {
-  return (
-    <div
-      className={cn(`track-list__body rounded-sm`, className)}
-      ref={ref}
-      role='presentation'
-      {...props}
-    >
-      {children}
-    </div>
-  )
-})
+interface TrackListBodyProps extends HTMLAttributes<HTMLDivElement> {
+  height?: number
+}
+
+const TrackListBody = React.forwardRef<HTMLDivElement, TrackListBodyProps>(
+  ({ children, className, height, ...props }, ref) => {
+    return (
+      <div
+        className={cn(`track-list__body rounded-sm`, className)}
+        ref={ref}
+        style={{
+          height: height ? `${height}px` : 'auto'
+        }}
+        role='presentation'
+        {...props}
+      >
+        <div
+          className={cn('track-list__body-container')}
+          style={{
+            height: height ? `${height}px` : 'auto'
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    )
+  }
+)
 
 TrackListBody.displayName = 'TrackListBody'
 
-const TrackListGridItem = React.forwardRef<
+const TrackListColumn = React.forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ children, className, ...props }, ref) => {
   return (
     <div
       className={cn(`track-list__grid-item `, className)}
-      role='gridcell'
       ref={ref}
       {...props}
     >
@@ -91,12 +103,12 @@ const TrackListGridItem = React.forwardRef<
   )
 })
 
-TrackListGridItem.displayName = 'TrackListGridItem'
+TrackListColumn.displayName = 'TrackListColumn'
 
 export {
   TrackList,
   TrackListBody,
-  TrackListGrid,
-  TrackListGridItem,
+  TrackListRow,
+  TrackListColumn,
   TrackListHeading
 }

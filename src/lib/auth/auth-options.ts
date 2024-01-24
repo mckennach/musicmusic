@@ -2,7 +2,10 @@ import { Account, AuthOptions } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
 // import SpotifyProvider from 'next-auth/providers/spotify'
-import spotifyProfile, { LOGIN_URL, refreshAccessToken } from './spotify-profile'
+import spotifyProfile, {
+  LOGIN_URL,
+  refreshAccessToken
+} from './spotify-profile'
 
 export type AuthUser = {
   name: string
@@ -22,7 +25,7 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
   debug: process.env.NODE_ENV === 'development',
   pages: {
-    signIn: '/login'
+    signIn: '/'
   },
   session: {
     maxAge: 60 * 60 // 1hr
@@ -57,6 +60,7 @@ export const authOptions: AuthOptions = {
         return token
       }
 
+      console.log('REFRESHING TOKEN')
       return await refreshAccessToken(token as AuthUser)
     },
     async session({ session, token }: { session: any; token: any }) {
