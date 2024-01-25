@@ -14,7 +14,7 @@ import {
   getArtistsDiscography
 } from '@/services/server/queries/artists.queries'
 import { AuthSession } from '@/types/database.ds'
-import {
+import type {
   Artist,
   Page,
   SimplifiedAlbum,
