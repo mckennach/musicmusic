@@ -7,34 +7,9 @@
   "tailwindConfig": "./tailwind.config.ts",
   "tailwindFunctions": ["clsx"],
   "printWidth": 80,
-  "importOrder": [
-    "^react$",
-    "^next/(.*)$",
-    "^react-dom$",
-    "^react-hook-form$",
-    "^jotai$",
-    "^@/lib/store$",
-    "^@/lib/(.*)$",
-    "^ts-hooks$",
-    "^lucide-react$",
-    "^@/components/(.*)$",
-    "^@/pages/(.*)$",
-    "^@/utils/(.*)$",
-    "^sonner$",
-    "^@/hooks/(.*)$",
-    "^@/styles/(.*)$",
-    "^[./]",
-    "^@/context/(.*)$",
-    "^@/config/(.*)$",
-    "^@/types/(.*)$"
-  ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "importOrderCaseInsensitive": true,
-  "importOrderGroupNamespaceSpecifiers": true,
+  
   "plugins": [
     "prettier-plugin-tailwindcss",
-    "prettier-plugin-organize-imports",
-    "@trivago/prettier-plugin-sort-imports"
+    "prettier-plugin-organize-imports"
   ]
 }

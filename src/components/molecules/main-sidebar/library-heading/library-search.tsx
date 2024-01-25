@@ -1,7 +1,9 @@
 'use client'
 
 // Components
-import { useState } from 'react'
+import { useOnClickOutside } from 'usehooks-ts'
+
+import { useRef, useState } from 'react'
 
 import { useAtom } from 'jotai'
 
@@ -19,16 +21,14 @@ import {
 export function LibrarySearch() {
   const [activeLibFilter] = useAtom(activeLibFilterAtom)
   const [searchVisible, setSearchVisible] = useState(false)
-  // const [filterInputValue, setFilterInputValue] = useState('');
-  // const [inputValue, setInputValue] = useState('');
   const [searchInput, setSearchInput] = useAtom(sidebarSearchInputAtom)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // useEffect(() => {
-  //   console.log(searchInput)
-  // }, [searchInput])
-  // const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchInput(e.target.value)
-  // }
+  const handleClickOutside = () => {
+    setSearchVisible(false)
+  }
+
+  useOnClickOutside(inputRef, handleClickOutside)
 
   return (
     <div className='group relative flex-auto pr-4'>
@@ -48,7 +48,9 @@ export function LibrarySearch() {
             <Icon name='search' size={`15`} />
           </button>
         </TooltipTrigger>
-        <TooltipContent>Search in your library</TooltipContent>
+        <TooltipContent hidden={searchVisible ? true : false}>
+          Search in your library
+        </TooltipContent>
       </Tooltip>
       <label className='sr-only' htmlFor='Search-Library'>
         Search in Your Library
@@ -56,6 +58,7 @@ export function LibrarySearch() {
       <input
         id='Search-Library'
         type='text'
+        ref={inputRef}
         className={cn(
           `relative z-20`,
           `bg-tinted-highlight text-white outline-none`,
@@ -65,6 +68,7 @@ export function LibrarySearch() {
             ? 'w-full'
             : `w-[23px] focus:w-full active:w-full opacity-0 focus:opacity-100 active:opacity-100`
         )}
+        autoComplete='off'
         onFocus={() => setSearchVisible(true)}
         placeholder='Search in Your Library'
         value={searchInput}

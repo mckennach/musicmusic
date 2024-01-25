@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import spotify from '@/lib/spotify-sdk'
-
 const url = process.env.SPOTIFY_ENDPOINT
 export async function POST(request: NextRequest) {
   try {

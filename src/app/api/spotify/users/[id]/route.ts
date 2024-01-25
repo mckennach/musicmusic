@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import spotify from '@/lib/spotify-sdk'
-
 export async function POST(
   request: NextRequest,
   context: { params: { id: string } }

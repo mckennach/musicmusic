@@ -2,10 +2,7 @@ import { Account, AuthOptions } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
 // import SpotifyProvider from 'next-auth/providers/spotify'
-import spotifyProfile, {
-  LOGIN_URL,
-  refreshAccessToken
-} from './spotify-profile'
+import spotifyProfile, { refreshAccessToken } from './spotify-profile'
 
 export type AuthUser = {
   name: string
@@ -56,7 +53,6 @@ export const authOptions: AuthOptions = {
       }
 
       if (Date.now() < (token as AuthUser).expires_at) {
-        console.log('EXISTING TOKEN IS VALID!')
         return token
       }
 

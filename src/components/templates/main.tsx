@@ -1,11 +1,11 @@
 'use client'
 
-import { GsapContext, GsapContextProps, useGsapContext } from '@/context'
+import { GsapContextProps, useGsapContext } from '@/context'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ImperativePanelHandle } from 'react-resizable-panels'
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Header } from '@/components/organisms/header'
 import {
@@ -16,10 +16,11 @@ import {
   MainResizeObserver,
   MainScrollSpacer,
   MainScrollSpacerChild,
-  MainUnderView,
   MainViewport
 } from '@/components/ui/main-containers'
 import { ResizablePanel } from '@/components/ui/resizable'
+
+import { HeroBannerImage } from '../molecules/hero/hero-banner-image'
 
 import { PanelProps } from '@/types/database.ds'
 
@@ -58,18 +59,12 @@ const MainView = React.forwardRef<ImperativePanelHandle, PanelProps>(
       }
     )
 
-    // useGSAP(() => {
-
-    // }, {
-    //   scope: gsapRef
-    // })
-
     return (
       <ResizablePanel ref={ref} className='relative' {...props}>
         <Main ref={gsapRef}>
           <Header />
           <MainContainer className='main-view-container'>
-            <MainUnderView />
+            <HeroBannerImage />
             <MainHost>
               <MainResizeObserver />
               <MainContainer className='main-view-container__padding'>

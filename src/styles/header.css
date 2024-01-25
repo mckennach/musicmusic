@@ -1,17 +1,73 @@
-.header {
-  justify-content: space-between;
-  -webkit-padding-end: var(--content-spacing);
-  align-items: center;
-  contain: content;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  gap: 8px;
-  height: 64px;
-  justify-content: space-between;
-  padding: 16px var(--content-spacing);
-  padding-inline-end: var(--content-spacing);
-  position: absolute;
-  width: 100%;
-  z-index: var(--top-bar-z-index);
+@tailwind components;
+
+@layer components {
+  .header {
+    justify-content: space-between;
+    -webkit-padding-end: var(--content-spacing);
+    align-items: center;
+    contain: layout;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    height: 64px;
+    justify-content: space-between;
+    padding: 16px var(--content-spacing);
+    padding-inline-end: var(--content-spacing);
+    position: absolute;
+    width: 100%;
+    z-index: var(--top-bar-z-index);
+  }
+
+  .header:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -2;
+    width: 100%;
+    opacity: var(--top-bar-opacity, 0);
+    height: 100%;
+    background-color: var(--random-color);
+  }
+
+  .header:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    opacity: var(--top-bar-opacity, 0);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  .page-header {
+    height: min(30vh, var(--fluid-height));
+    max-height: 400px;
+    min-height: var(--min-fluid-height);
+    padding-bottom: var(--content-spacing);
+  }
+
+  .page-header-image {
+    border-radius: 4px;
+    height: clamp(
+      128px,
+      128px +
+        (
+          100vw - var(--left-sidebar-width, 0px) - var(--panel-width, 0px) -
+            600px
+        )/424 * 104,
+      232px
+    );
+    width: clamp(
+      128px,
+      128px +
+        (
+          100vw - var(--left-sidebar-width, 0px) - var(--panel-width, 0px) -
+            600px
+        )/424 * 104,
+      232px
+    );
+  }
 }

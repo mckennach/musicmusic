@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 
 interface NoDeviceProps extends React.HTMLAttributes<HTMLDivElement> {}
 

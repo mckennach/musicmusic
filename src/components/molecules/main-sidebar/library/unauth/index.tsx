@@ -2,10 +2,6 @@
 
 import { signIn } from 'next-auth/react'
 
-import { useAtom } from 'jotai'
-
-import { sessionAtom } from '@/lib/atoms'
-
 import { Button } from '@/components/ui/button'
 
 export function SidebarSignIn() {
@@ -14,7 +10,7 @@ export function SidebarSignIn() {
       <Button
         onClick={() =>
           signIn('spotify', {
-            callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
+            callbackUrl: `${process.env.NEXT_PUBLIC_URL!}/`
           })
         }
         className='rounded-full'

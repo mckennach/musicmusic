@@ -9,13 +9,18 @@ interface CardSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   children?: React.ReactNode
   as?: 'div' | 'section' | 'article'
+  dir?: 'row' | 'column'
 }
 
 const CardSection = React.forwardRef<HTMLDivElement, CardSectionProps>(
-  ({ className, as = 'section', children, ...props }, ref) => {
+  ({ className, dir = 'column', as = 'section', children, ...props }, ref) => {
     const Tag = as
     return (
-      <Tag className={cn(`card-section`, className)} ref={ref} {...props}>
+      <Tag
+        className={cn(`card-section card-section__${dir}`, className)}
+        ref={ref}
+        {...props}
+      >
         {children}
       </Tag>
     )
@@ -47,25 +52,32 @@ CardSectionHeading.displayName = 'CardSectionHeading'
 interface CardSectionItemsProps extends React.HTMLAttributes<HTMLDivElement> {
   gridCols: number
   gap: number
+  dir?: 'row' | 'column'
 }
 
 const CardSectionItems = React.forwardRef<
   HTMLDivElement,
   CardSectionItemsProps
->(({ className, gridCols = 3, gap = 2, children, ...props }, ref) => {
-  return (
-    <div
-      className={cn(
-        `grid grid-cols-${gridCols.toString()} gap-${gap.toString()}`,
-        className
-      )}
-      {...props}
-      ref={ref}
-    >
-      {children}
-    </div>
-  )
-})
+>(
+  (
+    { className, gridCols = 3, gap = 2, children, dir = 'column', ...props },
+    ref
+  ) => {
+    return (
+      <div
+        className={cn(
+          `card-section__items card-section__items-${dir}`,
+          ``,
+          className
+        )}
+        {...props}
+        ref={ref}
+      >
+        {children}
+      </div>
+    )
+  }
+)
 
 CardSectionItems.displayName = 'CardSectionItems'
 

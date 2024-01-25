@@ -1,4 +1,3 @@
-export * from './apollo'
 export * from './database'
 export * from './gsap'
 export * from './jotai'

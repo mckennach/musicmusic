@@ -16,12 +16,7 @@ import {
   asyncPlaybackAtom,
   playbackStateAtom
 } from '@/lib/atoms'
-import {
-  cn,
-  formatDate,
-  formatTime,
-  millisToMinutesAndSeconds
-} from '@/lib/utils'
+import { cn, formatDate, millisToMinutesAndSeconds } from '@/lib/utils'
 
 import { CheckCircle2, MoreHorizontal, Play, PlusCircle } from 'lucide-react'
 
@@ -151,7 +146,7 @@ const PlaylistTrackItem = ({
       <TrackListColumn
         role='gridcell'
         className='grid-item relative'
-        data-colindex={1}
+        aria-colindex={1}
       >
         <Play
           color='white'
@@ -171,7 +166,7 @@ const PlaylistTrackItem = ({
           {index + 1}
         </span>
       </TrackListColumn>
-      <TrackListColumn role='gridcell' className='grid-item' data-colindex={2}>
+      <TrackListColumn role='gridcell' className='grid-item' aria-colindex={2}>
         <span className='py-2 text-xs text-subdued-foreground flex items-center gap-3 truncate'>
           <CoverImage
             className='w-10 h-10 shrink-0'
@@ -227,7 +222,7 @@ const PlaylistTrackItem = ({
       <TrackListColumn
         role='gridcell'
         className='grid-item truncate text-subdued-foreground'
-        data-colindex={3}
+        aria-colindex={3}
       >
         <Link
           href={`/album/${albumOrPodcast.id}`}
@@ -243,7 +238,7 @@ const PlaylistTrackItem = ({
       <TrackListColumn
         role='gridcell'
         className='grid-item truncate text-subdued-foreground'
-        data-colindex={4}
+        aria-colindex={4}
       >
         <span className='text-sm max-w-full truncate font-medium'>
           {formatDate(track.added_at)}
@@ -252,7 +247,7 @@ const PlaylistTrackItem = ({
       <TrackListColumn
         role='gridcell'
         className='grid-item truncate text-subdued-foreground'
-        data-colindex={5}
+        aria-colindex={5}
       >
         <Tooltip>
           <TooltipTrigger asChild>

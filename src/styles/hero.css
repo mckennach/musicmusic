@@ -1,6 +1,6 @@
 @tailwind components;
 
-@layer {
+@layer components {
   .hero {
     max-height: 320px;
     min-height: 320px;
@@ -45,10 +45,90 @@
     margin-right: var(--content-spacing);
   }
 
+  .full-size-absolute {
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .bg-scroll-cover {
+    background-attachment: scroll;
+    background-position: 50% 15%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    contain: strict;
+    content-visibility: auto;
+    height: 40vh;
+    min-height: var(--min-fluid-height);
+  }
+
+  .hero-banner-noise:after {
+    /* -webkit-animation: overlay-animation 1s linear;
+    animation: overlay-animation 1s linear;
+    -webkit-animation-delay: calc(var(--scroll) * -1s);
+    animation-delay: calc(var(--scroll) * -1s);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused; */
+    background-image:
+      -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(0, 0, 0, 0.6)),
+        to(rgba(0, 0, 0, 0.6))
+      ),
+      -webkit-gradient(linear, left top, left bottom, from(var(--random-color)), to(var(--random-color)));
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      linear-gradient(var(--random-color), var(--random-color));
+    content: '';
+    height: 40vh;
+    left: 0;
+    min-height: 340px;
+    opacity: var(--top-bar-opacity);
+    position: absolute;
+    right: 0;
+  }
+
+  .hero-banner-image {
+    overflow: hidden;
+
+    -webkit-animation: background-animation 1s linear;
+    animation: background-animation 1s linear;
+    -webkit-animation-delay: calc(var(--scroll) * -1s);
+    animation-delay: calc(var(--scroll) * -1s);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+    opacity: 1;
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  .hero-banner-image-noise {
+  }
+
   .hero-title {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     display: -webkit-box;
+  }
+
+  .hero-description {
+    color: hsla(0, 0%, 100%, 0.7);
+  }
+
+  .hero-description a {
+    color: white;
   }
 
   .hero-text-container {

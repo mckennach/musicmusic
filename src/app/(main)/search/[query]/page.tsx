@@ -1,4 +1,3 @@
-import { Artist, SearchResults, Track } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
 
 import { authOptions } from '@/lib/auth/auth-options'

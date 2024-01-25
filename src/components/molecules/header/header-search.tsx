@@ -15,7 +15,6 @@ const HeaderSearch = React.forwardRef<HTMLDivElement, HeaderSearchProps>(
   ({ ...props }, ref) => {
     const router = useRouter()
     const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.value)
       router.push(`/search/${e.target.value}`)
     }
 

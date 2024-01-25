@@ -1,15 +1,8 @@
 'use client'
 
-import {
-  Artist,
-  MaxInt,
-  Page,
-  PlayHistory,
-  SimplifiedPlaylist
-} from '@spotify/web-api-ts-sdk'
-import { useSession } from 'next-auth/react'
+import { PlayHistory } from '@spotify/web-api-ts-sdk'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -17,12 +10,8 @@ import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 
 import { sessionAtom } from '@/lib/atoms'
-import spotify from '@/lib/spotify-sdk'
 
-import { BackgroundFade } from '@/components/ui/background-fade'
-
-import { TopItems } from '../molecules/home/top-items'
-import { CardButton, CardButtonSkeleton } from '../ui/card-button'
+import { CardButtonSkeleton } from '../ui/card-button'
 import {
   CardSection,
   CardSectionHeading,

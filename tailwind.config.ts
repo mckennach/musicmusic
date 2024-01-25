@@ -169,6 +169,18 @@ const config = {
         sm: 'calc(var(--radius) - 4px)'
       },
       keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
+        'overlay-animation': {
+          '20%': { opacity: '1' },
+          '100%': { opacity: '1' }
+        },
+        'background-scroll-animation': {
+          '80%': { transform: 'scale(0)' },
+          '100%': { transform: 'scale(1)' }
+        },
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' }
@@ -179,6 +191,10 @@ const config = {
         }
       },
       animation: {
+        'fade-in': 'fade-in 0.2s ease-in-out forwards',
+        'overlay-animation': 'overlay-animation 0.2s ease-in-out forwards',
+        'background-scroll-animation':
+          'background-scroll-animation 1s ease-in-out infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
       }

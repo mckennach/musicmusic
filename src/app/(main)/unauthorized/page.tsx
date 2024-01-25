@@ -16,7 +16,7 @@ export default function Unauthorized({}) {
       <Button
         onClick={() =>
           signIn('spotify', {
-            callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
+            callbackUrl: `${process.env.NEXT_PUBLIC_URL!}/`
           })
         }
         className='rounded-full'

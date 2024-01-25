@@ -46,12 +46,14 @@ export function useSpotify() {
         return isSaved
       }
 
+      spotify.currentUser.followedArtists
+
       return false
     },
     createLibraryItems: (library: LibraryProps) => {
       const libraryItems: LibraryItem[] = []
-      if (library.artists?.items) {
-        library.artists.items.forEach((artist) => {
+      if (library.artists?.artists.items) {
+        library.artists.artists.items.forEach((artist) => {
           libraryItems.push({
             name: artist.name,
             id: artist.id,
@@ -151,7 +153,7 @@ export function useSpotify() {
       const tracks = await spotify.currentUser.tracks.savedTracks()
       return {
         playlists,
-        artists: artists?.artists,
+        artists,
         episodes,
         albums,
         tracks

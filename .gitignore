@@ -8,7 +8,7 @@
 
 # testing
 /coverage
-
+.sentryclirc
 # next.js
 /.next/
 /out/
@@ -36,3 +36,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sentry Config File
+.sentryclirc

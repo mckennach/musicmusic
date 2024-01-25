@@ -1,23 +1,14 @@
 'use client'
 
-import {
-  Artist,
-  MaxInt,
-  Page,
-  PlayHistory,
-  SimplifiedPlaylist
-} from '@spotify/web-api-ts-sdk'
-import { useSession } from 'next-auth/react'
+import { Artist, Page } from '@spotify/web-api-ts-sdk'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useAtom } from 'jotai'
 
 import { sessionAtom } from '@/lib/atoms'
-import spotify from '@/lib/spotify-sdk'
 
 import { CardButton, CardButtonSkeleton } from '@/components/ui/card-button'
 import {

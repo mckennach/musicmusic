@@ -43,8 +43,8 @@ export const checkIfItemIsSaved = async (
 
 export const createLibraryItems = (library: LibraryProps) => {
   const libraryItems: LibraryItem[] = []
-  if (library.artists?.items) {
-    library.artists.items.forEach((artist) => {
+  if (library.artists?.artists.items) {
+    library.artists.artists.items.forEach((artist) => {
       libraryItems.push({
         name: artist.name,
         id: artist.id,

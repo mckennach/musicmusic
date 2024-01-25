@@ -1,8 +1,4 @@
-import { getRecommendations } from '@/services/server/queries/recommendations.query'
-
 import { NextRequest, NextResponse } from 'next/server'
-
-import spotify from '@/lib/spotify-sdk'
 
 const url = process.env.SPOTIFY_ENDPOINT
 export async function POST(
@@ -14,22 +10,20 @@ export async function POST(
     const body = await request.json()
     const {
       token,
-      params: {
-        seed_tracks,
-        limit,
+      params: { seed_tracks, limit }
+    } = body
+
+    const response = await fetch(
+      `${url}/recommendations?limit=${limit ?? 10}&seed_tracks=${seed_tracks}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-    } = body;
+    )
 
-
-    const response = await fetch(`${url}/recommendations?limit=${limit ?? 10}&seed_tracks=${seed_tracks}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
-
+    const data = await response.json()
 
     return NextResponse.json({
       ...data

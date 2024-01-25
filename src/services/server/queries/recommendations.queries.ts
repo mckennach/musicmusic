@@ -1,26 +1,13 @@
 'use server'
 
-import { getServerSession } from 'next-auth'
-
-import { authOptions } from '@/lib/auth/auth-options'
-
-import type {
-  AuthSession,
-  ErrorMessage,
-  ItemType,
-  LibraryItem,
-  LibraryProps,
-  Limit,
-  Offset,
-  TimeRange,
-
-} from '@/types/database.ds'
-
 import { RecommendationsRequest } from '@spotify/web-api-ts-sdk'
 
+import type { AuthSession } from '@/types/database.ds'
 
-
-export async function getRecommendations(session: AuthSession, params: RecommendationsRequest) {
+export async function getRecommendations(
+  session: AuthSession,
+  params: RecommendationsRequest
+) {
   if (session) {
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/recommendations`,

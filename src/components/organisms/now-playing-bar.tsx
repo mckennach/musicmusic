@@ -9,16 +9,9 @@ import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 
 import { activeDeviceAtom } from '@/lib/atoms'
-// import { Sidebar } from '@/components/sidebar'
-import { cn } from '@/lib/utils'
 
-import {
-  NoDevice,
-  NowPlaying,
-  PlayerControls,
-  PlayerSettings,
-  PlayerUnauthorized
-} from '@/components/molecules/player'
+// import { Sidebar } from '@/components/sidebar'
+import { NoDevice, PlayerUnauthorized } from '@/components/molecules/player'
 import { NowPlayingBar } from '@/components/templates'
 
 export function NowPlayingView({ session }: { session: Session | null }) {
@@ -36,7 +29,8 @@ export function NowPlayingView({ session }: { session: Session | null }) {
         <>
           {activeDevice ? (
             <>
-              <NowPlaying
+              test
+              {/* <NowPlaying
                 className={cn(' flex-1 basis-[30%] max-w-[30%] pl-2')}
               />
               <PlayerControls
@@ -44,11 +38,10 @@ export function NowPlayingView({ session }: { session: Session | null }) {
               />
               <PlayerSettings
                 className={cn('flex-1 basis-[30%] max-w-[30%]')}
-              />
+              /> */}
             </>
           ) : (
             <>{loaded && <NoDevice />}</>
-            // <NoDevice />
           )}
         </>
       ) : (
