@@ -1,13 +1,13 @@
 'use client'
 
-import dynamicIconImports from 'lucide-react/dynamicIconImports'
-
 import { useEffect, useState } from 'react'
 
 import { useAtom } from 'jotai'
 
 import { sidebarSortByAtom, sidebarViewAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
+
+import { AlignJustify, Check, LayoutGrid, List, LucideIcon } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -19,7 +19,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import Icon from '@/components/ui/icon'
 
 interface LibrarySortProps {
   label: string
@@ -29,7 +28,7 @@ interface LibrarySortProps {
 interface LibraryViewProps {
   label: string
   value: 'grid' | 'list' | 'compact'
-  icon: keyof typeof dynamicIconImports
+  icon: LucideIcon
 }
 
 const librarySortOptions: LibrarySortProps[] = [
@@ -55,17 +54,17 @@ const libraryViewOptions: LibraryViewProps[] = [
   {
     label: 'Compact',
     value: 'compact',
-    icon: 'align-justify'
+    icon: AlignJustify
   },
   {
     label: 'List',
     value: 'list',
-    icon: 'list'
+    icon: List
   },
   {
     label: 'Grid',
     value: 'grid',
-    icon: 'layout-grid'
+    icon: LayoutGrid
   }
 ]
 
@@ -95,9 +94,13 @@ export function LibrarySort() {
     <DropdownMenu>
       <DropdownMenuTrigger className='flex items-center justify-between gap-1 text-xs font-medium tracking-tight text-subdued outline-none'>
         <span>{activeSort?.label}</span>
-        <Icon name={activeView?.icon} size={16} />
+        <activeView.icon size={16} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent side='bottom' align='end' className='bg-[#282828]'>
+      <DropdownMenuContent
+        side='bottom'
+        align='end'
+        className='bg-[#282828] min-w-44'
+      >
         <DropdownMenuLabel className='text-2xs font-bold text-subdued'>
           Sort by
         </DropdownMenuLabel>
@@ -115,7 +118,7 @@ export function LibrarySort() {
               <span className='group-hover:text-spotify'>{sort?.label}</span>
               {sort?.value === activeSort.value && (
                 <DropdownMenuShortcut className='text-spotify'>
-                  <Icon name='check' size={16} />
+                  <Check size={16} />
                 </DropdownMenuShortcut>
               )}
             </DropdownMenuItem>
@@ -137,13 +140,14 @@ export function LibrarySort() {
               )}
             >
               <div className='flex gap-2 group-hover:text-spotify'>
-                <Icon name={view?.icon} size={16} />
+                {/* <Icon name={view?.icon} size={16} /> */}
+                <view.icon size={16} />
                 <span>{view?.label}</span>
               </div>
 
               {view?.value === activeView.value && (
                 <DropdownMenuShortcut className='text-spotify'>
-                  <Icon name='check' size={16} />
+                  <Check size={16} />
                 </DropdownMenuShortcut>
               )}
             </DropdownMenuItem>

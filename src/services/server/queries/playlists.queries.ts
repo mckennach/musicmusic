@@ -1,5 +1,4 @@
-import { AuthSession } from "@/types/database.ds"
-
+import { AuthSession } from '@/types/database.ds'
 
 export async function fetchPlaylist(session: AuthSession, id: string) {
   if (session) {
@@ -22,8 +21,7 @@ export async function fetchPlaylist(session: AuthSession, id: string) {
   return null
 }
 
-
-export async function fetchPlaylistOwner(session: AuthSession, id: string)  {
+export async function fetchPlaylistOwner(session: AuthSession, id: string) {
   if (session) {
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/users/${id}`,

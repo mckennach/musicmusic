@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/track-list'
 
 import { RecommendationTrackItem } from '../molecules/recommendations/recommendation-track-item'
-import { PlaylistTrackItem } from '../molecules/track-items'
+import { ArtistTrackItem, PlaylistTrackItem } from '../molecules/track-items'
 
 export interface TrackListHeaderItems {
   title: string
@@ -30,7 +30,7 @@ export interface TrackListProps {
   contextUri: string
   tracks: Playlist['tracks']['items'] | Track[]
   columnCount: number
-  type: 'playlist' | 'album' | 'show' | 'episode' | 'recommendations'
+  type: 'playlist' | 'album' | 'show' | 'episode' | 'recommendations' | 'artist'
   headerItems?: TrackListHeaderItems[]
 }
 
@@ -53,6 +53,7 @@ export function TrackList({
 
   useGSAP(
     () => {
+      if (type !== 'playlist') return
       gsap
         .timeline({
           scrollTrigger: {
@@ -100,7 +101,7 @@ export function TrackList({
                   key={index}
                   role='columnheader'
                   className={item.className}
-                  data-colindex={index + 1}
+                  aria-colindex={index + 1}
                 >
                   <span className=''>{item.icon ? item.icon : item.title}</span>
                 </TrackListColumn>
@@ -127,6 +128,17 @@ export function TrackList({
               <RecommendationTrackItem
                 id={(track as Track).id}
                 playlistId={id}
+                key={(track as Track).id}
+                track={track as Track}
+                index={index}
+                contextUri={contextUri}
+              />
+            )
+          if (type === 'artist')
+            return (
+              <ArtistTrackItem
+                id={(track as Track).id}
+                artistId={id}
                 key={(track as Track).id}
                 track={track as Track}
                 index={index}

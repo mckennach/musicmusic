@@ -26,7 +26,7 @@ interface HeroTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
 const HeroTitle = React.forwardRef<HTMLHeadingElement, HeroTitleProps>(
   ({ title, className, ...props }, ref) => {
     const [titleClasses, setTitleClasses] = useState<string[]>([
-      'text-[2rem] @3xl:text-[4.5rem] @5-6xl:text-[6rem]'
+      'text-[3rem] @3xl:text-[4.5rem] @5-6xl:text-[6rem]'
     ])
     useEffect(() => {
       if (title && title.length < 13) {
@@ -34,7 +34,7 @@ const HeroTitle = React.forwardRef<HTMLHeadingElement, HeroTitleProps>(
       } else if (title && title.length < 25) {
         setTitleClasses(['text-[2rem] @3xl:text-[4.5rem] @5-6xl:text-[6rem]'])
       } else {
-        setTitleClasses(['text-[2rem] @9xl:text-[3rem]'])
+        setTitleClasses(['text-[3rem] @9xl:text-[3rem]'])
       }
     }, [title])
 

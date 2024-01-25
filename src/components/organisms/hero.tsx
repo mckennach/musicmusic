@@ -12,11 +12,14 @@ import {
 } from '@/components/molecules/hero'
 import { CoverImage } from '@/components/ui/cover-image'
 
+import Icon from '../ui/icon'
+
 // Components
 
 export interface HeroProps {
   title: string
   subtitle?: string
+  subtitleIcon?: keyof typeof dynamicIconImports
   description?: string
   extraInfo?: React.ReactNode
   imageSrc?: string
@@ -27,6 +30,7 @@ export interface HeroProps {
 export function Hero({
   title,
   subtitle,
+  subtitleIcon,
   description,
   extraInfo,
   imageSrc,
@@ -35,19 +39,47 @@ export function Hero({
 }: HeroProps) {
   const { data: session, status } = useSession()
   return (
-    <section className='hero content-spacing flex relative overlfow-hidden'>
-      <div className='bg-[var(--random-color)] absolute left-0 top-0 w-full h-full z-[-1]' />
-      <div className='background-noise absolute left-0 top-0 w-full h-full z-[0] order-2' />
-      <HeroImageContainer>
-        <CoverImage
-          src={imageSrc}
-          alt={`${title} cover`}
-          icon={imageIcon}
-          className='w-full h-full rounded-sm shadow-md'
-        />
-      </HeroImageContainer>
+    <section
+      role='banner'
+      className='hero content-spacing flex relative overlfow-hidden'
+    >
+      {imageSize === 'cover' && (
+        <>
+          <div className='bg-[var(--random-color)] animate-fade-in absolute left-0 top-0 w-full h-full z-[-1]' />
+          <div className='background-noise  animate-fade-in absolute left-0 top-0 w-full h-full z-[0] order-2' />
+        </>
+        // <>
+        // <Image
+        //   loader={imageLoader}
+        //   priority={true}
+        //   src={imageSrc ? imageSrc : placeholder}
+        //   alt={`${title} cover`}
+        //   fill={true}
+        //   style={{ objectFit: 'cover' }}
+        //   sizes='100vw'
+        //   className='hero-banner-image w-full h-full rounded-sm shadow-md z-[-1]'  />
+        //   <div className='image-fade absolute left-0 top-0 w-full h-full z-[0] order-2'
+
+        //   />
+        // </>
+      )}
+
+      {imageSize === 'cover' && (
+        <HeroImageContainer>
+          <CoverImage
+            src={imageSrc}
+            alt={`${title} cover`}
+            icon={imageIcon}
+            className='w-full h-full rounded-sm shadow-md'
+          />
+        </HeroImageContainer>
+      )}
+
       <HeroTextContainer className=''>
-        <span className='flex items-center text-sm font-medium'>
+        <span className='flex items-center gap-1 text-sm font-medium'>
+          {subtitleIcon && (
+            <Icon name={subtitleIcon} size={14} fill='#3d91f4' />
+          )}
           {subtitle}
         </span>
         <HeroTitle title={title} className='hehe leading-[normal]' />

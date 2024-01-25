@@ -1,0 +1,6 @@
+.card-section {
+  @apply relative space-y-2;
+  @apply flex min-h-11 flex-1 basis-full flex-col;
+  container-type: inline-size;
+  order: -1;
+}

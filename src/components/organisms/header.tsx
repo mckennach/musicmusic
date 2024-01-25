@@ -31,7 +31,7 @@ export function Header() {
   const [ref, setRef] = useState<GsapContextProps>()
   const handleSignIn = () => {
     signIn('spotify', {
-      callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL!}/`
     })
   }
 
@@ -43,7 +43,6 @@ export function Header() {
 
   useGSAP(
     () => {
-      console.log('here')
       gsap
         .timeline({
           scrollTrigger: {

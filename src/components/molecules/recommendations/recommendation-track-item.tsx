@@ -1,34 +1,30 @@
 'use client'
 
 import { useSpotify } from '@/hooks'
-import {
-  Track,
-} from '@spotify/web-api-ts-sdk'
+import { Track } from '@spotify/web-api-ts-sdk'
 import { useOnClickOutside } from 'usehooks-ts'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { useAtom } from 'jotai'
-import { toast } from 'sonner'
 
 import {
   activeDeviceAtom,
   activePlaylistAtom,
-  asyncPlaybackAtom,
   playbackStateAtom
 } from '@/lib/atoms'
-import {
-  cn,
-} from '@/lib/utils'
 import spotify from '@/lib/spotify-sdk'
+import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import { CoverImage } from '@/components/ui/cover-image'
 import { ItemTitle } from '@/components/ui/item-title'
-import { useRouter } from 'next/navigation'
 import { TrackListColumn, TrackListRow } from '@/components/ui/track-list'
+
+import { toast } from 'sonner'
 
 interface TrackItemProps extends React.HTMLAttributes<HTMLDivElement> {
   track: Track
@@ -48,10 +44,7 @@ const RecommendationTrackItem = ({
 }: TrackItemProps) => {
   const router = useRouter()
   const ref = useRef<HTMLDivElement>(null)
-  const {
-    startResumePlayback,
-    getPlaybackState
-  } = useSpotify()
+  const { startResumePlayback, getPlaybackState } = useSpotify()
   const [isSelected, setIsSelected] = useState(false)
   const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
 
@@ -75,16 +68,18 @@ const RecommendationTrackItem = ({
   }
 
   const handleAddToPlaylist = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+    e.stopPropagation()
 
     try {
-      if(!playlistId) return;
-      spotify.playlists.addItemsToPlaylist(playlistId, [track?.uri]).then(() => {
-        toast.success('Track added to playlist!');
-        router.refresh()
-      });
+      if (!playlistId) return
+      spotify.playlists
+        .addItemsToPlaylist(playlistId, [track?.uri])
+        .then(() => {
+          toast.success('Track added to playlist!')
+          router.refresh()
+        })
     } catch (error) {
-      toast.error('Something went wrong, try again!');
+      toast.error('Something went wrong, try again!')
     }
   }
 
@@ -92,7 +87,7 @@ const RecommendationTrackItem = ({
     setIsSelected(false)
   }
 
-  useOnClickOutside(ref, handleClickOutside);
+  useOnClickOutside(ref, handleClickOutside)
 
   return (
     <TrackListRow

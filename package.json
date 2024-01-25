@@ -13,18 +13,14 @@
     "tailwind:build": "tailwindcss -i ./src/styles/globals.css -o ./src/styles/globals.output.css",
     "tailwind:watch": "tailwindcss -i ./src/styles/globals.css -o ./src/styles/globals.output.css --watch",
     "codegen": "graphql-codegen --config codegen.ts --verbose",
-    "codegen:watch": "graphql-codegen --watch"
+    "codegen:watch": "graphql-codegen --watch",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.9",
-    "@apollo/experimental-nextjs-app-support": "^0.6.0",
-    "@apollo/server": "^4.10.0",
     "@as-integrations/next": "^3.0.0",
     "@gsap/react": "^2.1.0",
     "@hookform/resolvers": "^3.3.4",
-    "@next-auth/prisma-adapter": "^1.0.7",
     "@next/bundle-analyzer": "^14.1.0",
-    "@prisma/client": "^5.8.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -43,6 +39,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@sentry/nextjs": "^7.95.0",
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-table": "^8.11.6",
@@ -55,8 +52,7 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
-    "graphql": "^16.8.1",
-    "graphql-tools": "^9.0.0",
+    "embla-carousel-react": "^8.0.0-rc20",
     "gsap": "^3.12.5",
     "isomorphic-fetch": "^3.0.0",
     "jotai": "^2.6.1",
@@ -99,11 +95,28 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "postcss": "^8",
-    "prettier": "^3.2.1",
+    "prettier": "3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "lint-staged": {
+    "src/*.{js,jsx,ts,tsx,md,html}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "src/**/*.{js,jsx,ts,tsx,md,html}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

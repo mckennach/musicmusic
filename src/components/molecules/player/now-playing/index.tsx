@@ -12,12 +12,9 @@ import { useAtom } from 'jotai'
 // Hooks
 // import { useSpotify } from '@/hooks'
 import { playbackStateAtom, sessionAtom } from '@/lib/atoms'
-import { cn } from '@/lib/utils'
 
 import { NowPlayingLoading } from '@/components/molecules/player/now-playing/loading'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CoverImage } from '@/components/ui/cover-image'
-import Icon from '@/components/ui/icon'
 // Utils
 import { ItemTitle } from '@/components/ui/item-title'
 

@@ -47,8 +47,8 @@ const BackgroundFade = React.forwardRef<HTMLDivElement, BackgroundFadeProps>(
         ref={ref}
         {...props}
         className={cn(
-          `bg-[var(--random-color,black)]`,
-          `background-fade`,
+          `bg-[var(--random-color,transparent)]`,
+          `background-fade animate-fade-in`,
           className
         )}
       />

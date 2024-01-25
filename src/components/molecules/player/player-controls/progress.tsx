@@ -52,8 +52,6 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     )
 
     useEffect(() => {
-      console.log('playing', isPlaying)
-
       if (!session) return
       const timer = setInterval(async () => {
         updatePlayback()

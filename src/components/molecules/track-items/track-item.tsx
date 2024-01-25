@@ -118,7 +118,7 @@ const TrackItem = ({ track, index, contextUri, ...props }: TrackItemProps) => {
       )}
       role='row'
     >
-      <TrackListColumn className='grid-item relative' data-colindex={1}>
+      <TrackListColumn className='grid-item relative' aria-colindex={1}>
         <Play
           color='white'
           fill='white'
@@ -137,7 +137,7 @@ const TrackItem = ({ track, index, contextUri, ...props }: TrackItemProps) => {
           {index + 1}
         </span>
       </TrackListColumn>
-      <TrackListColumn className='grid-item' data-colindex={2}>
+      <TrackListColumn className='grid-item' aria-colindex={2}>
         <span className='py-2 text-xs text-subdued-foreground flex items-center gap-3 truncate'>
           title
         </span>

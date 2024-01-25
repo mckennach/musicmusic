@@ -74,7 +74,7 @@ export function Home() {
 
   return (
     <>
-      <BackgroundFade />
+      <BackgroundFade className='h-[350px]' />
       <div className='flex flex-col px-4 pb-12'>
         <div className='flex flex-col isolate pt-2 bg-transparent'>
           <div className='flex flex-wrap gap-8'>

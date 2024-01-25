@@ -1,16 +1,6 @@
 import { useSpotify } from '@/hooks'
 // import { ErrorType, LibraryFilterTypes, LibraryItem } from '../../../types/auth.ds'
-import {
-  Artist,
-  Device,
-  Page,
-  PlaybackState,
-  SavedAlbum,
-  SavedEpisode,
-  SavedTrack,
-  SimplifiedPlaylist,
-  User
-} from '@spotify/web-api-ts-sdk'
+import { Device, PlaybackState, User } from '@spotify/web-api-ts-sdk'
 import { atomWithStorage } from 'jotai/utils'
 
 import { atom, createStore } from 'jotai'
@@ -19,8 +9,13 @@ import spotify from '@/lib/spotify-sdk'
 
 import { millisToMinutesAndSeconds } from '../utils'
 
-import { ErrorType, LibraryFilterTypes, LibraryItem } from '@/types/database.ds'
-import { AuthSession } from '@/types/database.ds'
+import {
+  AuthSession,
+  ErrorType,
+  LibraryFilterTypes,
+  LibraryItem,
+  LibraryProps
+} from '@/types/database.ds'
 
 export const store = createStore()
 // ====================
@@ -35,13 +30,13 @@ export const currentUserAtom = atomWithStorage<User | null>('currentUser', null)
 // Library Atoms
 // ====================
 
-interface LibraryProps {
-  artists: Page<Artist>
-  albums: Page<SavedAlbum>
-  playlists: Page<SimplifiedPlaylist>
-  tracks: Page<SavedTrack>
-  episodes: Page<SavedEpisode>
-}
+// interface LibraryProps {
+//   artists: Page<Artist>
+//   albums: Page<SavedAlbum>
+//   playlists: Page<SimplifiedPlaylist>
+//   tracks: Page<SavedTrack>
+//   episodes: Page<SavedEpisode>
+// }
 
 export const asyncLibraryAtom = atom(null, async (get, set) => {
   const { fetchLibrary } = useSpotify()
@@ -62,6 +57,7 @@ export const libraryItemsAtom = atom<LibraryItem[]>((get) => {
   const library = get(libraryAtom)
   const { createLibraryItems } = useSpotify()
   if (!library) return []
+
   return createLibraryItems(library)
 })
 
@@ -199,6 +195,8 @@ export const noDeviceFoundAtom = atom(false)
 // ====================
 // UI Atoms
 // ====================
+
+export const bannerImageAtom = atom<string | null>(null)
 
 export const mainContainerScrolledAtom = atom(false)
 export const mainContainerScrollPositionAtom = atom(0)

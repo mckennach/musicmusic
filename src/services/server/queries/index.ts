@@ -1,2 +1,2 @@
-export * from './recommendations.query';
-export * from './playlists.query';
+export * from './playlists.queries'
+export * from './recommendations.queries'

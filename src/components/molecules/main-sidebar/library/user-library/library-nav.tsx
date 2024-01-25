@@ -31,6 +31,10 @@ export function LibraryNav({}) {
   const [library, setLibrary] = useState([] as LibraryItem[])
   const [sideBarLeftCollapsed] = useAtom(sideBarLeftCollapsedAtom)
   const [searchInput] = useAtom(sidebarSearchInputAtom)
+  const [sortedBy, setSortedBy] = useState(
+    sortBy as 'alphabetical' | 'recently-added' | 'recents' | 'creator'
+  )
+
   useEffect(() => {
     if (!libraryItems) return
     if (activeLibFilter === 'playlists') {
@@ -71,7 +75,68 @@ export function LibraryNav({}) {
         })
       )
     }
-  }, [libraryItems, activeLibFilter, sortBy, searchInput])
+  }, [libraryItems, activeLibFilter, searchInput])
+
+  useEffect(() => {
+    ;(async () => {
+      if (sortBy === 'alphabetical') {
+        setLibrary(
+          libraryItems
+            .sort((a, b) => {
+              const aPinned = a.pinned ? -1 : 1
+              const bPinned = b.pinned ? -1 : 1
+              return aPinned - bPinned
+            })
+            .sort((a, b) => {
+              const tracks = a.type === 'tracks' ? -1 : 1
+              const tracks2 = b.type === 'tracks' ? -1 : 1
+              return tracks - tracks2
+            })
+            .sort((a, b) => {
+              const aName = a.name.toLowerCase()
+              const bName = b.name.toLowerCase()
+              if (aName < bName) {
+                return -1
+              }
+              if (aName > bName) {
+                return 1
+              }
+              return 0
+            })
+        )
+      } else if (sortBy === 'recently-added') {
+        setLibrary(
+          libraryItems
+            .sort((a, b) => {
+              const aPinned = a.pinned ? -1 : 1
+              const bPinned = b.pinned ? -1 : 1
+              return aPinned - bPinned
+            })
+            .sort((a, b) => {
+              const tracks = a.type === 'tracks' ? -1 : 1
+              const tracks2 = b.type === 'tracks' ? -1 : 1
+              return tracks - tracks2
+            })
+        )
+      } else {
+        setLibrary(
+          libraryItems
+            .sort((a, b) => {
+              const aPinned = a.pinned ? -1 : 1
+              const bPinned = b.pinned ? -1 : 1
+              return aPinned - bPinned
+            })
+            .sort((a, b) => {
+              const tracks = a.type === 'tracks' ? -1 : 1
+              const tracks2 = b.type === 'tracks' ? -1 : 1
+              return tracks - tracks2
+            })
+        )
+      }
+
+      setSortedBy(sortBy)
+    })()
+  }, [libraryItems, sortBy])
 
   if (!session)
     return (
@@ -79,7 +144,7 @@ export function LibraryNav({}) {
         <Button
           onClick={() =>
             signIn('spotify', {
-              callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
+              callbackUrl: `${process.env.NEXT_PUBLIC_URL!}/`
             })
           }
           className='rounded-full'

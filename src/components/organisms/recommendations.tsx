@@ -1,59 +1,56 @@
 'use client'
 
 import {
-  Page,
   Playlist,
-  PlaylistedTrack,
-  QueryAdditionalTypes,
-  Track,
-  TrackItem
+  RecommendationsResponse,
+  Track
 } from '@spotify/web-api-ts-sdk'
-import { useState, useEffect } from 'react'
-import { getRecommendations } from '@/services/server/queries'
-// import React, { useEffect, useState } from 'react'
+
+import { useEffect, useState } from 'react'
 
 import spotify from '@/lib/spotify-sdk'
-import { useAtom } from 'jotai'
-import { sessionAtom } from '@/lib/atoms'
-import { TrackList, TrackListHeaderItems } from '../organisms/track-list'
-import { Button } from '../ui/button';
-import { AuthSession } from '@/types/database.ds';
+
+import { TrackList } from '../organisms/track-list'
+import { Button } from '../ui/button'
+
+import { AuthSession } from '@/types/database.ds'
 
 export function Recommendations({
   playlist,
   title = 'Recommended',
   description,
-  recommendedTracks
+  session,
+  recommendations
 }: {
   playlist?: Playlist
   title?: string
   description?: string
-  recommendedTracks?: Track[]
+  session: AuthSession | null
+  recommendations: RecommendationsResponse | null
 }) {
-  const [tracks, setTracks] = useState<Track[] | null>(null);
-  const [session] = useAtom(sessionAtom);
-
-
+  const [tracks, setTracks] = useState<Track[] | null>(null)
   useEffect(() => {
-    if(!recommendedTracks) return;
-    setTracks(recommendedTracks);
-  }, [recommendedTracks]);
+    if (!recommendations) return
+    setTracks(recommendations.tracks)
+  }, [recommendations])
 
-  const handleRefresh = async () => {
-    if (!session) return null
-    spotify.recommendations.get({
-      limit: 10,
-      seed_tracks: playlist?.tracks?.items
-      .slice(0, 5)
-      .map((item) => item.track.id)
-    }).then((res) => {
-      setTracks(res.tracks)
-    })
+  const handleRefresh = () => {
+    if (!session || !playlist) return
+    spotify.recommendations
+      .get({
+        limit: 10,
+        seed_tracks: playlist?.tracks?.items
+          .slice(0, 5)
+          .map((item) => item.track.id)
+      })
+      .then((data) => {
+        setTracks(data?.tracks)
+      })
   }
 
   if (!tracks || !playlist) return null
   return (
-    <div>
+    <div className='content-spacing'>
       <div className='pb-4 pt-6 flex justify-end'>
         <Button variant='link'>Find more</Button>
       </div>

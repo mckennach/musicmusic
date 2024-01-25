@@ -1,6 +1,7 @@
 import {
-  Artist,
   Devices,
+  FollowedArtists,
+  MaxInt,
   Page,
   PlaybackState,
   SavedAlbum,
@@ -10,7 +11,6 @@ import {
   SimplifiedPlaylist,
   User
 } from '@spotify/web-api-ts-sdk'
-import { MaxInt } from '@spotify/web-api-ts-sdk'
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
 import { DefaultSession, DefaultUser } from 'next-auth'
 import {
@@ -83,7 +83,7 @@ export type ErrorType =
   | 'no-lyrics-api-key-valid-found'
 
 export interface InitialData {
-  artists: Page<Artist>
+  artists: FollowedArtists
   albums: Page<SavedAlbum>
   playlists: Page<SimplifiedPlaylist>
   tracks: Page<SavedTrack>
@@ -95,7 +95,7 @@ export interface InitialData {
 }
 
 export interface LibraryProps {
-  artists: Page<Artist>
+  artists: FollowedArtists
   albums: Page<SavedAlbum>
   playlists: Page<SimplifiedPlaylist>
   tracks: Page<SavedTrack>

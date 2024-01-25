@@ -1,30 +1,15 @@
 import type {
-  Artist,
   AudioAnalysis,
   AudioFeatures,
-  FollowedArtists,
   Market,
-  MaxInt,
   Page,
   SavedTrack,
-  Track,
-  User,
-  UserProfile
+  Track
 } from '@spotify/web-api-ts-sdk'
 
 import spotify from '@/lib/spotify-sdk'
-import { formatNumber } from '@/lib/utils'
 
-import { UserTopItemParams } from '@/types/auth.ds'
-import type {
-  ErrorMessage,
-  ItemType,
-  LibraryItem,
-  LibraryProps,
-  Limit,
-  Offset,
-  TimeRange
-} from '@/types/database.ds'
+import type { ErrorMessage, Limit, Offset } from '@/types/database.ds'
 
 export async function getTrack(id: string, market?: Market): Promise<Track> {
   try {

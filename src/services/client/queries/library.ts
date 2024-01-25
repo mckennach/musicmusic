@@ -1,7 +1,4 @@
 // import spotifyApi from '@/lib/spotify'
-import { Artist } from '@spotify/web-api-ts-sdk'
-
-import spotify from '@/lib/spotify-sdk'
 import { formatNumber } from '@/lib/utils'
 
 import { LibraryItem, LibraryProps } from '@/types/database.ds'
@@ -10,8 +7,8 @@ export async function createLibraryItems(
   library: LibraryProps
 ): Promise<LibraryItem[]> {
   const libraryItems: LibraryItem[] = []
-  if (library.artists?.items) {
-    library.artists.items.forEach((artist) => {
+  if (library.artists?.artists.items) {
+    library.artists.artists.items.forEach((artist) => {
       libraryItems.push({
         name: artist.name,
         id: artist.id,

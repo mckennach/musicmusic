@@ -1,5 +1,7 @@
 'use client'
 
+import bgNoise from '@/assets/bg-noise.svg'
+
 import { useEffect } from 'react'
 
 import { useAtom } from 'jotai'
@@ -30,8 +32,11 @@ export function DatabaseProvider({
   const [, setPlaybackState] = useAtom(playbackStateAtom)
   useEffect(() => {
     if (session && initialData) {
+      console.log('hit')
       setCurrentSession(session)
       setCurrentUser(initialData.currentUser)
+
+      // return;
       setCurrentLibrary({
         artists: initialData.artists,
         albums: initialData.albums,
@@ -39,9 +44,6 @@ export function DatabaseProvider({
         tracks: initialData.tracks,
         episodes: initialData.episodes
       })
-
-      setAvailableDevices(initialData.devices.devices)
-      setPlaybackState(initialData.playback)
     }
   }, [
     session,
@@ -52,6 +54,13 @@ export function DatabaseProvider({
     setCurrentUser,
     setPlaybackState
   ])
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--background-noise',
+      `url(${bgNoise?.src})`
+    )
+  }, [bgNoise])
 
   return <>{children}</>
 }

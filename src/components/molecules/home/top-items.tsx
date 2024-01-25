@@ -1,23 +1,14 @@
 'use client'
 
-import {
-  Artist,
-  MaxInt,
-  Page,
-  PlayHistory,
-  SimplifiedPlaylist
-} from '@spotify/web-api-ts-sdk'
-import { useSession } from 'next-auth/react'
+import { Artist, Page } from '@spotify/web-api-ts-sdk'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useAtom } from 'jotai'
 
 import { sessionAtom } from '@/lib/atoms'
-import spotify from '@/lib/spotify-sdk'
 
 import { CardButton, CardButtonSkeleton } from '@/components/ui/card-button'
 import {
@@ -43,18 +34,24 @@ const TopItems = React.forwardRef<HTMLDivElement, TopItemsProps>(
           ? 'Good Afternoon'
           : 'Good Evening'
     return (
-      <CardSection {...props} ref={ref}>
+      <CardSection {...props} ref={ref} dir='row'>
         {items && (
           <CardSectionHeading>
             <h2 className='text-white font-bold text-3xl'>{greeting}</h2>
           </CardSectionHeading>
         )}
-        <CardSectionItems gridCols={3} gap={3} className='grid-cols-3'>
+        <CardSectionItems
+          gridCols={3}
+          gap={3}
+          className='grid-cols-3'
+          dir='row'
+        >
           {items && session ? (
             <>
               {items?.map((item, i) => (
                 <CardButton
                   key={i}
+                  className='card-section__item'
                   onClick={() => router.push(`/${item?.type}/${item.id}`)}
                   name={item?.name}
                   imageSrc={item?.images[0]?.url}

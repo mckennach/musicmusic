@@ -30,7 +30,7 @@ const ItemTitle = React.forwardRef<HTMLDivElement, ItemTitleProps>(
           {name}
         </p>
         {label && (
-          <div className='flex items-center max-w-full gap-1 truncate text-xs font-medium text-subdued-foreground'>
+          <div className='flex items-center max-w-full gap-1.5 truncate text-xs font-medium text-subdued-foreground'>
             {icon && (
               <Icon
                 name={icon}

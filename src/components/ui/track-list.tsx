@@ -108,7 +108,7 @@ TrackListColumn.displayName = 'TrackListColumn'
 export {
   TrackList,
   TrackListBody,
-  TrackListRow,
   TrackListColumn,
-  TrackListHeading
+  TrackListHeading,
+  TrackListRow
 }

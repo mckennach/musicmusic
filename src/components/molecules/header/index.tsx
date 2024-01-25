@@ -1,7 +1,6 @@
 'use client'
 
 // Components
-import { logIn } from '@/services/client/auth'
 import { signIn, useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
@@ -58,7 +57,7 @@ export function Header() {
 
   const handleSignIn = () => {
     signIn('spotify', {
-      callbackUrl: `${process.env.NEXTAUTH_ENDPOINT!}/`
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL!}/`
     })
   }
 
