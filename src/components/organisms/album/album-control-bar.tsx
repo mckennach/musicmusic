@@ -1,6 +1,6 @@
 'use client'
+import { SpotifyPlayButton } from '@/components/molecules/buttons/spotify-play-button'
 import { Button } from '@/components/ui/button'
-import { SpotifyPlayButton } from '@/components/ui/spotify-play-button'
 import {
   Tooltip,
   TooltipContent,

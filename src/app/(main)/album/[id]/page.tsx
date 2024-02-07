@@ -1,3 +1,5 @@
+import type { Metadata, ResolvingMetadata } from 'next'
+
 import { AlbumControlBar } from '@/components/organisms/album/album-control-bar'
 import { AlbumHero } from '@/components/organisms/album/album-hero'
 import { AlbumTrackList } from '@/components/organisms/album/album-track-list'
@@ -10,6 +12,31 @@ import { AuthSession } from '@/types/database.ds'
 import { Album, Artist } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
 import { Suspense } from 'react'
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const session: AuthSession | null = await getServerSession(authOptions)
+  const album: Album | null = session
+    ? await getAlbum(params.id, session)
+    : null
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: album ? `${album.name} | Spotify` : 'Album | Spotify',
+    openGraph: {
+      images: [album ? album.images[0].url : '', ...previousImages]
+    }
+  }
+}
+
 export default async function AlbumPage({
   params
 }: {

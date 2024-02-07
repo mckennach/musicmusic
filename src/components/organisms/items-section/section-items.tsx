@@ -31,7 +31,6 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
   const router = useRouter()
 
   if (type[0] === 'top-artists') {
-    // console.log('FOLLOWING', (data[type[0]] as FollowedArtists))
     return (
       <>
         {(data[type[0]] as Page<Artist>).items
@@ -46,7 +45,8 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               imageClassName='rounded-full'
               title={item?.name}
               label={'Artist'}
-              showPlayButton={false}
+              showPlayButton={true}
+              contextUri={item.uri}
             />
           ))}
       </>
@@ -69,7 +69,8 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               imageClassName='rounded-full'
               title={item?.name}
               label={'Artist'}
-              showPlayButton={false}
+              showPlayButton={true}
+              contextUri={item.uri}
             />
           ))}
       </>
@@ -91,6 +92,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               title={item?.show.name}
               label={item?.show.publisher}
               showPlayButton={false}
+              contextUri={item.show.uri}
             />
           ))}
       </>
@@ -112,6 +114,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               title={item?.album.name}
               label={item?.album.artists[0]?.name}
               showPlayButton={true}
+              contextUri={item.album.uri}
             />
           ))}
       </>
@@ -133,6 +136,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               title={item.name}
               label={item.owner.display_name}
               showPlayButton={true}
+              contextUri={item.uri}
             />
           ))}
       </>
@@ -142,18 +146,11 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
   if (type[0] === 'recently-played') {
     const arr = (data[type[0]] as RecentlyPlayedTracksPage).items
     // console.log('RECENTLY', arr);
+    console.log('RECENTLY', arr)
     return (
       <>
         {arr
-          // .filter(
-          //   (obj, index) =>
-          //     index ===
-          //     arr.findIndex(
-          //       (o) =>
-          //         obj.track.album.artists[0].name ===
-          //         o.track.album.artists[0].name
-          //     )
-          // )
+
           ?.slice(0, count)
           .map((item, i) => (
             <CardButtonVertical
@@ -165,6 +162,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               title={item.track.name}
               label={item.track.album.artists[0]?.name}
               showPlayButton={true}
+              contextUri={item.track.album.uri}
             />
           ))}
       </>
@@ -189,6 +187,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
               </span>
             }
             showPlayButton={true}
+            // contextUri={item.uri}
           />
         ))}
       </>
@@ -199,21 +198,20 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
     const arr = (data[type[0]] as Artists).artists
     return (
       <>
-        {arr
-          ?.slice(0, count)
-          .map((item, i) => (
-            <CardButtonVertical
-              onClick={() => router.push(`/artist/${item.id}`)}
-              className='card-section__item'
-              key={i}
-              imageSrc={item.images[0]?.url}
-              imageAlt={item.name + ' cover image'}
-              imageClassName='rounded-full'
-              title={item.name}
-              label={'Artist'}
-              showPlayButton={true}
-            />
-          ))}
+        {arr?.slice(0, count).map((item, i) => (
+          <CardButtonVertical
+            onClick={() => router.push(`/artist/${item.id}`)}
+            className='card-section__item'
+            key={i}
+            imageSrc={item.images[0]?.url}
+            imageAlt={item.name + ' cover image'}
+            imageClassName='rounded-full'
+            title={item.name}
+            label={'Artist'}
+            showPlayButton={true}
+            // contextUri={item.uri}
+          />
+        ))}
       </>
     )
   }

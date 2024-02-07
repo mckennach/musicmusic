@@ -10,8 +10,35 @@ import { formatNumber } from '@/lib/utils'
 import { fetchArtist } from '@/services/server/queries/artists.queries'
 import { AuthSession } from '@/types/database.ds'
 import type { Artist } from '@spotify/web-api-ts-sdk'
+import type { Metadata, ResolvingMetadata } from 'next'
 import { getServerSession } from 'next-auth'
 import { Suspense } from 'react'
+
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const session: AuthSession | null = await getServerSession(authOptions)
+  const artist: Artist | null = session
+    ? await fetchArtist(params.id, session)
+    : null
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: artist ? `${artist.name} | Spotify` : 'Artist | Spotify',
+    openGraph: {
+      images: [artist ? artist.images[0].url : '', ...previousImages]
+    }
+  }
+}
+
 export default async function Artist({ params }: { params: { id: string } }) {
   const session: AuthSession | null = await getServerSession(authOptions)
   const artist: Artist | null = session

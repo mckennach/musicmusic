@@ -20,6 +20,7 @@ const TopItems = React.forwardRef<HTMLDivElement, TopItemsProps>(
             imageSrc={item?.images[0]?.url}
             imageAlt={item?.name + ' cover image'}
             title={item?.name}
+            contextUri={item?.uri}
           />
         ))}
       </>

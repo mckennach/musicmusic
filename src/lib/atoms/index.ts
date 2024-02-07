@@ -84,6 +84,11 @@ export const activePlaylistAtom = atomWithStorage<string | null>(
 // Player Status
 // ====================
 
+export const activeContextUriAtom = atomWithStorage<string | null>(
+  'active-context-uri',
+  null
+)
+
 export const asyncPlaybackAtom = atom(null, async (get, set) => {
   const accessToken = get(sessionAtom)?.user?.access_token
   if (!accessToken) return null

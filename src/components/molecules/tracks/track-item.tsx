@@ -53,6 +53,8 @@ export function TrackItem({ track, ...props }: TrackItemProps) {
   }, [track, checkIfItemIsSaved])
 
   const handleDoubleClick = async () => {
+    console.log('double click')
+    console.log(track.uri)
     // if (activeDevice && activeDevice?.id) {
     //   await startResumePlayback(
     //     activeDevice?.id,

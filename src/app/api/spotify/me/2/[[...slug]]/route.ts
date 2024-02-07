@@ -13,7 +13,7 @@ export async function POST(
     const queryStr = searchParams ? `?${searchParams.toString()}` : ''
 
     const url = `${process.env.SPOTIFY_ENDPOINT}/me/${context.params.slug ? context.params.slug?.join('/') : ''}${queryStr}`
-    console.log('URL', url)
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {

@@ -19,8 +19,6 @@ import {
   sessionAtom
 } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
-import { fetchPlaybackState } from '@/services/server'
-import { PlaybackState } from '@spotify/web-api-ts-sdk'
 import { ProgressBar } from './progress-bar'
 // type SliderProps = React.ComponentProps<typeof Slider>
 interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -50,8 +48,8 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
           if (!activeDevice || !session) return
           spotify.player.getPlaybackState().then((res) => {
             setPlaybackState(res)
-            setProgress(res.progress_ms - 1)
-            setDuration(res?.item?.duration_ms - 1)
+            setProgress(res.progress_ms)
+            setDuration(res?.item?.duration_ms)
             setIsPlaying(res.is_playing)
           })
         },
@@ -79,11 +77,10 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
 
     useEffect(() => {
       if (session && activeDevice) {
-        console.log(activeDevice)
-        fetchPlaybackState(session).then((res: PlaybackState) => {
+        spotify.player.getPlaybackState().then((res) => {
           setPlaybackState(res)
-          setProgress(res.progress_ms - 1)
-          setDuration(res?.item?.duration_ms - 1)
+          setProgress(res.progress_ms)
+          setDuration(res?.item?.duration_ms)
           setIsPlaying(res.is_playing)
         })
       }
@@ -105,20 +102,10 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
       const newPosition: number = Math.round(
         (debouncedPosition / 100) * duration
       )
-      console.log(newPosition)
       spotify.player.seekToPosition(newPosition).then((res) => {
         updatePlayback()
       })
     }, [duration, debouncedPosition, updatePlayback])
-
-    // useEffect(() => {
-    //   if (!isSeeking) return;
-    //   console.log('debouncedPosition', debouncedPosition);
-    //   spotify.player.seekToPosition(debouncedPosition).then((res) => {
-    //     updatePlayback();
-    //   });
-    //   setIsSeeking(false);
-    // }, [debouncedPosition, seekingPosition, isSeeking, updatePlayback]);
 
     if (!progressPercent) return null
     return (

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { Card } from '../../ui/card'
 import { CoverImage } from '../../ui/cover-image'
 import { ItemTitle } from '../../ui/item-title'
-import { SpotifyPlayButton } from '../../ui/spotify-play-button'
+import { SpotifyPlayButton } from '../buttons/spotify-play-button'
 
 import {
   CardButtonCloseTrigger,
@@ -31,6 +31,7 @@ interface CardButtonRowProps
   className?: string
   icon?: keyof typeof dynamicIconImports
   dir?: 'row' | 'column'
+  contextUri?: string
 }
 
 const CardButtonRow = React.forwardRef<HTMLDivElement, CardButtonRowProps>(
@@ -39,6 +40,7 @@ const CardButtonRow = React.forwardRef<HTMLDivElement, CardButtonRowProps>(
       title,
       titleClassName,
       label,
+      contextUri,
       imageSrc,
       imageClassName,
       imageAlt,
@@ -70,7 +72,8 @@ const CardButtonRow = React.forwardRef<HTMLDivElement, CardButtonRowProps>(
             <CardButtonPlayButton
               className='top-1/2 right-2 translate-y-[-50%] bottom-[unset]'
               fade={true}
-              iconSize={18}
+              iconSize={14}
+              contextUri={contextUri}
               iconClassName='w-8 h-8'
             />
           </CardButtonText>
@@ -95,6 +98,7 @@ interface CardButtonVerticalProps
   className?: string
   icon?: keyof typeof dynamicIconImports
   dir?: 'row' | 'column'
+  contextUri?: string
   showPlayButton?: boolean
   showCloseButton?: boolean
   onClose?: () => void
@@ -115,6 +119,7 @@ const CardButtonVertical = React.forwardRef<
       imageAlt,
       imageSize,
       imageIcon,
+      contextUri,
       icon,
       showPlayButton = true,
       showCloseButton = false,
@@ -148,9 +153,11 @@ const CardButtonVertical = React.forwardRef<
             {showPlayButton && (
               <CardButtonPlayButton
                 onClick={onPlay}
-                className='bottom-1 right-1 translate-y-1 '
+                // className="'absolute  opacity-0 group-hover:opacity-100 bottom-1 right-1',"
+                // className='bottom-1 right-1 -translate-y-2 group-hover:-translate-y-1 transition-all duration-300 ease-in-out'
                 fade={true}
                 fadeDir='up'
+                contextUri={contextUri}
               />
             )}
           </CardButtonImage>

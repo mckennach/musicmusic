@@ -138,7 +138,14 @@ export function SearchTopResult({
                 titleClassName='text-white font-bold text-[2rem] truncate'
                 label={<>Artist</>}
               />
-              <CardButtonPlayButton fade={true} fadeDir='up' />
+              <CardButtonPlayButton
+                contextUri={topResult.uri}
+                fade={true}
+                fadeDir='up'
+                className='bottom-4 right-4'
+
+                // className='transform -translate-x-1 -translate-y-8 opacity-0 group-hover:opacity-100 group-hover:-translate-y-10 transition-all duration-300 ease-in-out'
+              />
             </CardButton>
           </>
         )}
@@ -174,7 +181,13 @@ export function SearchTopResult({
                   </>
                 }
               />
-              <CardButtonPlayButton fade={true} fadeDir='up' />
+              <CardButtonPlayButton
+                contextUri={topResult.uri}
+                className='bottom-4 right-4'
+                fade={true}
+                fadeDir='up'
+                // className='transform -translate-x-1 -translate-y-8 opacity-0 group-hover:opacity-100 group-hover:-translate-y-10 transition-all duration-300 ease-in-out'
+              />
             </CardButton>
           </>
         )}
@@ -210,7 +223,13 @@ export function SearchTopResult({
                   </>
                 }
               />
-              <CardButtonPlayButton fade={true} fadeDir='up' />
+              <CardButtonPlayButton
+                contextUri={topResult.uri}
+                fade={true}
+                fadeDir='up'
+                className='bottom-4 right-4'
+                // className='transform -translate-x-1 -translate-y-8 opacity-0 group-hover:opacity-100 group-hover:-translate-y-10 transition-all duration-300 ease-in-out'
+              />
             </CardButton>
           </>
         )}

@@ -5,13 +5,14 @@ import dynamicIconImports from 'lucide-react/dynamicIconImports'
 
 import React from 'react'
 
-import { cn } from '@/lib/utils'
-
 import { Card } from '@/components/ui/card'
 import { CoverImage } from '@/components/ui/cover-image'
 import { ItemTitle, ItemTitleSkeleton } from '@/components/ui/item-title'
-import { SpotifyPlayButton } from '@/components/ui/spotify-play-button'
+import { activeContextUriAtom, isPlayingAtom } from '@/lib/atoms'
+import { cn } from '@/lib/utils'
+import { useAtom } from 'jotai'
 import { X } from 'lucide-react'
+import { SpotifyPlayButton } from '../molecules/buttons/spotify-play-button'
 import { Button } from './button'
 interface CardButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   dir?: 'row' | 'column'
@@ -138,6 +139,7 @@ interface CardButtonPlayButtonProps
   fadeDir?: 'default' | 'up' | 'down' | 'left' | 'right'
   iconSize?: number
   iconClassName?: string
+  contextUri?: string
 }
 
 const CardButtonPlayButton = React.forwardRef<
@@ -145,27 +147,44 @@ const CardButtonPlayButton = React.forwardRef<
   CardButtonPlayButtonProps
 >(
   (
-    { fade, fadeDir, className, iconSize = 20, iconClassName, ...props },
+    {
+      fade,
+      fadeDir,
+      className,
+      iconSize = 20,
+      iconClassName,
+      contextUri,
+      ...props
+    },
     ref
   ) => {
+    const [activeContextUri] = useAtom(activeContextUriAtom)
+    const [isPlaying] = useAtom(isPlayingAtom)
+    const isActive = activeContextUri === contextUri && isPlaying
+
     return (
       <div
         ref={ref}
         {...props}
         className={cn(
-          'absolute -translate-x-0 right-1 opacity-100 ',
+          'absolute -translate-x-1 -translate-y-0 opacity-100 group-hover:opacity-100 bottom-1 right-1',
           fade &&
+            !isActive &&
             'opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out',
           fade &&
+            !isActive &&
             fadeDir === 'up' &&
-            'transform -translate-x-1 -translate-y-[-10px] opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300 ease-in-out',
+            'transform -translate-x-1 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:-translate-y-0 transition-all duration-300 ease-in-out',
           fade &&
+            !isActive &&
             fadeDir === 'down' &&
-            'transform -translate-x-1 translate-y-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300 ease-in-out',
+            'transform -translate-x-1 -translate-y-2 opacity-0 group-hover:opacity-100 group-hover:-translate-y-0 transition-all duration-300 ease-in-out',
           fade &&
+            !isActive &&
             fadeDir === 'left' &&
             'transform -translate-x-[20px] -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:-translate-x-1 transition-all duration-300 ease-in-out',
           fade &&
+            !isActive &&
             fadeDir === 'right' &&
             'transform translate-x-[20px] -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 ease-in-out',
           className
@@ -175,6 +194,7 @@ const CardButtonPlayButton = React.forwardRef<
           <SpotifyPlayButton
             className={cn('shadow-lg w-12 h-12', iconClassName)}
             iconSize={iconSize}
+            contextUri={contextUri}
           />
         </div>
       </div>
