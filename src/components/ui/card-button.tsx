@@ -1,3 +1,5 @@
+'use client'
+
 // import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
 
@@ -5,119 +7,218 @@ import React from 'react'
 
 import { cn } from '@/lib/utils'
 
-import { Card } from './card'
-import { CoverImage } from './cover-image'
-import { ItemTitle, ItemTitleSkeleton } from './item-title'
-import { SpotifyPlayButton } from './spotify-play-button'
-
+import { Card } from '@/components/ui/card'
+import { CoverImage } from '@/components/ui/cover-image'
+import { ItemTitle, ItemTitleSkeleton } from '@/components/ui/item-title'
+import { SpotifyPlayButton } from '@/components/ui/spotify-play-button'
+import { X } from 'lucide-react'
+import { Button } from './button'
 interface CardButtonProps extends React.HTMLAttributes<HTMLDivElement> {
-  name: string | React.ReactNode
-  label?: string | React.ReactNode
-  imageSrc?: string
-  imageClassName?: string
-  imageAlt?: string
-  imageSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  imageIcon?: keyof typeof dynamicIconImports
   dir?: 'row' | 'column'
   className?: string
-  icon?: keyof typeof dynamicIconImports
 }
 
 const CardButton = React.forwardRef<HTMLDivElement, CardButtonProps>(
-  (
-    {
-      name,
-      label,
-      imageSrc,
-      imageClassName,
-      imageAlt,
-      imageSize,
-      imageIcon = 'music',
-      dir = 'row',
-      className,
-      icon,
-      ...props
-    },
-    ref
-  ) => {
+  ({ children, dir = 'column', className, ...props }, ref) => {
     return (
       <Card
         ref={ref}
         {...props}
         className={cn(
-          `bg-tinted-base hover:bg-tinted-higlight-2 active:bg-tinted-press border-none cursor-pointer relative`,
+          `card-section__item bg-tinted-base hover:bg-tinted-higlight-2 active:bg-tinted-press border-none cursor-pointer relative overflow-hidden`,
           className,
           dir === 'row'
             ? 'rounded-sm group'
-            : 'p-2.5 pb-6 isolate relative w-full rounded-md group'
+            : 'p-2.5 pb-6 isolate relative w-full rounded-md group bg-[#181818] hover:bg-[#282828] focus-within:bg-[#282828]'
         )}
       >
-        <div className='h-full w-full'>
-          <div
-            className={cn(
-              'flex gap-3  ',
-              dir === 'row'
-                ? 'flex-row items-center basis-1/3 p-0'
-                : 'flex-col justify-center'
-            )}
-          >
-            <div
-              className={cn(
-                'relative overflow-hidden card-item-image',
-                dir === 'row' ? '' : ''
-              )}
-            >
-              <CoverImage
-                className={cn(`shadow-md`, imageClassName)}
-                src={imageSrc}
-                alt={`${name} cover image`}
-                icon={imageIcon}
-                size={imageSize ? imageSize : dir === 'row' ? 'md' : 'xl'}
-              />
-              {dir === 'column' && (
-                <div
-                  className={cn(
-                    'absolute bottom-1 right-1 transform -translate-x-1 -translate-y-[-20px] opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300 ease-in-out'
-                  )}
-                >
-                  <div>
-                    <SpotifyPlayButton
-                      className='shadow-md w-12 h-12'
-                      iconSize={20}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <ItemTitle
-              className='w-full truncate bg-transparent'
-              name={name}
-              label={label}
-              icon={icon}
-            />
-            {dir === 'row' && (
-              <div
-                className={cn(
-                  'absolute top-1/2 right-2 transform -translate-x-0 -translate-y-1/2 opacity-0 group-hover:opacity-100  transition-all duration-300 ease-in-out'
-                )}
-              >
-                <div>
-                  <SpotifyPlayButton
-                    className='shadow-md w-10 h-10'
-                    iconSize={18}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        {children}
       </Card>
     )
   }
 )
 
 CardButton.displayName = 'CardButton'
+
+interface CardButtonContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  dir?: 'row' | 'column'
+}
+
+const CardButtonContent = React.forwardRef<
+  HTMLDivElement,
+  CardButtonContentProps
+>(({ children, dir = 'column', className, ...props }, ref) => {
+  return (
+    <div className={cn('h-full w-full', className)} ref={ref}>
+      <div
+        className={cn(
+          'flex gap-3  ',
+          dir === 'row'
+            ? 'flex-row items-center basis-1/3 p-0'
+            : 'flex-col justify-center'
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  )
+})
+
+CardButtonContent.displayName = 'CardButtonContent'
+
+interface CardButtonTextProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title: string | React.ReactNode
+  titleClassName?: string
+  label?: string | React.ReactNode
+  icon?: keyof typeof dynamicIconImports
+  dir?: 'row' | 'column'
+}
+
+const CardButtonText = React.forwardRef<HTMLDivElement, CardButtonTextProps>(
+  (
+    {
+      title,
+      titleClassName,
+      label,
+      icon,
+      children,
+      dir = 'column',
+      className,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <>
+        <ItemTitle
+          className={cn('w-full truncate bg-transparent', className)}
+          title={title}
+          titleClassName={titleClassName}
+          label={label}
+          icon={icon}
+          {...props}
+          ref={ref}
+        />
+        {children}
+      </>
+    )
+  }
+)
+
+CardButtonText.displayName = 'CardButtonText'
+
+interface CardButtonCloseTriggerProps
+  extends React.HTMLAttributes<HTMLButtonElement> {}
+
+const CardButtonCloseTrigger = React.forwardRef<
+  HTMLButtonElement,
+  CardButtonCloseTriggerProps
+>(({ className, ...props }, ref) => {
+  return (
+    <Button
+      {...props}
+      size='sm'
+      variant='ghost'
+      className={cn(
+        'rounded-full absolute top-2 right-2 w-7 h-7 p-0',
+        className
+      )}
+    >
+      <X size={20} />
+    </Button>
+  )
+})
+
+CardButtonCloseTrigger.displayName = 'CardButtonCloseTrigger'
+
+interface CardButtonPlayButtonProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  fade: boolean
+  fadeDir?: 'default' | 'up' | 'down' | 'left' | 'right'
+  iconSize?: number
+  iconClassName?: string
+}
+
+const CardButtonPlayButton = React.forwardRef<
+  HTMLDivElement,
+  CardButtonPlayButtonProps
+>(
+  (
+    { fade, fadeDir, className, iconSize = 20, iconClassName, ...props },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        {...props}
+        className={cn(
+          'absolute -translate-x-0 right-1 opacity-100 ',
+          fade &&
+            'opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out',
+          fade &&
+            fadeDir === 'up' &&
+            'transform -translate-x-1 -translate-y-[-10px] opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300 ease-in-out',
+          fade &&
+            fadeDir === 'down' &&
+            'transform -translate-x-1 translate-y-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300 ease-in-out',
+          fade &&
+            fadeDir === 'left' &&
+            'transform -translate-x-[20px] -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:-translate-x-1 transition-all duration-300 ease-in-out',
+          fade &&
+            fadeDir === 'right' &&
+            'transform translate-x-[20px] -translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 ease-in-out',
+          className
+        )}
+      >
+        <div>
+          <SpotifyPlayButton
+            className={cn('shadow-lg w-12 h-12', iconClassName)}
+            iconSize={iconSize}
+          />
+        </div>
+      </div>
+    )
+  }
+)
+
+CardButtonPlayButton.displayName = 'CardButtonPlayButton'
+
+interface CardButtonImageProps extends React.HTMLAttributes<HTMLDivElement> {
+  dir?: 'row' | 'column'
+  src?: string
+  alt?: string
+  icon?: keyof typeof dynamicIconImports
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+}
+
+const CardButtonImage = React.forwardRef<HTMLDivElement, CardButtonImageProps>(
+  (
+    { dir = 'column', src, alt, icon, size, className, children, ...props },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'relative overflow-hidden card-item-image',
+          dir === 'row' ? '' : ''
+        )}
+      >
+        <CoverImage
+          className={cn(`shadow-md`, className)}
+          src={src}
+          alt={alt}
+          icon={icon}
+          size={size ? size : dir === 'row' ? 'md' : 'xl'}
+        />
+        {children}
+      </div>
+    )
+  }
+)
+
+CardButtonImage.displayName = 'CardButtonImage'
 
 interface CardButtonSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: string | React.ReactNode
@@ -152,32 +253,30 @@ const CardButtonSkeleton = React.forwardRef<
         ref={ref}
         {...props}
         className={cn(
-          `bg-tinted-base hover:bg-tinted-higlight-2 active:bg-tinted-press  border-none cursor-pointer`,
+          `card-section__item bg-tinted-base hover:bg-tinted-higlight-2 active:bg-tinted-press  border-none cursor-none relative overflow-hidden`,
           className,
           dir === 'row'
-            ? 'rounded-sm'
-            : 'p-4 isolate relative w-full rounded-md'
+            ? 'rounded-sm group'
+            : 'p-2.5 pb-6 isolate relative w-full rounded-md'
         )}
       >
         <div className='h-full w-full'>
           <div
             className={cn(
-              'flex gap-3  ',
+              'flex gap-3 ',
               dir === 'row'
                 ? 'flex-row items-center basis-1/3 p-0'
                 : 'flex-col justify-center'
             )}
           >
             <CoverImage
-              className={cn(
-                `shadow-md`,
-                dir === 'row' ? 'max-w-[20%]' : '',
-                imageClassName
-              )}
+              className={cn(`shadow-md w-full h-full`, imageClassName)}
               loading={true}
+              dir='column'
               icon={imageIcon}
               size={imageSize ? imageSize : dir === 'row' ? 'md' : 'xl'}
             />
+
             <ItemTitleSkeleton
               className='w-full truncate bg-transparent'
               dir={dir}
@@ -191,4 +290,12 @@ const CardButtonSkeleton = React.forwardRef<
 
 CardButtonSkeleton.displayName = 'CardButtonSkeleton'
 
-export { CardButton, CardButtonSkeleton }
+export {
+  CardButton,
+  CardButtonCloseTrigger,
+  CardButtonContent,
+  CardButtonImage,
+  CardButtonPlayButton,
+  CardButtonSkeleton,
+  CardButtonText
+}

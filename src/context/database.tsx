@@ -2,7 +2,7 @@
 
 import bgNoise from '@/assets/bg-noise.svg'
 
-import { useEffect } from 'react'
+import { createContext, useEffect } from 'react'
 
 import { useAtom } from 'jotai'
 
@@ -15,6 +15,8 @@ import {
 } from '@/lib/atoms'
 
 import { AuthSession, InitialData } from '@/types/database.ds'
+
+const DatabaseContext = createContext<InitialData | null>(null)
 
 export function DatabaseProvider({
   children,
@@ -32,11 +34,11 @@ export function DatabaseProvider({
   const [, setPlaybackState] = useAtom(playbackStateAtom)
   useEffect(() => {
     if (session && initialData) {
-      console.log('hit')
       setCurrentSession(session)
       setCurrentUser(initialData.currentUser)
+      setAvailableDevices(initialData.devices?.devices || [])
+      setPlaybackState(initialData.playback || {})
 
-      // return;
       setCurrentLibrary({
         artists: initialData.artists,
         albums: initialData.albums,
@@ -60,7 +62,9 @@ export function DatabaseProvider({
       '--background-noise',
       `url(${bgNoise?.src})`
     )
-  }, [bgNoise])
+  })
+
+  // useEffect(() => {}, [initialData])
 
   return <>{children}</>
 }

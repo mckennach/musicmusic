@@ -1,48 +1,21 @@
-import {
-  ArtistDiscography,
-  ArtistTopTracks
-} from '@/components/organisms/artist'
-import { ControlBar } from '@/components/organisms/control-bar'
+import { ControlBar } from '@/components/molecules/control-bar'
+import { ArtistTopTracks } from '@/components/organisms/artist'
 import { Hero } from '@/components/organisms/hero'
+import { ItemSection } from '@/components/organisms/items-section/section-container'
+import { SectionContainer } from '@/components/templates/section-container'
 import { BackgroundFade } from '@/components/ui/background-fade'
 import { ArtistProvider } from '@/context/artist'
 import { authOptions } from '@/lib/auth/auth-options'
 import { formatNumber } from '@/lib/utils'
-import {
-  getArtist,
-  getArtistTopTracks,
-  getArtistsDiscography
-} from '@/services/server/queries/artists.queries'
+import { fetchArtist } from '@/services/server/queries/artists.queries'
 import { AuthSession } from '@/types/database.ds'
-import type {
-  Artist,
-  Page,
-  SimplifiedAlbum,
-  TopTracksResult
-} from '@spotify/web-api-ts-sdk'
+import type { Artist } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
 import { Suspense } from 'react'
-
-const fetchTopTracks = async (id: string, session: AuthSession | null) => {
-  'use server'
-  const topTracks: TopTracksResult = session
-    ? await getArtistTopTracks(id, session)
-    : null
-  return topTracks
-}
-
-const fetchDiscography = async (id: string, session: AuthSession | null) => {
-  'use server'
-  const discog: Page<SimplifiedAlbum> = session
-    ? await getArtistsDiscography(id, session)
-    : null
-  return discog
-}
-
 export default async function Artist({ params }: { params: { id: string } }) {
   const session: AuthSession | null = await getServerSession(authOptions)
   const artist: Artist | null = session
-    ? await getArtist(params.id, session)
+    ? await fetchArtist(params.id, session)
     : null
 
   if (!artist) return null
@@ -65,28 +38,66 @@ export default async function Artist({ params }: { params: { id: string } }) {
             }
           />
         </Suspense>
-        <section className='relative h-full bg-card isolate space-y-6 min-h-28'>
+        <SectionContainer className=''>
           <BackgroundFade className='faade m-0 top-0 isolate animate-fade-in' />
           <Suspense fallback={<p>Loading Control bar...</p>}>
             <ControlBar id={params.id} />
           </Suspense>
-          <Suspense fallback={<p>Loading Top Songs...</p>}>
-            <ArtistTopTracks
-              session={session}
-              artist={artist}
-              id={params.id}
-              fetchTopTracks={fetchTopTracks}
-            />
-          </Suspense>
-          <Suspense fallback={<p>Loading Top Songs...</p>}>
-            <ArtistDiscography
-              session={session}
-              artist={artist}
-              id={params.id}
-              fetchDiscography={fetchDiscography}
-            />
-          </Suspense>
-        </section>
+
+          <div className='artist-top-items content-spacing'>
+            <Suspense>
+              <ArtistTopTracks
+                session={session}
+                artist={artist}
+                id={params.id}
+              />
+            </Suspense>
+          </div>
+          <section className='isolate pt-2 flex flex-col' data-testid='artist'>
+            <div className='content-spacing flex flex-wrap gap-6 pt-2'>
+              <Suspense>
+                <ItemSection
+                  title='Discography'
+                  session={session}
+                  endpoint={`spotify/artist/${params.id}/albums`}
+                  type={['discography']}
+                  fields={{
+                    includeGroups: 'album,single,compilation'
+                  }}
+                  headingUrl={`/artist/${params.id}/discography/all`}
+                  showFilter={true}
+                  limit={6}
+                  offset={0}
+                />
+              </Suspense>
+              <Suspense>
+                <ItemSection
+                  title='Fans also like'
+                  session={session}
+                  endpoint={`spotify/artist/${params.id}/related-artists`}
+                  type={['related-artists']}
+                  headingUrl={`/artist/${params.id}/related`}
+                  limit={6}
+                  offset={0}
+                />
+              </Suspense>
+              <Suspense>
+                <ItemSection
+                  title='Appears On'
+                  session={session}
+                  endpoint={`spotify/artist/${params.id}/albums`}
+                  type={['discography']}
+                  headingUrl={`/artist/${params.id}/appears-on`}
+                  fields={{
+                    includeGroups: 'appears_on'
+                  }}
+                  limit={6}
+                  offset={0}
+                />
+              </Suspense>
+            </div>
+          </section>
+        </SectionContainer>
       </div>
     </ArtistProvider>
   )

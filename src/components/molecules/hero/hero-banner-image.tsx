@@ -1,23 +1,25 @@
 'use client'
 
-import { type HTMLAttributes } from 'react'
-
-import { GsapContextProps, useGsapContext } from '@/context'
-
+import { GsapContext, GsapContextProps } from '@/context'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useAtom } from 'jotai'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState, type HTMLAttributes } from 'react'
 
 import { bannerImageAtom } from '@/lib/atoms'
 import { imageLoader } from '@/lib/utils'
 
-import { MainUnderView } from '@/components/ui/main-containers'
+import { MainUnderView } from '@/components/molecules/main/main-containers'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const HeroBannerImage = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const pathname = usePathname()
+  const gsapRef = useContext(GsapContext)
   const [bannerImage] = useAtom(bannerImageAtom)
-  const gsapRef = useGsapContext()
   const [ref, setRef] = useState<GsapContextProps>()
 
   useEffect(() => {
@@ -26,51 +28,55 @@ const HeroBannerImage = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     }
   }, [gsapRef])
 
-  // useGSAP(
-  //   () => {
-  //     if (!bannerImage || !pathname.includes('/artist')) return null
-  //     gsap
-  //       .timeline({
-  //         scrollTrigger: {
-  //           scroller: '.main-view-container__viewport',
-  //           trigger: '.under-header',
-  //           start: 'top top',
-  //           end: 'bottom bottom',
-  //           scrub: 2
-  //           // markers: true
-  //         }
-  //       })
-  //       .set('.hero-banner-image', {
-  //         '--scroll': 0,
-  //       })
-  //       .to('.hero-banner-image', {
-  //         '--scroll': .06
-  //       })
+  useGSAP(
+    () => {
+      if (!bannerImage) return
+      gsap
+        .timeline({
+          scrollTrigger: {
+            scroller: '.main-view-container__viewport',
+            trigger: '.hero',
+            start: 'top top',
+            end: 'bottom-=50 top',
+            scrub: 2
+          }
+        })
+        .set('.main-view-container', {
+          '--top-bar-opacity': 0
+        })
+        .to('.main-view-container', {
+          '--top-bar-opacity': 1
+        })
 
-  //       gsap.timeline({
-  //         scrollTrigger: {
-  //           scroller: '.main-view-container__viewport',
-  //           trigger: '.under-header',
-  //           start: 'top top',
-  //           end: 'bottom bottom',
-  //           scrub: 1
-  //           // markers: true
-  //         }
-  //       }).set('.main-view-container__under-main-view', {
-  //         '--top-bar-opacity': 0
-  //       })
-  //       .to('.main-view-container__under-main-view', {
-  //         '--top-bar-opacity': 1
-  //       })
+      gsap
+        .timeline({
+          scrollTrigger: {
+            scroller: '.main-view-container__viewport',
+            trigger: '.hero',
+            start: 'top top',
+            end: 'bottom-=50 top',
+            scrub: 2
+          }
+        })
+        .set('.main-view-container', {
+          '--scroll': 0
+        })
+        .to('.main-view-container', {
+          '--scroll': 0.06
+        })
+    },
+    {
+      scope: ref,
+      dependencies: [bannerImage]
+    }
+  )
 
-  //   },
-  //   {
-  //     scope: ref,
-  //     dependencies: [ref]
-  //   }
-  // )
-
-  if (!bannerImage || !pathname.includes('/artist')) return null
+  if (
+    !bannerImage ||
+    !pathname.includes('/artist') ||
+    pathname.split('/').length > 3
+  )
+    return null
   return (
     <MainUnderView>
       <div>
@@ -80,7 +86,7 @@ const HeroBannerImage = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             alt={'Banner Image'}
             sizes='100vw'
             fill={true}
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
             priority={true}
             loader={imageLoader}
           />

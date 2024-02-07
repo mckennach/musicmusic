@@ -1,5 +1,6 @@
 'use client'
 
+import { useDebounce } from '@/hooks'
 import { useAtomCallback } from 'jotai/utils'
 
 import React, { useCallback, useEffect, useState } from 'react'
@@ -8,7 +9,6 @@ import { useAtom } from 'jotai'
 
 import {
   activeDeviceAtom,
-  asyncPlaybackAtom,
   durationAtom,
   durationReadoutAtom,
   isPlayingAtom,
@@ -18,36 +18,51 @@ import {
   progressReadoutAtom,
   sessionAtom
 } from '@/lib/atoms'
-
+import spotify from '@/lib/spotify-sdk'
+import { fetchPlaybackState } from '@/services/server'
+import { PlaybackState } from '@spotify/web-api-ts-sdk'
 import { ProgressBar } from './progress-bar'
-
 // type SliderProps = React.ComponentProps<typeof Slider>
 interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ ...props }, ref) => {
     const [activeDevice] = useAtom(activeDeviceAtom)
-    const [, sync] = useAtom(asyncPlaybackAtom)
-    const [session] = useAtom(sessionAtom)
+
     const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
+    const [session] = useAtom(sessionAtom)
     const [progress, setProgress] = useAtom(progressAtom)
     const [duration, setDuration] = useAtom(durationAtom)
-    const [progressPercent, setProgressPercent] = useAtom(progressPercentAtom)
-    const [durationReadout, setDurationReadout] = useAtom(durationReadoutAtom)
-    const [progressReadout, setProgressReadout] = useAtom(progressReadoutAtom)
+    const [progressPercent] = useAtom(progressPercentAtom)
+    const [durationReadout] = useAtom(durationReadoutAtom)
+    const [progressReadout] = useAtom(progressReadoutAtom)
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom)
+    const [seekingPosition, setSeekingPosition] = useState<number>(0)
     const [isSeeking, setIsSeeking] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
     const [isReady, setIsReady] = useState(false)
+    const debouncedPosition = useDebounce(seekingPosition, 300)
 
     const updatePlayback = useAtomCallback(
       useCallback(
         async (get) => {
-          if (!activeDevice) return
-          await sync()
+          if (!activeDevice || !session) return
+          spotify.player.getPlaybackState().then((res) => {
+            setPlaybackState(res)
+            setProgress(res.progress_ms - 1)
+            setDuration(res?.item?.duration_ms - 1)
+            setIsPlaying(res.is_playing)
+          })
         },
-        [sync, activeDevice]
+        [
+          activeDevice,
+          session,
+          setPlaybackState,
+          setProgress,
+          setDuration,
+          setIsPlaying
+        ]
       )
     )
 
@@ -63,23 +78,47 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     }, [updatePlayback, isPlaying, session])
 
     useEffect(() => {
-      if (session && playbackState && activeDevice) {
-        setProgress(playbackState.progress_ms - 1)
-        setDuration(playbackState?.item?.duration_ms - 1)
-        setIsPlaying(playbackState.is_playing)
+      if (session && activeDevice) {
+        console.log(activeDevice)
+        fetchPlaybackState(session).then((res: PlaybackState) => {
+          setPlaybackState(res)
+          setProgress(res.progress_ms - 1)
+          setDuration(res?.item?.duration_ms - 1)
+          setIsPlaying(res.is_playing)
+        })
       }
     }, [
       activeDevice,
-      playbackState,
       session,
+      setPlaybackState,
       setProgress,
       setDuration,
       setIsPlaying
     ])
 
+    const handlePositionSeek = async (value: number[]) => {
+      setSeekingPosition(value[0])
+      setIsSeeking(true)
+    }
+
     useEffect(() => {
-      // console.log('PROGRESS', progressPercent)
-    }, [progressPercent])
+      const newPosition: number = Math.round(
+        (debouncedPosition / 100) * duration
+      )
+      console.log(newPosition)
+      spotify.player.seekToPosition(newPosition).then((res) => {
+        updatePlayback()
+      })
+    }, [duration, debouncedPosition, updatePlayback])
+
+    // useEffect(() => {
+    //   if (!isSeeking) return;
+    //   console.log('debouncedPosition', debouncedPosition);
+    //   spotify.player.seekToPosition(debouncedPosition).then((res) => {
+    //     updatePlayback();
+    //   });
+    //   setIsSeeking(false);
+    // }, [debouncedPosition, seekingPosition, isSeeking, updatePlayback]);
 
     if (!progressPercent) return null
     return (
@@ -88,9 +127,11 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
           <span>{progressReadout}</span>
         </div>
         <ProgressBar
+          onValueChange={handlePositionSeek}
+          // onValueCommit={() => setIsSeeking(false)}
           disabled={!session}
           defaultValue={[0]}
-          value={[progressPercent]}
+          value={isSeeking ? [seekingPosition] : [progressPercent]}
           className='flex w-full items-center justify-center'
         />
         <div className='min-w-[40px] text-left text-xs text-white/80'>

@@ -18,7 +18,7 @@ export function MainSidebar({
     <Sidebar
       side='left'
       order={1}
-      collapsible={true}
+      collapsible={session ? true : false}
       collapsedSize={6}
       minSize={20}
       maxSize={30}

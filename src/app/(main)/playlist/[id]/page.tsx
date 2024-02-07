@@ -1,18 +1,15 @@
-import {
-  fetchPlaylist,
-  fetchPlaylistOwner,
-  getRecommendations
-} from '@/services/server/queries'
+import { fetchPlaylist, getRecommendations } from '@/services/server/queries'
 import { Playlist as PlaylistProps } from '@spotify/web-api-ts-sdk'
 import { getServerSession } from 'next-auth'
+import { notFound } from 'next/navigation'
 
-import { Suspense } from 'react'
-
+import { SectionContainer } from '@/components/templates/section-container'
 import { authOptions } from '@/lib/auth/auth-options'
+import { Suspense } from 'react'
 
 import { Clock } from 'lucide-react'
 
-import { ControlBar } from '@/components/organisms/control-bar'
+import { ControlBar } from '@/components/molecules/control-bar'
 import { PlaylistHero } from '@/components/organisms/playlist/playlist-hero'
 import { Recommendations } from '@/components/organisms/recommendations'
 import {
@@ -54,13 +51,12 @@ export default async function Playlists({
   params: { id: string }
 }) {
   const session: AuthSession | null = await getServerSession(authOptions)
-  const playlist: PlaylistProps | null = await fetchPlaylist(
-    session as AuthSession,
-    params.id
-  )
-  const owner = playlist
-    ? await fetchPlaylistOwner(session as AuthSession, playlist.owner.id)
-    : null
+  const playlist: PlaylistProps | null = session
+    ? await fetchPlaylist(session as AuthSession, params.id)
+    : notFound()
+
+  if (!playlist) return notFound()
+
   const recommendations =
     session && playlist
       ? await getRecommendations(session, {
@@ -71,13 +67,13 @@ export default async function Playlists({
         })
       : null
 
-  if (!playlist) return null
+  if (!playlist) return <div>NOT FOUND</div>
   return (
     <div className='under-header'>
       <Suspense fallback={<p>Loading hero...</p>}>
         <PlaylistHero session={session} playlist={playlist} />
       </Suspense>
-      <section className=' relative h-full bg-card isolate'>
+      <SectionContainer>
         <BackgroundFade className='faade m-0 top-0 isolate animate-fade-in' />
         <ControlBar id={params.id} />
 
@@ -100,7 +96,7 @@ export default async function Playlists({
             description="Based on what's in this playlist"
           />
         </Suspense>
-      </section>
+      </SectionContainer>
     </div>
   )
 

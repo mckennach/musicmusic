@@ -44,6 +44,7 @@ const filterItems: LibraryFilterItemsProps[] = [
 
 export function LibraryFilter() {
   const [activeLibFilter, setActiveLibFilter] = useAtom(activeLibFilterAtom)
+
   return (
     <div className={cn(`relative z-30 w-full space-y-4 px-0`)}>
       <div className='relative'>

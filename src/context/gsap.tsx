@@ -1,12 +1,8 @@
 'use client'
 
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/ScrollTrigger'
-
 import React, { createContext, useContext, useRef } from 'react'
 
 export type GsapContextProps = React.RefObject<HTMLDivElement>
-gsap.registerPlugin(ScrollTrigger)
 
 export const GsapContext = createContext<GsapContextProps | null>(null)
 

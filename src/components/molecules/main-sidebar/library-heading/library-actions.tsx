@@ -1,7 +1,7 @@
 // import Link from 'next/link'
 import { useAtom } from 'jotai'
 
-import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
+import { sessionAtom, sideBarLeftCollapsedAtom } from '@/lib/atoms'
 
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/tooltip'
 
 export function LibraryActions() {
+  const [session] = useAtom(sessionAtom)
   const [sideBarLeftCollapsed, setSidebarLeftCollaposed] = useAtom(
     sideBarLeftCollapsedAtom
   )
@@ -55,20 +56,33 @@ export function LibraryActions() {
       </Tooltip>
 
       <div className='flex items-center'>
-        <Button
-          className='h-8 w-8 rounded-full p-2'
-          variant='ghost'
-          size='icon'
-        >
-          <Icon name='plus' size={16} />
-        </Button>
-        <Button
-          className='h-8 w-8 rounded-full p-2'
-          variant='ghost'
-          size='icon'
-        >
-          <Icon name='arrow-right' size={16} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className='h-8 w-8 rounded-full p-2'
+              variant='ghost'
+              size='icon'
+            >
+              <Icon name='plus' size={16} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side='top'>Create playlist</TooltipContent>
+        </Tooltip>
+
+        {session && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className='h-8 w-8 rounded-full p-2'
+                variant='ghost'
+                size='icon'
+              >
+                <Icon name='arrow-right' size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side='top'>See more</TooltipContent>
+          </Tooltip>
+        )}
       </div>
     </div>
   )

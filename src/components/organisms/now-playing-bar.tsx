@@ -11,8 +11,15 @@ import { useAtomValue } from 'jotai'
 import { activeDeviceAtom } from '@/lib/atoms'
 
 // import { Sidebar } from '@/components/sidebar'
-import { NoDevice, PlayerUnauthorized } from '@/components/molecules/player'
+import {
+  NoDevice,
+  NowPlaying,
+  PlayerControls,
+  PlayerSettings,
+  PlayerUnauthorized
+} from '@/components/molecules/player'
 import { NowPlayingBar } from '@/components/templates'
+import { cn } from '@/lib/utils'
 
 export function NowPlayingView({ session }: { session: Session | null }) {
   const [loaded, setLoaded] = useState(false)
@@ -29,8 +36,7 @@ export function NowPlayingView({ session }: { session: Session | null }) {
         <>
           {activeDevice ? (
             <>
-              test
-              {/* <NowPlaying
+              <NowPlaying
                 className={cn(' flex-1 basis-[30%] max-w-[30%] pl-2')}
               />
               <PlayerControls
@@ -38,7 +44,7 @@ export function NowPlayingView({ session }: { session: Session | null }) {
               />
               <PlayerSettings
                 className={cn('flex-1 basis-[30%] max-w-[30%]')}
-              /> */}
+              />
             </>
           ) : (
             <>{loaded && <NoDevice />}</>

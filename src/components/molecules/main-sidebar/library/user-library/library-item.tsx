@@ -1,12 +1,10 @@
 'use client'
 
 import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
-import { LibraryItem } from '@/types/database.ds'
 import { useAtom } from 'jotai'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 // Components
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CoverImage } from '@/components/ui/cover-image'
 import { ItemTitle } from '@/components/ui/item-title'
 import {
@@ -15,9 +13,9 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import type { LibraryItem } from '@/types/database.ds'
 import Link from 'next/link'
 import { buttonVariants } from '../../../../ui/button'
-import Icon from '../../../../ui/icon'
 
 interface LibraryNavItemProps {
   name: string
@@ -96,7 +94,7 @@ export function LibraryItem({
             />
             {!sideBarLeftCollapsed && (
               <ItemTitle
-                name={name}
+                title={name}
                 label={label}
                 icon={pinned ? 'pin' : undefined}
                 className='w-full truncate bg-transparent'
@@ -144,76 +142,11 @@ export function LibraryItem({
       </TooltipTrigger>
       <TooltipContent side='right' hidden={!sideBarLeftCollapsed}>
         <ItemTitle
-          name={name}
+          title={name}
           label={label}
           icon={pinned ? 'pin' : undefined}
         />
       </TooltipContent>
     </Tooltip>
-  )
-
-  return (
-    <Link
-      href={href}
-      className={cn(
-        buttonVariants({
-          size: 'sm',
-          variant: 'ghost',
-          className: cn(
-            'library-item',
-            `w-full flex-1 overflow-hidden rounded-sm justify-start p-2`,
-            isActive &&
-              'after:bg-tinted-higlight after:opacity-100 bg-tinted-base active:bg-tinted-press text-highlight-foreground'
-          )
-        })
-      )}
-    >
-      <div className='flex max-w-full items-center gap-x-3 gap-y-2 truncate relative z-20'>
-        <div className='relative'>
-          <Avatar
-            className={cn(
-              `h-12 w-12`,
-              sideBarLeftCollapsed && 'h-10 w-10',
-              type === 'artist' ? `rounded-full` : 'rounded-sm'
-            )}
-          >
-            <AvatarImage
-              className={cn(type === 'artist' ? `rounded-full` : 'rounded-sm')}
-              src={imageSrc ? imageSrc : undefined}
-              alt={name ? `${name} Cover` : 'Cover'}
-            />
-            <AvatarFallback
-              className={cn(
-                type === 'artist' ? `rounded-full` : 'rounded-sm',
-                type === 'tracks' &&
-                  'bg-gradient-to-br from-[#7f3ffb] from-20% to-[#ffffff] to-100%',
-                type === 'episodes' && 'bg-[#056952]'
-              )}
-            >
-              <Icon
-                name={icon}
-                size={20}
-                className='shadow-sm'
-                fill={
-                  type === 'tracks' || type === 'episodes'
-                    ? type === 'tracks'
-                      ? 'white'
-                      : '#1ed760'
-                    : ''
-                }
-                color={type === 'episodes' ? '#1ed760' : 'white'}
-              />
-            </AvatarFallback>
-          </Avatar>
-        </div>
-        {!sideBarLeftCollapsed && (
-          <ItemTitle
-            name={name}
-            label={label}
-            icon={pinned ? 'pin' : undefined}
-          />
-        )}
-      </div>
-    </Link>
   )
 }

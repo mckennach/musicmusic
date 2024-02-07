@@ -1,13 +1,12 @@
-import { useAtom } from 'jotai'
-
 import {
   asyncAvailableDevicesAtom,
   availableDevicesAtom,
-  deviceModalOpenAtom
+  sessionAtom
 } from '@/lib/atoms'
-import spotify from '@/lib/spotify-sdk'
-
+import { transferPlayBack } from '@/services/server'
+import { useAtom } from 'jotai'
 import { Laptop2, Smartphone, Speaker } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -19,28 +18,40 @@ import {
   DrawerTitle
 } from '@/components/ui/drawer'
 
-const DeviceModal = ({ ...props }) => {
-  const [deviceModalOpen, setDeviceModalOpen] = useAtom(deviceModalOpenAtom)
+interface DeviceModalProps {
+  open: boolean
+  onOpenChange?: (open: boolean) => void
+  displayName?: string
+}
+
+export function DeviceModal({ ...props }: DeviceModalProps) {
+  const [session] = useAtom(sessionAtom)
+  const router = useRouter()
+  // const [deviceModalOpen, setDeviceModalOpen] = useAtom(deviceModalOpenAtom)
   const [availableDevices, setAvailableDevices] = useAtom(availableDevicesAtom)
   const [, syncActiveDevice] = useAtom(asyncAvailableDevicesAtom)
 
   const handleDeviceChange = async (device: SpotifyApi.UserDevice) => {
-    if (device && device.id) {
-      await spotify.player?.transferPlayback([device.id])
-      await syncActiveDevice()
-      setDeviceModalOpen(false)
+    if (device && device.id && session) {
+      const playback = await transferPlayBack(session, [device.id], false)
+      if (playback) {
+        router.refresh()
+        // syncActiveDevice()
+      }
     }
   }
   return (
     <Drawer
-      open={deviceModalOpen}
-      onOpenChange={(open) => {
-        setDeviceModalOpen(open)
-      }}
+      {...props}
+      // open={open}
+      // open={open}
+      // onOpenChange={(open) => {
+      //   // setDeviceModalOpen(open)
+      // }}
     >
       <DrawerContent>
         <DrawerHeader className='flex flex-col items-center justify-center'>
-          <DrawerTitle className='text-2xl text-spotify'>
+          <DrawerTitle className='text-2xl md:text-4xl text-spotify'>
             Select a device
           </DrawerTitle>
           <DrawerDescription>Select a device to play music</DrawerDescription>
@@ -75,5 +86,3 @@ const DeviceModal = ({ ...props }) => {
     </Drawer>
   )
 }
-
-export { DeviceModal }

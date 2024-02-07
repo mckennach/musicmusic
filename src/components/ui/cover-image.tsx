@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority'
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
 
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
@@ -12,7 +12,7 @@ import { AspectRatio } from './aspect-ratio'
 import Icon from './icon'
 import { Skeleton } from './skeleton'
 
-interface CoverImageProps {
+export interface CoverImageProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string | StaticImport
   alt?: string
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
@@ -53,6 +53,8 @@ const CoverImage = forwardRef<HTMLDivElement, CoverImageProps>(
     },
     ref
   ) => {
+    const [loaded, setIsLoaded] = useState(false)
+
     return (
       <div
         ref={ref}
@@ -76,15 +78,21 @@ const CoverImage = forwardRef<HTMLDivElement, CoverImageProps>(
           ) : (
             <>
               {src ? (
-                <Image
-                  src={src}
-                  alt='Cover Image'
-                  loader={imageLoader}
-                  fill={true}
-                  sizes='100%'
-                  style={{ objectFit: 'cover' }}
-                  priority={true}
-                />
+                <>
+                  <Image
+                    src={src}
+                    alt='Cover Image'
+                    loader={imageLoader}
+                    fill={true}
+                    sizes='100%'
+                    style={{ objectFit: 'cover', opacity: !loaded ? 0 : 1 }}
+                    priority={true}
+                    onLoad={() => setIsLoaded(true)}
+                  />
+                  {!loaded && (
+                    <Skeleton className='flex items-center justify-center w-full h-full' />
+                  )}
+                </>
               ) : (
                 <div
                   className={cn(

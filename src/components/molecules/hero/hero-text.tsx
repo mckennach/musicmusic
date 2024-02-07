@@ -25,26 +25,47 @@ interface HeroTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
 
 const HeroTitle = React.forwardRef<HTMLHeadingElement, HeroTitleProps>(
   ({ title, className, ...props }, ref) => {
-    const [titleClasses, setTitleClasses] = useState<string[]>([
-      'text-[3rem] @3xl:text-[4.5rem] @5-6xl:text-[6rem]'
-    ])
+    const [titleClasses, setTitleClasses] = useState<string>(
+      'text-[2rem] @[35rem]:text-[2rem] @[45rem]:text-[2.5rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+    )
     useEffect(() => {
-      if (title && title.length < 13) {
-        setTitleClasses(['text-[4.5rem] @4xl:text-[6rem]'])
-      } else if (title && title.length < 25) {
-        setTitleClasses(['text-[2rem] @3xl:text-[4.5rem] @5-6xl:text-[6rem]'])
-      } else {
-        setTitleClasses(['text-[3rem] @9xl:text-[3rem]'])
+      if (title) {
+        if (title.length >= 35) {
+          setTitleClasses(
+            'text-[2rem] @[35rem]:text-[2rem] @[45rem]:text-[2.5rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+          )
+        } else if (title.length >= 25) {
+          setTitleClasses(
+            'text-[2rem] @[35rem]:text-[2rem] @[45rem]:text-[2.5rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+          )
+        } else if (title.length >= 17) {
+          setTitleClasses(
+            'text-[2rem] @[35rem]:text-[2.5rem] @[45rem]:text-[3rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+          )
+        } else if (title.length >= 13) {
+          setTitleClasses(
+            'text-[2rem] @[35rem]:text-[2rem] @[45rem]:text-[2.5rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+          )
+        } else {
+          setTitleClasses(
+            'text-[2rem] @[35rem]:text-[2rem] @[45rem]:text-[2.5rem] @[55rem]:text-[3.5rem] @[65rem]:text-[4.5rem] @[75rem]:text-[5rem]'
+          )
+        }
       }
     }, [title])
 
     return (
       <h1
         className={cn(
-          'hero-title  font-bold break-words text-left w-full truncate',
+          'hero-title  font-bold break-words text-left w-full truncate tracking-tight',
           titleClasses,
           className
         )}
+        style={
+          {
+            // fontSize: 'clamp(2rem, 10vw, 5rem)'
+          }
+        }
         ref={ref}
         {...props}
       >

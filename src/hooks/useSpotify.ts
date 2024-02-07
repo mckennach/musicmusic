@@ -252,28 +252,47 @@ export function useSpotify() {
           })
       }
     },
-    unsaveItem: async (
+    removeItem: async (
       id: string,
       type: 'tracks' | 'episodes' | 'albums' | 'artist' | 'playlists' | 'user'
     ) => {
       if (type === 'tracks') {
-        return await spotify.currentUser.tracks.removeSavedTracks([id])
+        spotify.currentUser.tracks
+          .removeSavedTracks([id])
+          .then(() => {
+            toast.success('Album removed to your library!')
+          })
+          .catch((e) => {
+            toast.error('Error saving album to your library. Try again.')
+          })
       }
 
       if (type === 'episodes') {
-        return await spotify.currentUser.episodes.removeSavedEpisodes([id])
+        spotify.currentUser.episodes
+          .removeSavedEpisodes([id])
+          .then(() => {
+            toast.success('Album saved to your library!')
+          })
+          .catch((e) => {})
       }
 
       if (type === 'albums') {
-        return await spotify.currentUser.albums.removeSavedAlbums([id])
+        spotify.currentUser.albums
+          .removeSavedAlbums([id])
+          .then(() => {
+            toast.success('Album removed from your library!')
+          })
+          .catch((e) => {
+            toast.error('Please try again!')
+          })
       }
 
       if (type === 'playlists') {
-        return await spotify.currentUser.playlists.unfollow(id)
+        spotify.currentUser.playlists.unfollow(id)
       }
 
       if (type === 'artist' || type === 'user') {
-        return await spotify.currentUser.unfollowArtistsOrUsers([id], type)
+        spotify.currentUser.unfollowArtistsOrUsers([id], type)
       }
     }
   }

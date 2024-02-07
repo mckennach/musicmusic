@@ -27,7 +27,7 @@ const TrackItem = ({ track, index, contextUri, ...props }: TrackItemProps) => {
   const {
     checkIfItemIsSaved,
     saveItem,
-    unsaveItem,
+    removeItem,
     startResumePlayback,
     getPlaybackState
   } = useSpotify()
@@ -87,9 +87,9 @@ const TrackItem = ({ track, index, contextUri, ...props }: TrackItemProps) => {
     e.preventDefault()
     if (isSaved) {
       if (track.track.type === 'track') {
-        await unsaveItem((track.track as Track).id, 'tracks')
+        await removeItem((track.track as Track).id, 'tracks')
       } else {
-        await unsaveItem((track.track as Episode).id, 'episodes')
+        await removeItem((track.track as Episode).id, 'episodes')
       }
       setIsSaved(false)
     } else {

@@ -1,7 +1,9 @@
+'use client'
+import { sessionAtom } from '@/lib/atoms'
+import { useAtom } from 'jotai'
+import { ExternalLink } from 'lucide-react'
 import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
-
-import { ExternalLink } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -15,6 +17,12 @@ import {
 import { UserAvatar } from '../../ui/user-avatar'
 
 export function HeaderUserDropdown({ session }: { session: Session }) {
+  const [, setSession] = useAtom(sessionAtom)
+  const handleLogout = () => {
+    setSession(null)
+    signOut()
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -41,7 +49,7 @@ export function HeaderUserDropdown({ session }: { session: Session }) {
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>Sign out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

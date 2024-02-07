@@ -1,12 +1,12 @@
 'use client'
 
-import { GsapContextProps, useGsapContext } from '@/context'
+import { GsapContext, GsapContextProps } from '@/context'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 // import '@/styles/header.css'
 import { signIn, useSession } from 'next-auth/react'
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import { usePathname } from 'next/navigation'
 
@@ -20,14 +20,18 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-
+import ScrollTrigger from 'gsap/ScrollTrigger'
 import { HeaderNavigation } from '../molecules/header/header-navigation'
 import { HeaderSearch } from '../molecules/header/header-search'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
-  const gsapRef = useGsapContext()
+  const gsapRef = useContext(GsapContext)
+  // const gsapRef = useGsapContext();
+  const headerRef = useRef<HTMLDivElement>(null)
   const [ref, setRef] = useState<GsapContextProps>()
   const handleSignIn = () => {
     signIn('spotify', {
@@ -47,10 +51,11 @@ export function Header() {
         .timeline({
           scrollTrigger: {
             scroller: '.main-view-container__viewport',
-            trigger: '.main-view-container__scroll-spacer-child',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1
+            trigger: '.main-view-container__scroll-spacer',
+            start: 'top+=100 top',
+            end: 'bottom+=100 bottom',
+            scrub: 1.5
+            // markers: true
           }
         })
         .set('.header', {
@@ -61,8 +66,7 @@ export function Header() {
         })
     },
     {
-      scope: ref,
-      dependencies: [ref]
+      scope: ref
     }
   )
 

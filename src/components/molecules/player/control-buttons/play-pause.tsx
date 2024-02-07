@@ -4,7 +4,6 @@ import { useAtom } from 'jotai'
 
 import { activeDeviceAtom, isPlayingAtom, sessionAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
-
 import { Pause, Play } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -17,8 +16,12 @@ const PlayPauseButton = React.forwardRef<HTMLButtonElement, PlayPauseProps>(
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom)
     const [activeDevice] = useAtom(activeDeviceAtom)
     const handlePlayPause = async () => {
-      if (activeDevice && activeDevice?.id) {
+      if (activeDevice && activeDevice?.id && session) {
         if (!isPlaying) {
+          // play(session, activeDevice?.id).then((res) => {
+          //   console.log(res);
+          //   setIsPlaying(true)
+          // });
           spotify.player?.startResumePlayback(activeDevice?.id).then(() => {
             setIsPlaying(true)
           })
@@ -27,19 +30,7 @@ const PlayPauseButton = React.forwardRef<HTMLButtonElement, PlayPauseProps>(
             setIsPlaying(false)
           })
         }
-
-        // await startResumePlayback(activeDevice?.id, contextUri, undefined, index, 0);
-        // getPlaybackState().then((playbackState) => {
-        //   setPlaybackState(playbackState);
-        //   setActivePlaylist(contextUri);
-        // });
       }
-      // if (isPlaying) {
-      //   await spotify.player?.pausePlayback()
-      // } else {
-      //   await spotify.player?.resumePlayback();
-      // }
-      // setIsPlaying(!isPlaying)
     }
 
     return (

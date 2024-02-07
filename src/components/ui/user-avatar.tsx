@@ -1,3 +1,5 @@
+'use client'
+
 import dynamicIconImports from 'lucide-react/dynamicIconImports'
 
 import { forwardRef } from 'react'

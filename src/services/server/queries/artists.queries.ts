@@ -1,9 +1,10 @@
+'use server'
+
 import { AuthSession } from '@/types/database.ds'
 import { MaxInt } from '@spotify/web-api-ts-sdk'
 
-export async function getArtist(id: string, session: AuthSession | null) {
+export async function fetchArtist(id: string, session: AuthSession | null) {
   if (session) {
-    ;('use server')
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/artist/${id}`,
       {
@@ -23,12 +24,11 @@ export async function getArtist(id: string, session: AuthSession | null) {
   return null
 }
 
-export async function getArtistTopTracks(
+export async function fetchArtistTopTracks(
   id: string,
   session: AuthSession | null
 ) {
   if (session) {
-    ;('use server')
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/artist/${id}/top-tracks`,
       {
@@ -48,7 +48,7 @@ export async function getArtistTopTracks(
   return null
 }
 
-export async function getArtistsDiscography(
+export async function fetchArtistsDiscography(
   id: string,
   session: AuthSession | null,
   includeGroups?: string,
@@ -57,7 +57,6 @@ export async function getArtistsDiscography(
   market?: string
 ) {
   if (session) {
-    ;('use server')
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/artist/${id}/albums`,
       {

@@ -8,7 +8,7 @@ export async function POST(
   const { params } = context
   try {
     const body = await request.json()
-    const { token, ids } = body
+    const { token } = body
     const response = await fetch(
       `${process.env.SPOTIFY_ENDPOINT!}/artists/${params?.id}`,
       {

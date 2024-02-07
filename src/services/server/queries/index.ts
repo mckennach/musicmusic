@@ -1,2 +1,7 @@
+export * from './artists.queries'
+export * from './browse.queries'
+export * from './me.queries'
 export * from './playlists.queries'
 export * from './recommendations.queries'
+export * from './search.queries'
+export * from './users.queries'

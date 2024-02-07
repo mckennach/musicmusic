@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { token, limit, offset } = body
     const response = await fetch(
-      `${process.env.SPOTIFY_ENDPOINT!}/me/playlists`,
+      `${process.env.SPOTIFY_ENDPOINT!}/me/playlists?limit=50&offset=0`,
       {
         method: 'GET',
         headers: {

@@ -8,14 +8,15 @@ import Icon from './icon'
 import { Skeleton } from './skeleton'
 
 interface ItemTitleProps {
-  name: string | React.ReactNode
+  title: string | React.ReactNode
+  titleClassName?: string
   label?: string | React.ReactNode
   className?: string
   icon?: keyof typeof dynamicIconImports
 }
 
 const ItemTitle = React.forwardRef<HTMLDivElement, ItemTitleProps>(
-  ({ name, label, className, icon, ...props }, ref) => {
+  ({ title, titleClassName, label, className, icon, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -26,11 +27,16 @@ const ItemTitle = React.forwardRef<HTMLDivElement, ItemTitleProps>(
           className
         )}
       >
-        <p className='truncate text-base max-w-full font-medium leading-snug text-foreground'>
-          {name}
+        <p
+          className={cn(
+            'truncate text-base max-w-full font-semibold leading-snug text-foreground',
+            titleClassName
+          )}
+        >
+          {title}
         </p>
         {label && (
-          <div className='flex items-center max-w-full gap-1.5 truncate text-xs font-medium text-subdued-foreground'>
+          <div className='flex items-center max-w-full gap-1.5 truncate text-xs font-medium text-subdued'>
             {icon && (
               <Icon
                 name={icon}
@@ -65,6 +71,7 @@ const ItemTitleSkeleton = React.forwardRef<
       className={cn(
         `flex flex-col justify-center items-start`,
         'h-full max-w-full space-y-0.5 truncate text-left pr-4',
+        'flex flex-col items-start h-full max-w-full space-y-0.5 text-left w-full truncate bg-transparent min-h-14 justify-start',
         className
       )}
     >

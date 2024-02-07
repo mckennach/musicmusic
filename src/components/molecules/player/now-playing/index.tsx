@@ -40,18 +40,12 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
     useEffect(() => {
       if (playbackState) {
         if (playbackState.item) {
-          // setTitle(playbackState.item.name);
-
           if (playbackState.item && playbackState.item?.type === 'track') {
             const item = playbackState.item as Track
             setPlayingTrack(item)
-            // setSubtitle(item.artists[0].name);
-            // setImage(item.album.images[0].url);
           } else {
             const item = playbackState.item as Episode
             setPlayingEpisode(item)
-            // setSubtitle(item.show.name);
-            // setImage(item.show.images[0].url);
           }
         }
       }
@@ -70,21 +64,8 @@ const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
                 alt={alt}
                 icon='music'
               />
-              {/* <Avatar className={cn('h-10 w-10 rounded-sm')}>
-                <AvatarImage
-                  className={cn('rounded-sm')}
-                  src={
-                    playingEpisode?.show.images[0].url ||
-                    playingTrack?.album.images[0].url
-                  }
-                  alt={alt}
-                />
-                <AvatarFallback className={cn('rounded-sm')}>
-                  <Icon name='music' size={20} className='shadow-sm' />
-                </AvatarFallback>
-              </Avatar> */}
               <ItemTitle
-                name={
+                title={
                   <Link
                     href={
                       playingTrack

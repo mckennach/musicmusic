@@ -68,7 +68,7 @@ const Sidebar = ({
         onExpand={() => setSidebarLeftCollaposed(false)}
         onResize={() => setIsResizing(true)}
         className={cn(
-          sideBarLeftCollapsed ? 'max-w-[68px]' : '',
+          sideBarLeftCollapsed ? 'max-w-[68px] min-w-[68px]' : '',
           // sideBarLeftCollapsed && side === 'left'
           //   ? `min-w-[65px] max-w-[65px]`
           //   : `min-w-[200px] max-w-[375px]`,

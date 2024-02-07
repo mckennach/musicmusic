@@ -119,7 +119,7 @@ const RecommendationTrackItem = ({
           />
           <ItemTitle
             className='truncate !group-hover:text-white transition-colors duration-300'
-            name={
+            title={
               <Link
                 className={cn(
                   `hover:underline font-medium`,

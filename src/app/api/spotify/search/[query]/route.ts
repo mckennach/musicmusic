@@ -10,7 +10,7 @@ export async function POST(
     const { token, limit, offset, type } = body
 
     const response = await fetch(
-      `${process.env.SPOTIFY_ENDPOINT!}/search?q=${params.query}&type=${type ?? 'artist%2Calbum%2Ctrack%2cplaylist%2Cshow%2Cepisode%2Caudiobook'}&limit=${limit ?? 10}&offset=${offset ?? 0}`,
+      `${process.env.SPOTIFY_ENDPOINT!}/search?q=${params.query}&type=${type ?? 'artist%2Calbum%2Ctrack'}&limit=${limit ?? 10}&offset=${offset ?? 0}`,
       {
         method: 'GET',
         headers: {

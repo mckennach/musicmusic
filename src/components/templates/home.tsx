@@ -11,31 +11,25 @@ import { useSession } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useAtom } from 'jotai'
 
-import { sessionAtom } from '@/lib/atoms'
+import { columnCountAtom, rowCountAtom, sessionAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 
 import { BackgroundFade } from '@/components/ui/background-fade'
 
-import { TopItems } from '../molecules/home/top-items'
-import { CardButton, CardButtonSkeleton } from '../ui/card-button'
-import {
-  CardSection,
-  CardSectionHeading,
-  CardSectionItems
-} from '../ui/card-section'
+// import { TopItems } from '../organisms/home/top-container'
 
 export function Home() {
   const { data: session1, status } = useSession()
   const router = useRouter()
   const [session] = useAtom(sessionAtom)
   const curHr = new Date().getHours()
-  const [columnCardsCount, setColumnCardsCount] = useState<MaxInt<50>>(5)
-  const [rowCardsCount, setRowCardsCount] = useState<MaxInt<50>>(6)
+  const [columnCardsCount, setColumnCardsCount] =
+    useAtom<MaxInt<50>>(columnCountAtom)
+  const [rowCardsCount, setRowCardsCount] = useAtom<MaxInt<50>>(rowCountAtom)
 
   const greeting =
     curHr < 12 ? 'Good Morning' : curHr < 18 ? 'Good Afternoon' : 'Good Evening'
@@ -78,9 +72,13 @@ export function Home() {
       <div className='flex flex-col px-4 pb-12'>
         <div className='flex flex-col isolate pt-2 bg-transparent'>
           <div className='flex flex-wrap gap-8'>
-            <TopItems items={topItems} cardCount={rowCardsCount} />
+            {/* <TopItems items={topItems} cardCount={rowCardsCount} /> */}
 
-            <CardSection>
+            {/* <CardSection
+              title="Your playlists"
+
+            /> */}
+            {/* <CardSection>
               {playlists && session && (
                 <CardSectionHeading>
                   <h2 className='text-white font-bold text-2xl'>
@@ -98,22 +96,24 @@ export function Home() {
               <CardSectionItems gridCols={5} gap={3} className='grid-cols-5'>
                 {playlists && session ? (
                   <>
-                    {playlists?.map((item, i) => (
-                      <CardButton
-                        key={i}
-                        onClick={() =>
-                          router.push(`/${item?.type}/${item?.id}`)
-                        }
-                        className='bg-[#181818]'
-                        dir='column'
-                        name={item?.name}
-                        label={`By ${item?.owner?.display_name}`}
-                        imageSrc={item?.images[0]?.url}
-                        imageAlt={item?.name + ' cover image'}
-                        imageIcon='music'
-                        imageClassName='w-full h-full'
-                      />
-                    ))}
+                    {playlists
+                      ?.slice(0, columnCardsCount)
+                      .map((item, i) => (
+                        <CardButton
+                          key={i}
+                          onClick={() =>
+                            router.push(`/${item?.type}/${item?.id}`)
+                          }
+                          className='bg-[#181818]'
+                          dir='column'
+                          title={item?.name}
+                          label={`By ${item?.owner?.display_name}`}
+                          imageSrc={item?.images[0]?.url}
+                          imageAlt={item?.name + ' cover image'}
+                          imageIcon='music'
+                          imageClassName='w-full h-full'
+                        />
+                      ))}
                   </>
                 ) : (
                   <>
@@ -149,24 +149,26 @@ export function Home() {
               <CardSectionItems gridCols={5} gap={3} className='grid-cols-5'>
                 {recentlyPlayed && session ? (
                   <>
-                    {recentlyPlayed?.map((item, i) => (
-                      <CardButton
-                        key={i}
-                        onClick={() =>
-                          router.push(
-                            `/${item?.track?.type}/${item?.track?.id}`
-                          )
-                        }
-                        className='bg-[#181818] hover:bg-[#282828]/80 active:bg-[#282828]'
-                        dir='column'
-                        name={item?.track?.name}
-                        label={item?.track?.artists[0]?.name}
-                        imageSrc={item?.track?.album?.images[0]?.url}
-                        imageAlt={item?.track?.album?.name + ' cover image'}
-                        imageIcon='music'
-                        imageClassName='w-full h-full'
-                      />
-                    ))}
+                    {recentlyPlayed
+                      ?.slice(0, columnCardsCount)
+                      .map((item, i) => (
+                        <CardButton
+                          key={i}
+                          onClick={() =>
+                            router.push(
+                              `/${item?.track?.type}/${item?.track?.id}`
+                            )
+                          }
+                          className='bg-[#181818] hover:bg-[#282828]/80 active:bg-[#282828]'
+                          dir='column'
+                          title={item?.track?.name}
+                          label={item?.track?.artists[0]?.name}
+                          imageSrc={item?.track?.album?.images[0]?.url}
+                          imageAlt={item?.track?.album?.name + ' cover image'}
+                          imageIcon='music'
+                          imageClassName='w-full h-full'
+                        />
+                      ))}
                   </>
                 ) : (
                   <>
@@ -182,7 +184,7 @@ export function Home() {
                   </>
                 )}
               </CardSectionItems>
-            </CardSection>
+            </CardSection> */}
           </div>
         </div>
       </div>

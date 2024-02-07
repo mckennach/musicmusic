@@ -1,5 +1,5 @@
+import { notFound } from 'next/navigation'
 import { NextRequest, NextResponse } from 'next/server'
-
 const url = process.env.SPOTIFY_ENDPOINT
 export async function POST(
   request: NextRequest,
@@ -19,14 +19,21 @@ export async function POST(
       }
     )
 
+    if (
+      response.status === 404 ||
+      response.status === 401 ||
+      response.status === 502 ||
+      response.status === 401
+    ) {
+      return notFound()
+    }
+
     const data = await response.json()
 
     return NextResponse.json({
       ...data
     })
   } catch (error) {
-    return NextResponse.json({
-      error
-    })
+    return NextResponse.error()
   }
 }

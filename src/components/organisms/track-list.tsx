@@ -1,11 +1,11 @@
 'use client'
 
-import { GsapContextProps, useGsapContext } from '@/context'
+import { GsapContext, GsapContextProps } from '@/context'
 import { useGSAP } from '@gsap/react'
-import { Playlist, Track } from '@spotify/web-api-ts-sdk'
+import { Playlist, SimplifiedTrack, Track } from '@spotify/web-api-ts-sdk'
 import gsap from 'gsap'
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import {
   TrackListBody,
@@ -17,6 +17,7 @@ import {
 
 import { RecommendationTrackItem } from '../molecules/recommendations/recommendation-track-item'
 import { ArtistTrackItem, PlaylistTrackItem } from '../molecules/track-items'
+import { SearchTrackItem } from './search/search-track-item'
 
 export interface TrackListHeaderItems {
   title: string
@@ -28,9 +29,16 @@ export interface TrackListHeaderItems {
 export interface TrackListProps {
   id: string
   contextUri: string
-  tracks: Playlist['tracks']['items'] | Track[]
+  tracks: Playlist['tracks']['items'] | Track[] | SimplifiedTrack[]
   columnCount: number
-  type: 'playlist' | 'album' | 'show' | 'episode' | 'recommendations' | 'artist'
+  type:
+    | 'playlist'
+    | 'album'
+    | 'show'
+    | 'episode'
+    | 'recommendations'
+    | 'artist'
+    | 'search'
   headerItems?: TrackListHeaderItems[]
 }
 
@@ -42,9 +50,10 @@ export function TrackList({
   type,
   headerItems
 }: TrackListProps) {
-  const gsapRef = useGsapContext()
+  // const gsapRef = useGsapContext()
+  // const [ref, setRef] = useState<GsapContextProps>()
+  const gsapRef = useContext(GsapContext)
   const [ref, setRef] = useState<GsapContextProps>()
-
   useEffect(() => {
     if (gsapRef?.current) {
       setRef(gsapRef)
@@ -72,10 +81,10 @@ export function TrackList({
           borderBottomColor: 'hsla(0, 0%, 100%, 0)'
         })
         .set('.track-list-heading', {
-          '--top-bar-opacity': 0
+          '--heading-bar-opacity': 0
         })
         .to('.track-list-heading', {
-          '--top-bar-opacity': 1
+          '--heading-bar-opacity': 1
         })
     },
     {
@@ -123,6 +132,17 @@ export function TrackList({
                 contextUri={contextUri}
               />
             )
+          if (type === 'album')
+            return (
+              <>ALBUM</>
+              // <AlbumTrackItem
+              //   key={(track as Playlist['tracks']['items'][0]).track.id}
+              //   playlistId={id}
+              //   track={track as Playlist['tracks']['items'][0]}
+              //   index={index}
+              //   contextUri={contextUri}
+              // />
+            )
           if (type === 'recommendations')
             return (
               <RecommendationTrackItem
@@ -139,6 +159,16 @@ export function TrackList({
               <ArtistTrackItem
                 id={(track as Track).id}
                 artistId={id}
+                key={(track as Track).id}
+                track={track as Track}
+                index={index}
+                contextUri={contextUri}
+              />
+            )
+          if (type === 'search')
+            return (
+              <SearchTrackItem
+                id={(track as Track).id}
                 key={(track as Track).id}
                 track={track as Track}
                 index={index}

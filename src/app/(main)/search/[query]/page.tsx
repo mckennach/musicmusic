@@ -2,32 +2,28 @@ import { getServerSession } from 'next-auth'
 
 import { authOptions } from '@/lib/auth/auth-options'
 
-import { Card } from '@/components/ui/card'
-
+import { SearchTopResult } from '@/components/organisms/search/top-result'
+import { SearchTrackList } from '@/components/organisms/search/track-list'
+import { SectionContainer } from '@/components/templates/section-container'
+import { fetchSearchResults } from '@/services/server/queries/search.queries'
 import { AuthSession } from '@/types/database.ds'
-
-const fetchSearchResults = async (
-  query: string,
-  session: AuthSession | null
-) => {
-  if (session) {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL!}/api/spotify/search/${query}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          token: session.user?.access_token
-        }),
-        method: 'POST'
-      }
-    )
-    return response.json()
-  }
-  return null
+import type { ItemTypes, PartialSearchResult } from '@spotify/web-api-ts-sdk'
+interface ResourceTypeToResultKey {
+  album: 'albums'
+  artist: 'artists'
+  track: 'tracks'
+  playlist: 'playlists'
+  show: 'shows'
+  episode: 'episodes'
+  audiobook: 'audiobooks'
 }
+
+export type SearchResults<T extends readonly ItemTypes[]> =
+  Pick<PartialSearchResult, ResourceTypeToResultKey[T[number]]> extends infer R
+    ? number extends T['length']
+      ? R
+      : Required<R>
+    : never
 
 export default async function Search({
   params
@@ -35,76 +31,32 @@ export default async function Search({
   params: { query: string }
 }) {
   const session: AuthSession | null = await getServerSession(authOptions)
-  const searchResults = await fetchSearchResults(params?.query, session)
+  const searchResults: SearchResults<ItemTypes[]> = await fetchSearchResults(
+    params?.query,
+    session
+  )
+  if (!searchResults) return null
   return (
-    <div className='space-y-4 w-full'>
-      <h1>Search</h1>
-      <div className='flex gap-2 w-full justify-between'>
-        <Card className='p-4 flex-1'>
-          <h2 className='text-2xl font-bold mb-2'>Artists</h2>
-          <ul>
-            {/* {JSON.stringify(searchResults.artists, null, 2)} */}
-            {searchResults &&
-              searchResults.artists &&
-              searchResults.artists?.items.map((track: any) => {
-                return <li key={track.name}>{track.name}</li>
-              })}
-          </ul>
-        </Card>
-        <Card className='p-4 flex-1'>
-          <h2 className='text-2xl font-bold mb-2'>Tracks</h2>
-          <ul>
-            {searchResults &&
-              searchResults.tracks &&
-              searchResults.tracks.items.map((track: any) => {
-                return <li key={track.name}>{track.name}</li>
-              })}
-          </ul>
-        </Card>
+    <SectionContainer>
+      <div className='content-spacing'>
+        <div className='grid grid-cols-5 gap-8'>
+          {/* <Suspense fallback={<div>Loading...</div>}> */}
+          <SearchTopResult
+            className='col-span-2'
+            results={searchResults}
+            query={params.query}
+            session={session}
+          />
+          {/* </Suspense> */}
+          {/* <Suspense fallback={<div>Loading...</div>}> */}
+          <SearchTrackList
+            className='col-span-3'
+            results={searchResults}
+            query={params.query}
+          />
+          {/* </Suspense> */}
+        </div>
       </div>
-
-      <Card className='p-4'>
-        <h2 className='text-2xl font-bold mb-2'>Albums</h2>
-        <ul>
-          {/* {JSON.stringify(searchResults.artists, null, 2)} */}
-          {searchResults &&
-            searchResults.albums &&
-            searchResults.albums?.items.map((track: any) => {
-              return <li key={track.name}>{track.name}</li>
-            })}
-        </ul>
-      </Card>
-      <Card className='p-4'>
-        <h2 className='text-2xl font-bold mb-2'>Playlists</h2>
-        <ul>
-          {/* {JSON.stringify(searchResults.artists, null, 2)} */}
-          {searchResults &&
-            searchResults.playlists &&
-            searchResults.playlists?.items.map((track: any) => {
-              return <li key={track.name}>{track.name}</li>
-            })}
-        </ul>
-      </Card>
-      <Card className='p-4'>
-        <h2 className='text-2xl font-bold mb-2'>Shows</h2>
-        <ul>
-          {searchResults &&
-            searchResults.shows &&
-            searchResults.shows.items.map((track: any) => {
-              return <li key={track.name}>{track.name}</li>
-            })}
-        </ul>
-      </Card>
-      <Card className='p-4'>
-        <h2 className='text-2xl font-bold mb-2'>Episodes</h2>
-        <ul>
-          {searchResults &&
-            searchResults.episodes &&
-            searchResults.episodes.items.map((track: any) => {
-              return <li key={track.name}>{track.name}</li>
-            })}
-        </ul>
-      </Card>
-    </div>
+    </SectionContainer>
   )
 }

@@ -12,6 +12,7 @@ import {
 } from '@/components/molecules/hero'
 import { CoverImage } from '@/components/ui/cover-image'
 
+import { cn } from '@/lib/utils'
 import Icon from '../ui/icon'
 
 // Components
@@ -25,6 +26,8 @@ export interface HeroProps {
   imageSrc?: string
   imageIcon?: keyof typeof dynamicIconImports
   imageSize: 'cover' | 'background'
+  imageClassName?: string
+  fallbackClassName?: string
 }
 
 export function Hero({
@@ -35,9 +38,12 @@ export function Hero({
   extraInfo,
   imageSrc,
   imageIcon,
-  imageSize
+  imageSize,
+  imageClassName,
+  fallbackClassName
 }: HeroProps) {
   const { data: session, status } = useSession()
+
   return (
     <section
       role='banner'
@@ -48,20 +54,6 @@ export function Hero({
           <div className='bg-[var(--random-color)] animate-fade-in absolute left-0 top-0 w-full h-full z-[-1]' />
           <div className='background-noise  animate-fade-in absolute left-0 top-0 w-full h-full z-[0] order-2' />
         </>
-        // <>
-        // <Image
-        //   loader={imageLoader}
-        //   priority={true}
-        //   src={imageSrc ? imageSrc : placeholder}
-        //   alt={`${title} cover`}
-        //   fill={true}
-        //   style={{ objectFit: 'cover' }}
-        //   sizes='100vw'
-        //   className='hero-banner-image w-full h-full rounded-sm shadow-md z-[-1]'  />
-        //   <div className='image-fade absolute left-0 top-0 w-full h-full z-[0] order-2'
-
-        //   />
-        // </>
       )}
 
       {imageSize === 'cover' && (
@@ -70,7 +62,8 @@ export function Hero({
             src={imageSrc}
             alt={`${title} cover`}
             icon={imageIcon}
-            className='w-full h-full rounded-sm shadow-md'
+            fallbackClassName={fallbackClassName}
+            className={cn('w-full h-full rounded-sm shadow-md', imageClassName)}
           />
         </HeroImageContainer>
       )}
@@ -84,7 +77,9 @@ export function Hero({
         </span>
         <HeroTitle title={title} className='hehe leading-[normal]' />
         <HeroDescription description={description} />
-        <div className='flex items-center flex-wrap space-x-2'>{extraInfo}</div>
+        <div className='flex items-center flex-wrap space-x-2 mt-2'>
+          {extraInfo}
+        </div>
       </HeroTextContainer>
     </section>
   )

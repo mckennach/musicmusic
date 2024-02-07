@@ -1,74 +1,68 @@
 'use client'
 
-import { GsapContextProps, useGsapContext } from '@/context'
-import { useGSAP } from '@gsap/react'
+import { useGsapContext } from '@/context'
 import gsap from 'gsap'
+import ScrollTrigger from 'gsap/src/ScrollTrigger'
 import { ImperativePanelHandle } from 'react-resizable-panels'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useElementSize } from 'usehooks-ts'
+gsap.registerPlugin(ScrollTrigger)
 
-import { Header } from '@/components/organisms/header'
 import {
   Main,
   MainContainer,
   MainContent,
   MainHost,
-  MainResizeObserver,
   MainScrollSpacer,
   MainScrollSpacerChild,
   MainViewport
-} from '@/components/ui/main-containers'
+} from '@/components/molecules/main/main-containers'
+import { Header } from '@/components/organisms/header'
+import { MainResizeObserver } from '../molecules/main/resize-observer'
+
 import { ResizablePanel } from '@/components/ui/resizable'
 
 import { HeroBannerImage } from '../molecules/hero/hero-banner-image'
 
 import { PanelProps } from '@/types/database.ds'
 
-interface MainProps {
-  children: React.ReactNode
-  className?: string
-}
-
 const MainView = React.forwardRef<ImperativePanelHandle, PanelProps>(
   ({ children, className, ...props }, ref) => {
     const gsapRef = useGsapContext()
-    const [mainRef, setRef] = useState<GsapContextProps>()
+    const [size, setSize] = useState(0)
+    const [isResizing, setIsResizing] = useState(false)
+    const [squareRef, { width, height }] = useElementSize()
+    const panelRef = useRef<ImperativePanelHandle>(null)
 
     useEffect(() => {
-      if (gsapRef?.current) {
-        setRef(gsapRef)
+      if (isResizing) {
+        setTimeout(() => {
+          setIsResizing(false)
+        }, 100)
       }
-    }, [gsapRef])
 
-    useGSAP(
-      () => {
-        gsap.timeline({
-          scrollTrigger: {
-            scroller: '.main-view-container__viewport',
-            start: 'top top',
-            end: 'bottom bottom',
-            pin: true
-
-            // markers: true
-          }
-        })
-      },
-      {
-        scope: mainRef,
-        dependencies: [mainRef]
-      }
-    )
+      document.documentElement.style.setProperty(
+        '--main-panel-width',
+        `${width}px`
+      )
+    }, [isResizing, width])
 
     return (
-      <ResizablePanel ref={ref} className='relative' {...props}>
+      <ResizablePanel
+        onResize={() => setIsResizing(true)}
+        ref={ref}
+        className='relative'
+        {...props}
+      >
         <Main ref={gsapRef}>
           <Header />
-          <MainContainer className='main-view-container'>
+          <MainContainer className='main-view-container' ref={squareRef}>
             <HeroBannerImage />
             <MainHost>
               <MainResizeObserver />
               <MainContainer className='main-view-container__padding'>
-                <MainViewport className='overflow-y-scroll'>
+                <MainViewport className='overflow-y-scroll bg-scroll-cover'>
                   <MainContent>
                     <MainScrollSpacer />
                     <MainScrollSpacerChild>

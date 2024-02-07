@@ -1,6 +1,6 @@
 import { useSpotify } from '@/hooks'
 // import { ErrorType, LibraryFilterTypes, LibraryItem } from '../../../types/auth.ds'
-import { Device, PlaybackState, User } from '@spotify/web-api-ts-sdk'
+import { Device, MaxInt, PlaybackState, User } from '@spotify/web-api-ts-sdk'
 import { atomWithStorage } from 'jotai/utils'
 
 import { atom, createStore } from 'jotai'
@@ -27,16 +27,15 @@ export const sessionAtom = atomWithStorage<AuthSession | null>('session', null)
 export const currentUserAtom = atomWithStorage<User | null>('currentUser', null)
 
 // ====================
-// Library Atoms
+// Search Atoms
 // ====================
 
-// interface LibraryProps {
-//   artists: Page<Artist>
-//   albums: Page<SavedAlbum>
-//   playlists: Page<SimplifiedPlaylist>
-//   tracks: Page<SavedTrack>
-//   episodes: Page<SavedEpisode>
-// }
+export const searchQueryAtom = atomWithStorage<string>('search-query', '')
+export const recentSearchesAtom = atomWithStorage<any[]>('recent-searches', [])
+
+// ====================
+// Library Atoms
+// ====================
 
 export const asyncLibraryAtom = atom(null, async (get, set) => {
   const { fetchLibrary } = useSpotify()
@@ -175,8 +174,10 @@ export const availableDevicesAtom = atomWithStorage<Device[] | null>(
 export const activeDeviceAtom = atom<Device | null>((get) => {
   const availableDevices = get(availableDevicesAtom)
   if (!availableDevices || availableDevices.length === 0) return null
-  // if (availableDevices.length === 0) return null
   const activeDevice = availableDevices.find((device) => device.is_active)
+
+  // const setActiveDevice = await transferPlayBack(se)
+
   return activeDevice ? activeDevice : null
 })
 export const activeDeviceTypeAtom = atom<
@@ -197,6 +198,13 @@ export const noDeviceFoundAtom = atom(false)
 // ====================
 
 export const bannerImageAtom = atom<string | null>(null)
+
+export const mainPanelWidthAtom = atomWithStorage<number | null>(
+  'main-panel-width',
+  null
+)
+export const columnCountAtom = atom<MaxInt<50>>(5)
+export const rowCountAtom = atom<MaxInt<50>>(6)
 
 export const mainContainerScrolledAtom = atom(false)
 export const mainContainerScrollPositionAtom = atom(0)

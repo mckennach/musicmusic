@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 interface CardSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: React.ReactNode
   className?: string
-  children?: React.ReactNode
+  children?: React.ReactNode | string
   as?: 'div' | 'section' | 'article'
   dir?: 'row' | 'column'
 }
@@ -38,7 +38,7 @@ const CardSectionHeading = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   return (
     <div
-      className={cn('flex items-center justify-between mb-4', className)}
+      className={cn('flex items-center justify-between my-1', className)}
       {...props}
       ref={ref}
     >
@@ -50,8 +50,8 @@ const CardSectionHeading = React.forwardRef<
 CardSectionHeading.displayName = 'CardSectionHeading'
 
 interface CardSectionItemsProps extends React.HTMLAttributes<HTMLDivElement> {
-  gridCols: number
-  gap: number
+  gridCols?: number
+  gap?: number
   dir?: 'row' | 'column'
 }
 

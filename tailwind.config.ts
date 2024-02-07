@@ -113,7 +113,7 @@ const config = {
           foreground: 'var(--foreground)'
         },
         subdued: {
-          DEFAULT: 'var(--essential-subdued)',
+          DEFAULT: 'var(--text-subdued)',
           foreground: 'var(--text-subdued)'
         },
         spotify: {

@@ -11,7 +11,8 @@ import { useAtom } from 'jotai'
 
 import { sessionAtom } from '@/lib/atoms'
 
-import { CardButtonSkeleton } from '../ui/card-button'
+import { CardButtonSkeleton } from '@/components/ui/card-button'
+
 import {
   CardSection,
   CardSectionHeading,
