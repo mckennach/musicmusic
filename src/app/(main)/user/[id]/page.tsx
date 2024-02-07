@@ -1,3 +1,3 @@
-export default async function User({ id }: { id: string }) {
+export default async function User({ params }: { params: { id: string } }) {
   return <>USER</>
 }
