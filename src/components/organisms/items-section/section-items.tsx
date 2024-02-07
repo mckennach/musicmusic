@@ -145,8 +145,7 @@ function SectionItems<const T extends readonly MyItemsKeys[]>({
 
   if (type[0] === 'recently-played') {
     const arr = (data[type[0]] as RecentlyPlayedTracksPage).items
-    // console.log('RECENTLY', arr);
-    console.log('RECENTLY', arr)
+
     return (
       <>
         {arr
