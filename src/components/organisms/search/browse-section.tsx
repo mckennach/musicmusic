@@ -1,6 +1,6 @@
 'use server'
+import { CardButtonSkeleton } from '@/components/ui/card-button'
 // import { CardButton } from '@/components/molecules/cards/card-button'
-import { CardButtonSkeleton } from '@/components/molecules/cards/card-button'
 import {
   CardSection,
   CardSectionHeading,
