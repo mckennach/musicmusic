@@ -1,4 +1,3 @@
-// import { Toaster } from '@/components/ui/toaster'
 import {
   DatabaseProvider,
   DevicesProvider,
