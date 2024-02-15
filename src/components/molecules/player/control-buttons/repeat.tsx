@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { useAtom } from 'jotai'
-
-import { playbackStateAtom, repeatStateAtom, sessionAtom } from '@/lib/atoms'
+import { playbackStateAtom, repeatStateAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 import { cn } from '@/lib/utils'
+import { useAtom } from 'jotai'
+import { useSession } from 'next-auth/react'
 
 import { Repeat, Repeat1 } from 'lucide-react'
 
@@ -14,9 +14,9 @@ interface RepeatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
 
 const RepeatButton = React.forwardRef<HTMLButtonElement, RepeatButtonProps>(
   ({ className, ...props }, ref) => {
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
     const [repeatState, setRepeatState] = useAtom(repeatStateAtom)
-    const [playbackState] = useAtom(playbackStateAtom)
+    const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
 
     useEffect(() => {
       ;(async () => {
@@ -24,22 +24,26 @@ const RepeatButton = React.forwardRef<HTMLButtonElement, RepeatButtonProps>(
           setRepeatState(playbackState.repeat_state)
         }
       })()
-    }, [playbackState, session, setRepeatState])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const setRepeat = (updatedState: 'off' | 'context' | 'track') => {
+      spotify.player.setRepeatMode(updatedState).then(() => {
+        spotify.player.getPlaybackState().then((state) => {
+          setRepeatState(state.repeat_state)
+          setPlaybackState(state)
+        })
+      })
+    }
 
     const handleButtonClick = () => {
-      if (repeatState === 'off') {
-        spotify.player.setRepeatMode('context').then(() => {
-          setRepeatState('context')
-        })
-      } else if (repeatState === 'context') {
-        spotify.player.setRepeatMode('track').then(() => {
-          setRepeatState('track')
-        })
-      } else {
-        spotify.player.setRepeatMode('off').then(() => {
-          setRepeatState('off')
-        })
-      }
+      const newState =
+        repeatState === 'off'
+          ? 'context'
+          : repeatState === 'context'
+            ? 'track'
+            : 'off'
+      setRepeat(newState)
     }
 
     return (

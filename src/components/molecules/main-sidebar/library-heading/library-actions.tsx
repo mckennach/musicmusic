@@ -1,8 +1,6 @@
 // import Link from 'next/link'
 import { useAtom } from 'jotai'
 
-import { sessionAtom, sideBarLeftCollapsedAtom } from '@/lib/atoms'
-
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
 import {
@@ -10,9 +8,12 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
+import { useSession } from 'next-auth/react'
 
 export function LibraryActions() {
-  const [session] = useAtom(sessionAtom)
+  const { data: session } = useSession()
+
   const [sideBarLeftCollapsed, setSidebarLeftCollaposed] = useAtom(
     sideBarLeftCollapsedAtom
   )

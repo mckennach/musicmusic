@@ -84,8 +84,36 @@ export const activePlaylistAtom = atomWithStorage<string | null>(
 // Player Status
 // ====================
 
+// export const asyncActiveContextUriAtom = atom(null, async (get, set) => {
+//   const playbackState = get(playbackStateAtom);
+//   if (!playbackState) return null;
+//   playbackState.context ? set(activeContextUriAtom, playbackState.context.uri) : set(activeContextUriAtom, null);
+// });
+
+// type ContextTypes = 'playlist' | 'album' | 'show' | 'artist' | 'user' | 'episode' | 'track';
+
+// export const activeContextType = atom<ContextTypes | null>((get) => {
+//   const playbackState = get(playbackStateAtom);
+//   if(!playbackState) return null;
+//   return playbackState.context?.type as ContextTypes;
+// })
+
 export const activeContextUriAtom = atomWithStorage<string | null>(
   'active-context-uri',
+  null
+)
+
+// export const asyncContextAtom = atom(null, async (get, set) => {
+//   const playbackState = get(playbackStateAtom);
+//   const contextType = get(activeContextType);
+//   if (!playbackState || !contextType) return null;
+//   const uri = playbackState.context?.uri.replaceAll(':', '').replaceAll('spotify', '').replaceAll(contextType, '');
+//   console.log('ID', uri);
+
+// })
+
+export const activeContextAtom = atomWithStorage<any | null>(
+  'active-context',
   null
 )
 
@@ -107,6 +135,11 @@ export const asyncPlaybackAtom = atom(null, async (get, set) => {
 
 export const playbackStateAtom = atomWithStorage<PlaybackState | null>(
   'playback',
+  null
+)
+
+export const nowPlayingItem = atomWithStorage<PlaybackState['item'] | null>(
+  'now-playing-item',
   null
 )
 
@@ -176,15 +209,9 @@ export const availableDevicesAtom = atomWithStorage<Device[] | null>(
   'devices',
   null
 )
-export const activeDeviceAtom = atom<Device | null>((get) => {
-  const availableDevices = get(availableDevicesAtom)
-  if (!availableDevices || availableDevices.length === 0) return null
-  const activeDevice = availableDevices.find((device) => device.is_active)
 
-  // const setActiveDevice = await transferPlayBack(se)
+export const activeDeviceAtom = atom<Device | null>(null)
 
-  return activeDevice ? activeDevice : null
-})
 export const activeDeviceTypeAtom = atom<
   'no-device' | 'computer' | 'speaker' | 'smartphone'
 >((get) => {
@@ -226,6 +253,11 @@ export const sideBarRightCollapsedAtom = atomWithStorage(
   false
 )
 
+export const sideBarRightActiveAtom = atomWithStorage<boolean>(
+  'sidebar-right-active',
+  false
+)
+
 export const forwardRoutesAtom = atom<string[]>([])
 export const previousRoutesAtom = atom<string[]>([])
 
@@ -235,3 +267,7 @@ export const sidebarSortByAtom = atom<
 export const sidebarViewAtom = atom<'grid' | 'list' | 'compact'>('list')
 export const sidebarSearchInputAtom = atom<string>('')
 export const fullScreenAtom = atom<boolean>(false)
+export const nowPlayingViewAtom = atomWithStorage<boolean>(
+  'now-playing-view',
+  false
+)

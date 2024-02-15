@@ -2,16 +2,15 @@ import { useAtomCallback } from 'jotai/utils'
 
 import React, { useCallback } from 'react'
 
-import { useAtom } from 'jotai'
-
 import {
   activeDeviceAtom,
   asyncPlaybackAtom,
-  playbackStateAtom,
-  sessionAtom
+  playbackStateAtom
 } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 import { cn } from '@/lib/utils'
+import { useAtom } from 'jotai'
+import { useSession } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
@@ -24,7 +23,8 @@ interface SkipButtonProps extends React.HTMLAttributes<HTMLDivElement> {
 const SkipButton = React.forwardRef<HTMLButtonElement, SkipButtonProps>(
   ({ action, icon, className, ...props }, ref) => {
     const [activeDevice] = useAtom(activeDeviceAtom)
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
+
     const [playbackState] = useAtom(playbackStateAtom)
     const [, sync] = useAtom(asyncPlaybackAtom)
 

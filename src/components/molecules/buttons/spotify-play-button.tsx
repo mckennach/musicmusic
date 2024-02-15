@@ -40,7 +40,7 @@ const SpotifyPlayButton = React.forwardRef<
       spotifySdk.player
         .startResumePlayback(activeDevice?.id, contextUri)
         .then(() => {
-          setActiveContextUri(contextUri)
+          // setActiveContextUri(contextUri)
           spotifySdk.player.getPlaybackState().then((state) => {
             setPlaybackState(state)
             setIsPlaying(state.is_playing)
@@ -53,7 +53,7 @@ const SpotifyPlayButton = React.forwardRef<
       activeContextUri === contextUri
     ) {
       spotifySdk.player.pausePlayback(activeDevice?.id).then(() => {
-        setActiveContextUri('')
+        // setActiveContextUri('')
         spotifySdk.player.getPlaybackState().then((state) => {
           setPlaybackState(state)
           setIsPlaying(state.is_playing)

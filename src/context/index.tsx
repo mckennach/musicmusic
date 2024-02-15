@@ -1,5 +1,6 @@
 export * from './artist'
 export * from './database'
+export * from './device'
 export * from './gsap'
 export * from './jotai'
 export * from './session'

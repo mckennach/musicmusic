@@ -3,7 +3,7 @@ import React from 'react'
 import { useAtom } from 'jotai'
 
 // import Icon from '@/components/ui/icon'
-import { fullScreenAtom } from '@/lib/atoms'
+import { nowPlayingViewAtom, sideBarRightActiveAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 
 import { PlaySquare } from 'lucide-react'
@@ -22,20 +22,30 @@ const NowPlayingButton = React.forwardRef<
   HTMLButtonElement,
   NowPlayingButtonProps
 >(({ className, ...props }, ref) => {
-  const [fullScreenState, setFullScreenState] = useAtom(fullScreenAtom)
+  const [nowPlayingView, setNowPlayingView] = useAtom(nowPlayingViewAtom)
+  const [sideBarActive, setSideBarActive] = useAtom(sideBarRightActiveAtom)
+
+  const handleButtonClick = () => {
+    if ((nowPlayingView && sideBarActive) || (!nowPlayingView && sideBarActive))
+      setSideBarActive(false)
+    if (!nowPlayingView && !sideBarActive) setSideBarActive(true)
+    // if(!nowPlayingView && sideBarActive) setSideBarActive(false);
+    setNowPlayingView(!nowPlayingView)
+  }
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          onClick={() => setFullScreenState(!fullScreenState)}
+          onClick={handleButtonClick}
           ref={ref}
           size='icon'
           {...props}
           className={cn(
             `h-8 w-8 rounded-full p-2`,
             `bg-transparent text-foreground opacity-70 hover:bg-transparent hover:opacity-100 active:bg-transparent`,
-            fullScreenState && 'text-spotify opacity-100 hover:scale-100',
-            fullScreenState &&
+            nowPlayingView && 'text-spotify opacity-100 hover:scale-100',
+            nowPlayingView &&
               'after:absolute after:bottom-0 after:left-1/2 after:z-[-1] after:h-1 after:w-1 after:translate-x-[-50%] after:rounded-full after:bg-spotify after:opacity-100'
           )}
           scale={true}

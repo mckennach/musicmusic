@@ -27,7 +27,7 @@ export function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const { data: session, status } = useSession()
-  // const [session] = useAtom(sessionAtom)
+
   const [previousRoutes, setPreviousRoutes] = useAtom(previousRoutesAtom)
   const [forwardRoutes, setForwardRoutes] = useAtom(forwardRoutesAtom)
   const [canGoForward, setCanGoForward] = useState(false)

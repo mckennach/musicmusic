@@ -1,27 +1,46 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 
+import { DeviceModal } from '@/components/molecules/devices/device-modal'
 import { buttonVariants } from '@/components/ui/button'
-import { DeviceModal } from '@/components/ui/device-modal'
-import { availableDevicesAtom } from '@/lib/atoms'
+import { availableDevicesAtom, deviceModalOpenAtom } from '@/lib/atoms'
+import spotifySdk from '@/lib/spotify-sdk'
 import { useAtom } from 'jotai'
 interface NoDeviceProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const NoDevice = React.forwardRef<HTMLDivElement, NoDeviceProps>(
   ({ className, ...props }, ref) => {
-    const [modalOpen, setModalOpen] = useState(false)
-    const [availableDevices] = useAtom(availableDevicesAtom)
+    const [modalOpen, setModalOpen] = useAtom(deviceModalOpenAtom)
+    const [availableDevices, setAvailableDevices] =
+      useAtom(availableDevicesAtom)
 
     useEffect(() => {
       if (availableDevices && availableDevices?.length > 0) {
         setModalOpen(true)
       }
-    }, [availableDevices])
+    }, [availableDevices, setModalOpen])
+
+    const handleButtonClick = (
+      e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    ) => {
+      e.preventDefault()
+      if (availableDevices && availableDevices?.length > 0) {
+        setModalOpen(true)
+      } else {
+        window.open('https://open.spotify.com/', '_blank')
+        setTimeout(() => {
+          spotifySdk.player.getAvailableDevices().then((devices) => {
+            setAvailableDevices(devices.devices)
+            setModalOpen(true)
+          })
+        }, 1000)
+      }
+    }
 
     return (
       <>
@@ -35,11 +54,7 @@ const NoDevice = React.forwardRef<HTMLDivElement, NoDeviceProps>(
           <Link
             href='https://open.spotify.com/'
             target='_blank'
-            onClick={(e) => {
-              if (availableDevices && availableDevices?.length > 0) {
-                e.preventDefault()
-              }
-            }}
+            onClick={(e) => handleButtonClick(e)}
             className={cn(buttonVariants({ className: 'rounded-full' }))}
           >
             Open Spotify

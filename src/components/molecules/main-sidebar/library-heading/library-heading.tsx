@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai'
 
-import { sessionAtom, sideBarLeftCollapsedAtom } from '@/lib/atoms'
+import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
-
+import { useSession } from 'next-auth/react'
 // import Link from 'next/link'
 import { LibraryActions } from './library-actions'
 import { LibraryFilter } from './library-filter'
@@ -10,7 +10,7 @@ import { LibrarySearch } from './library-search'
 import { LibrarySort } from './library-sort'
 
 export function LibraryHeading() {
-  const [session] = useAtom(sessionAtom)
+  const { data: session } = useSession()
   const [sideBarLeftCollapsed, setSidebarLeftCollaposed] = useAtom(
     sideBarLeftCollapsedAtom
   )

@@ -6,6 +6,7 @@
   :root {
     --scroll: 0;
     --left-sidebar-width: 0px;
+    --right-sidebar-width: 0px;
     --panel-width: 0px;
     --main-panel-width: 0px;
     --content-max-width: 1955px;

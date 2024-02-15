@@ -7,12 +7,10 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { useAtom } from 'jotai'
-
-import { sessionAtom } from '@/lib/atoms'
-
 import { CardButtonSkeleton } from '@/components/ui/card-button'
+import { useSession } from 'next-auth/react'
 
+import { AuthSession } from '@/types/database.ds'
 import {
   CardSection,
   CardSectionHeading,
@@ -20,7 +18,8 @@ import {
 } from '../ui/card-section'
 
 export function SearchPage({ ...props }) {
-  const [session] = useAtom(sessionAtom)
+  const { data: session } = useSession()
+
   const router = useRouter()
   const [recentlySearched, setRecentlySearched] = useState<
     PlayHistory[] | null
@@ -36,7 +35,7 @@ export function SearchPage({ ...props }) {
                   Recent searches
                 </h2>
                 <Link
-                  href={`/sections/${session?.user?.id}/playlists`}
+                  href={`/sections/${(session as AuthSession)?.user?.id}/playlists`}
                   className='text-sm font-semibold text-subdued hover:underline'
                 >
                   Show all

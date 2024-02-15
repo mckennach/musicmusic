@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { useAtom } from 'jotai'
-
-import { playbackStateAtom, sessionAtom, shuffleStateAtom } from '@/lib/atoms'
+import { playbackStateAtom, shuffleStateAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 import { cn } from '@/lib/utils'
+import { useAtom } from 'jotai'
+import { useSession } from 'next-auth/react'
 
 import { Shuffle } from 'lucide-react'
 
@@ -19,9 +19,9 @@ interface ShuffleButtonProps extends React.HTMLAttributes<HTMLButtonElement> {}
 
 const ShuffleButton = React.forwardRef<HTMLButtonElement, ShuffleButtonProps>(
   ({ className, ...props }, ref) => {
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
 
-    const [playbackState] = useAtom(playbackStateAtom)
+    const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
     const [shuffleState, setShuffleState] = useAtom(shuffleStateAtom)
     useEffect(() => {
       ;(async () => {
@@ -32,11 +32,11 @@ const ShuffleButton = React.forwardRef<HTMLButtonElement, ShuffleButtonProps>(
     }, [playbackState, session, setShuffleState])
 
     const handleButtonClick = () => {
-      // spotify.player?.setShuffle(!shuffleState).then(() => {
-      //   setShuffleState(!shuffleState)
-      // })
       spotify.player?.togglePlaybackShuffle(!shuffleState).then((res) => {
-        setShuffleState(!shuffleState)
+        spotify.player.getPlaybackState().then((state) => {
+          setPlaybackState(state)
+          setShuffleState(state.shuffle_state)
+        })
       })
     }
 

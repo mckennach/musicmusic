@@ -2,6 +2,7 @@ import {
   Artist,
   Artists,
   Devices,
+  Episode,
   FollowedArtists,
   MaxInt,
   Page,
@@ -225,3 +226,11 @@ export interface TrackItemProps extends React.HTMLAttributes<HTMLDivElement> {
     isSaved: boolean
   ) => void
 }
+
+
+export type NowPlayingItemKeys = 'track' | 'episode';
+export interface NowPlayingItemMap {
+  track: Track
+  episode: Episode
+}
+export type NowPlayingItem<T> =  T extends Track ? NowPlayingItemMap['track'] : NowPlayingItemMap['episode']

@@ -3,13 +3,12 @@ import { useDebounce } from '@/hooks'
 import React, { useEffect } from 'react'
 
 import { useAtom } from 'jotai'
-
+import { useSession } from 'next-auth/react'
 // import Icon from '@/components/ui/icon'
 import {
   activeDeviceAtom,
   asyncPlaybackAtom,
   playbackStateAtom,
-  sessionAtom,
   volumeAtom,
   volumeBeforeMutedAtom,
   volumeMutedAtom
@@ -34,7 +33,8 @@ const VolumeControl = React.forwardRef<HTMLDivElement, VolumeControlProps>(
   ({ className, ...props }, ref) => {
     const [activeDevice] = useAtom(activeDeviceAtom)
     const [, sync] = useAtom(asyncPlaybackAtom)
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
+
     const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
     const [volumeBeforeMutedState, setVolumeBeforeMutedState] = useAtom(
       volumeBeforeMutedAtom

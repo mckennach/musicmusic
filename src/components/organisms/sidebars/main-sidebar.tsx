@@ -22,7 +22,7 @@ export function MainSidebar({
       collapsedSize={6}
       minSize={20}
       maxSize={30}
-      defaultSize={defaultLayout[0]}
+      defaultSize={session ? defaultLayout[0] : 20}
       id='Sidebar-Left'
     >
       <SidebarNav />

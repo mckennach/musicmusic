@@ -8,7 +8,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 
 // import { Panel } from 'react-resizable-panels'
-import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
+import {
+  sideBarLeftCollapsedAtom,
+  sideBarRightActiveAtom,
+  sideBarRightCollapsedAtom
+} from '@/lib/atoms'
 // import { sideBarLeftCollapsedAtom } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
 
@@ -21,9 +25,6 @@ interface SidebarProps extends PanelProps {
   minSize: number
 }
 
-interface Panel extends ImperativePanelHandle {}
-interface Panel extends HTMLDivElement {}
-
 const Sidebar = ({
   children,
   className,
@@ -34,9 +35,22 @@ const Sidebar = ({
   const [sideBarLeftCollapsed, setSidebarLeftCollaposed] = useAtom(
     sideBarLeftCollapsedAtom
   )
+  const [sideBarActive, setSideBarActive] = useAtom(sideBarRightActiveAtom)
+
+  const [sideBarRightCollapsed, setSidebarRightCollaposed] = useAtom(
+    sideBarRightCollapsedAtom
+  )
   const [isResizing, setIsResizing] = useState(false)
+  const [panelClasses, setPanelClasses] = useState<string[]>([])
+  const [containerClasses, setContainerClasses] = useState<string[]>([])
   const [squareRef, { width, height }] = useElementSize()
   const panelRef = useRef<ImperativePanelHandle>(null)
+
+  useEffect(() => {
+    if (side === 'left') {
+      setPanelClasses([sideBarLeftCollapsed ? 'max-w-[68px]' : ''])
+    }
+  }, [side, sideBarLeftCollapsed, sideBarRightCollapsed])
 
   useEffect(() => {
     if (isResizing) {
@@ -45,36 +59,51 @@ const Sidebar = ({
       }, 100)
     }
     document.documentElement.style.setProperty(
-      '--left-sidebar-width',
+      `--${side}-sidebar-width`,
       `${width}px`
     )
-  }, [isResizing, width])
+  }, [isResizing, width, side])
 
   useEffect(() => {
-    if (sideBarLeftCollapsed) {
+    if (sideBarLeftCollapsed && side === 'left') {
       panelRef.current?.collapse()
-    } else {
+    } else if (!sideBarLeftCollapsed && side === 'left') {
+      panelRef.current?.expand()
+    } else if (sideBarRightCollapsed && side === 'right') {
+      panelRef.current?.collapse()
+    } else if (!sideBarRightCollapsed && side === 'right') {
       panelRef.current?.expand()
     }
-  }, [sideBarLeftCollapsed, panelRef])
+  }, [side, sideBarLeftCollapsed, sideBarRightCollapsed, panelRef])
+
+  const handleCollapse = () => {
+    if (side === 'left') setSidebarLeftCollaposed(true)
+    if (side === 'right') setSidebarRightCollaposed(true)
+  }
+
+  const handleExpand = () => {
+    if (side === 'left') setSidebarLeftCollaposed(false)
+    if (side === 'right') setSidebarRightCollaposed(false)
+  }
 
   return (
     <>
+      {side === 'right' && (
+        <ResizableHandle
+          className={cn(
+            'hover:bg-gray-500/80 mx-1 bg-transparent',
+            !sideBarActive ? 'hidden' : ''
+          )}
+        />
+      )}
       <ResizablePanel
         {...props}
         ref={panelRef}
         minSize={minSize}
-        onCollapse={() => setSidebarLeftCollaposed(true)}
-        onExpand={() => setSidebarLeftCollaposed(false)}
+        onCollapse={handleCollapse}
+        onExpand={handleExpand}
         onResize={() => setIsResizing(true)}
-        className={cn(
-          sideBarLeftCollapsed ? 'max-w-[68px] min-w-[68px]' : '',
-          // sideBarLeftCollapsed && side === 'left'
-          //   ? `min-w-[65px] max-w-[65px]`
-          //   : `min-w-[200px] max-w-[375px]`,
-          `overflow-hidden`,
-          className
-        )}
+        className={cn(panelClasses, `overflow-hidden`, className)}
       >
         <aside
           ref={squareRef}
@@ -86,7 +115,9 @@ const Sidebar = ({
           {children}
         </aside>
       </ResizablePanel>
-      <ResizableHandle className='hover:bg-gray-500/80 mx-1 bg-transparent' />
+      {side === 'left' && (
+        <ResizableHandle className='hover:bg-gray-500/80 mx-1 bg-transparent' />
+      )}
     </>
   )
 }

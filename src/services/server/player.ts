@@ -1,7 +1,6 @@
 'use server'
 
 import { AuthSession } from '@/types/database.ds'
-
 export async function play(
   session: AuthSession,
   device_id: string,
@@ -64,6 +63,26 @@ export async function pause(
   return data
 }
 
+// export async function fetchCurrentlyPlaying(session: AuthSession): Promise<> {
+//   const response = await fetch(
+//     `${process.env.NEXTAUTH_URL!}/api/spotify/player/currently-playing`,
+//     {
+//       method: 'POST',
+//       headers: {
+//         Accept: 'application/json',
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({
+//         token: session.user?.access_token
+//       })
+//     }
+//   )
+
+//   const data = await response.json()
+
+//   return data
+// }
+
 export async function fetchPlaybackState(session: AuthSession) {
   const response = await fetch(
     `${process.env.NEXTAUTH_URL!}/api/spotify/player/playback`,
@@ -90,15 +109,15 @@ export async function seekToPosition(
   device_id?: string
 ) {}
 
-export async function transferPlayBack(
+export async function transferPlayback(
   session: AuthSession,
   device_ids: string[],
   play: boolean
 ) {
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL!}/api/spotify/player/playback`,
+    `${process.env.NEXTAUTH_URL!}/api/spotify/player/playback/transfer`,
     {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

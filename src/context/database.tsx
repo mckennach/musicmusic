@@ -7,7 +7,6 @@ import { createContext, useEffect } from 'react'
 import { useAtom } from 'jotai'
 
 import {
-  availableDevicesAtom,
   currentUserAtom,
   libraryAtom,
   playbackStateAtom,
@@ -30,13 +29,13 @@ export function DatabaseProvider({
   const [, setCurrentSession] = useAtom(sessionAtom)
   const [, setCurrentUser] = useAtom(currentUserAtom)
   const [, setCurrentLibrary] = useAtom(libraryAtom)
-  const [, setAvailableDevices] = useAtom(availableDevicesAtom)
+  // const [, setAvailableDevices] = useAtom(availableDevicesAtom)
   const [, setPlaybackState] = useAtom(playbackStateAtom)
   useEffect(() => {
     if (session && initialData) {
       setCurrentSession(session)
       setCurrentUser(initialData.currentUser)
-      setAvailableDevices(initialData.devices?.devices || [])
+      // setAvailableDevices(initialData.devices?.devices || [])
       setPlaybackState(initialData.playback || {})
 
       setCurrentLibrary({
@@ -50,7 +49,7 @@ export function DatabaseProvider({
   }, [
     session,
     initialData,
-    setAvailableDevices,
+    // setAvailableDevices,
     setCurrentLibrary,
     setCurrentSession,
     setCurrentUser,

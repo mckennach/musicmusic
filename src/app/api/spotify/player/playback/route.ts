@@ -25,28 +25,34 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { token, device_ids, play } = body
-    const response = await fetch(`${process.env.SPOTIFY_ENDPOINT!}/me/player`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        device_ids,
-        play
-      })
-    })
+  const body = await request.json()
+  const { token, device_ids, play } = body
+  console.log(device_ids)
 
-    const data = await response.json()
+  const response = await fetch(`${process.env.SPOTIFY_ENDPOINT!}/me/player`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      device_ids,
+      play
+    })
+  })
 
-    return NextResponse.json({
-      ...data
-    })
-  } catch (error) {
-    return NextResponse.json({
-      error
-    })
-  }
+  const data = await response.json()
+
+  console.log('DATA', data)
+
+  return NextResponse.json({
+    ...data
+  })
+  // try {
+
+  // } catch (error) {
+  //   return NextResponse.json({
+  //     error
+  //   })
+  // }
 }

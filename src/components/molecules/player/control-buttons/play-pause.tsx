@@ -1,37 +1,54 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useAtom } from 'jotai'
 
-import { activeDeviceAtom, isPlayingAtom, sessionAtom } from '@/lib/atoms'
+import { Button } from '@/components/ui/button'
+import { activeDeviceAtom, isPlayingAtom, playbackStateAtom } from '@/lib/atoms'
 import spotify from '@/lib/spotify-sdk'
 import { Pause, Play } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
 
 interface PlayPauseProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const PlayPauseButton = React.forwardRef<HTMLButtonElement, PlayPauseProps>(
   ({ className, ...props }, ref) => {
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
+
+    const [playbackState, setPlaybackState] = useAtom(playbackStateAtom)
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom)
     const [activeDevice] = useAtom(activeDeviceAtom)
+    const [isPlayingState, setIsPlayingState] = useState(false)
     const handlePlayPause = async () => {
       if (activeDevice && activeDevice?.id && session) {
-        if (!isPlaying) {
-          // play(session, activeDevice?.id).then((res) => {
-          //   console.log(res);
-          //   setIsPlaying(true)
-          // });
+        console.log(activeDevice)
+        console.log(isPlaying)
+        if (!playbackState?.is_playing) {
           spotify.player?.startResumePlayback(activeDevice?.id).then(() => {
-            setIsPlaying(true)
+            spotify.player.getPlaybackState().then((state) => {
+              setIsPlaying(state?.is_playing)
+              setPlaybackState(state)
+            })
           })
         } else {
           spotify.player?.pausePlayback(activeDevice?.id).then(() => {
-            setIsPlaying(false)
+            spotify.player.getPlaybackState().then((state) => {
+              setIsPlaying(state?.is_playing)
+              setPlaybackState(state)
+            })
           })
         }
       }
     }
+
+    // useEffect(() => {
+    //   spotify.player.getPlaybackState().then((state) => {
+    //     if (state) {
+    //       setIsPlayingState(state.is_playing);
+    //       setPlaybackState(state);
+    //       setPlaybackState(state);
+    //     }
+    //   })
+    // }, [isPlaying, isPlayingState, playbackState, setIsPlaying, setPlaybackState])
 
     return (
       <Button
@@ -42,10 +59,10 @@ const PlayPauseButton = React.forwardRef<HTMLButtonElement, PlayPauseProps>(
         onClick={handlePlayPause}
         ref={ref}
       >
-        {isPlaying && session ? (
+        {playbackState && isPlaying && session ? (
           <Pause size={16} fill='black' />
         ) : (
-          <Play size={16} fill='black' />
+          <Play size={16} fill='black' className='translate-x-[1px]' />
         )}
       </Button>
     )

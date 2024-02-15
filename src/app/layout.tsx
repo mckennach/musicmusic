@@ -1,6 +1,7 @@
 // import { Toaster } from '@/components/ui/toaster'
 import {
   DatabaseProvider,
+  DevicesProvider,
   GsapProvider,
   JotaiProvider,
   SessionProvider,
@@ -21,7 +22,8 @@ import '@/styles/globals.output.css'
 
 import { authOptions } from '../lib/auth/auth-options'
 
-import { AuthSession } from '@/types/database.ds'
+import { AuthSession, InitialData } from '@/types/database.ds'
+// import DeviceContext from '../context/device';
 
 const fontSans = Lato({
   weight: ['300', '400', '700', '900'],
@@ -36,7 +38,9 @@ export const metadata: Metadata = {
     'Spotify is a digital music service that gives you access to millions of songs.'
 }
 
-const fetchInitalData = async (session: AuthSession | null) => {
+const fetchInitalData = async (
+  session: AuthSession | null
+): Promise<InitialData | null> => {
   if (session) {
     const response = await fetch(
       `${process.env.NEXTAUTH_URL!}/api/spotify/init`,
@@ -78,18 +82,23 @@ export default async function RootLayout({
                 fontSans.variable
               )}
             >
-              <TooltipProvider delayDuration={0}>
-                <GsapProvider>
-                  <ThemeProvider
-                    attribute='class'
-                    defaultTheme='dark'
-                    enableSystem={false}
-                  >
-                    {children}
-                    <Toaster />
-                  </ThemeProvider>
-                </GsapProvider>
-              </TooltipProvider>
+              <DevicesProvider
+                session={session}
+                devices={initialData ? initialData.devices : null}
+              >
+                <TooltipProvider delayDuration={0}>
+                  <GsapProvider>
+                    <ThemeProvider
+                      attribute='class'
+                      defaultTheme='dark'
+                      enableSystem={false}
+                    >
+                      {children}
+                      <Toaster />
+                    </ThemeProvider>
+                  </GsapProvider>
+                </TooltipProvider>
+              </DevicesProvider>
             </body>
           </DatabaseProvider>
         </JotaiProvider>

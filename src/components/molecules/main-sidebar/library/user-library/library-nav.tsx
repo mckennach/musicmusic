@@ -4,17 +4,16 @@ import { signIn } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
 
-import { useAtom, useAtomValue } from 'jotai'
-
 import {
   activeLibFilterAtom,
   libraryItemsAtom,
-  sessionAtom,
   sideBarLeftCollapsedAtom,
   sidebarSearchInputAtom,
   sidebarSortByAtom
 } from '@/lib/atoms'
 import { cn } from '@/lib/utils'
+import { useAtom, useAtomValue } from 'jotai'
+import { useSession } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
 
@@ -24,7 +23,8 @@ import { LibrarySkeleton } from './library-skeleton'
 import { LibraryItem } from '@/types/database.ds'
 
 export function LibraryNav({}) {
-  const [session] = useAtom(sessionAtom)
+  const { data: session } = useSession()
+
   const [sortBy] = useAtom(sidebarSortByAtom)
   const [activeLibFilter] = useAtom(activeLibFilterAtom)
   const libraryItems = useAtomValue(libraryItemsAtom)

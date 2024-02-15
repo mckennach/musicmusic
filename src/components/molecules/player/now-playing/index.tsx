@@ -8,10 +8,10 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { useAtom } from 'jotai'
-
+import { useSession } from 'next-auth/react'
 // Hooks
 // import { useSpotify } from '@/hooks'
-import { playbackStateAtom, sessionAtom } from '@/lib/atoms'
+import { playbackStateAtom } from '@/lib/atoms'
 
 import { NowPlayingLoading } from '@/components/molecules/player/now-playing/loading'
 import { CoverImage } from '@/components/ui/cover-image'
@@ -23,7 +23,8 @@ interface NowPlayingProps extends React.HTMLAttributes<HTMLDivElement> {}
 const NowPlaying = React.forwardRef<HTMLDivElement, NowPlayingProps>(
   ({ ...props }, ref) => {
     // const spotify = useSpotify()
-    const [session] = useAtom(sessionAtom)
+    const { data: session } = useSession()
+
     const [playbackState] = useAtom(playbackStateAtom)
     const [isArtist, setIsArtist] = useState(false)
     const [title, setTitle] = useState<string | undefined>(undefined)
